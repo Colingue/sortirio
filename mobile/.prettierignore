@@ -1,0 +1,37 @@
+# Dependances
+node_modules/
+
+# Sorties de build
+dist/
+build/
+web-build/
+coverage/
+
+# Expo (genere)
+.expo/
+expo-env.d.ts
+.metro-health-check*
+
+# Dossiers natifs generes par prebuild
+/ios/
+/android/
+
+# Lockfiles (generes, ne jamais reformater)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+skills-lock.json
+
+# Artefacts TypeScript
+*.tsbuildinfo
+
+# Outillage agents (vendore, gere par skills-lock.json)
+.agents/
+.claude/
+
+# Genere par Icon Composer, reecrit a chaque export
+assets/expo.icon/
+
+# Divers
+.DS_Store
+*.log

@@ -1,0 +1,12 @@
+{
+  // Le formatage JS/TS est fait par ESLint (eslint-plugin-prettier, cf. eslint.config.js),
+  // pas par l'extension Prettier. Sans ce override, le formatOnSave global relance une
+  // 2e reecriture complete du fichier apres source.fixAll -> effet "ca bouge puis ca revient".
+  "[javascript][javascriptreact][typescript][typescriptreact]": {
+    "editor.formatOnSave": false
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  }
+}
