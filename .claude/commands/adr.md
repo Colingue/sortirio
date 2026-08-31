@@ -1,15 +1,14 @@
 ---
-description: Plan a task while taking the project's ADRs into account
+description: Plan a task while taking the project's decision records into account
 argument-hint: [task description]
 ---
 
-Plan a new task:
+Plan a new task, using the `decision-records` skill.
 
-- Consult CLAUDE.md for the list of current ADRs.
 - The task: $ARGUMENTS
-- Before planning this task, read any relevant ADRs in `docs/adr/`.
-- If this plan would make any statement in those ADRs obsolete, include the ADR
+- Read `docs/adr/INDEX.md` first, then the records it lists that touch this subject,
+  before planning anything. Treat `status: accepted` as binding.
+- If this plan would make any statement in those records obsolete, include the record
   update in the plan.
-- If this plan requires a new ADR, confirm with me before creating it. A new ADR is
-  created by copying `docs/adr/000-template.md` under the next available number, and
-  is added to the list in CLAUDE.md.
+- If this plan requires a new decision record, confirm with me before writing it,
+  create it with `status: proposed`, and add its line to `docs/adr/INDEX.md`.

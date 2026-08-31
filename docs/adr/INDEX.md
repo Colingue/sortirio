@@ -1,0 +1,37 @@
+# Decision records — index
+
+Every structural decision taken on Sortirio, newest first. **Start here** before
+planning anything structural: this table says which record covers your subject, so you
+read one file instead of five.
+
+A record is immutable — `accepted` means binding. Do not re-propose an option a record
+already rejected under `## Why not something else`.
+
+| Record                                                                         | Date       | Status   | What it settles                                                                                                                                           |
+| ------------------------------------------------------------------------------ | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Grouping key — declared city, not GPS radius](2026-08-31-matching-by-city.md) | 2026-08-31 | accepted | Users pick their city from a list at sign-up; groups are formed within a city. Lyon only for the pilot, no geolocation, `expo-location` out of the stack. |
+| [Backend — Supabase](2026-08-31-backend-supabase.md)                           | 2026-08-31 | accepted | Postgres + Auth (Apple/Google) + Realtime chat + Storage + `pg_cron` for the Thursday job, in a `supabase/` directory. Replaces the reserved `api/`.      |
+| [Repository structure](2026-08-30-repository-structure.md)                     | 2026-08-30 | accepted | One repository, one directory per deployable (`mobile/`, `supabase/`, `docs/`), no monorepo tooling.                                                      |
+| [Mobile stack — Expo SDK 57 and expo-router](2026-08-30-mobile-stack-expo.md)  | 2026-08-30 | accepted | Expo SDK 57, React Native 0.86, React 19, expo-router with typed routes, TypeScript strict, npm, Node 24.20.0.                                            |
+| [Code quality — ESLint and Prettier](2026-08-30-code-quality.md)               | 2026-08-30 | accepted | ESLint 9 flat config on `eslint-config-expo`, Prettier as the single formatting authority, checks local only (no hook, no CI yet).                        |
+
+## By subject
+
+- **Where the code lives, how the repo is laid out** → repository structure
+- **Data, auth, chat, scheduled jobs, migrations** → backend Supabase
+- **Navigation, TypeScript, package manager, Node version** → mobile stack
+- **Linting, formatting, when checks run** → code quality
+- **Who gets grouped with whom, cities, geolocation** → grouping key
+
+## Keeping this file honest
+
+This index is **not** a record: it is living state, so it is edited freely — unlike the
+records themselves.
+
+Adding a record means adding its line here **in the same pass**. Superseding one means
+updating its status here too, and pointing the line at the record that replaces it. An
+index that lags behind the directory is worse than no index, because it is still
+trusted.
+
+Related living documents: `docs/SPEC.md` (what the product does today) and
+`docs/ideas/` (ideation notes and user stories).
