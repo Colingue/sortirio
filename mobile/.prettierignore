@@ -35,3 +35,6 @@ assets/expo.icon/
 # Divers
 .DS_Store
 *.log
+
+# Variables d’environnement
+.env.example
