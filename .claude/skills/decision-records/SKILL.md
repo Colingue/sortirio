@@ -33,7 +33,10 @@ expensive to undo, it is structural.
    human explicitly and stop. Do not quietly route around it, and do not re-propose an
    option a record already rejected. An agent that silently reverses a settled decision
    costs more than one that asks.
-4. **`status: superseded` is history, not law.** Read it for context, follow the record
+4. **`status: proposed` binds nothing.** It is a draft waiting for the human, in both
+   directions: you may not build on it, and it does not forbid anything either. If your
+   task needs the answer it holds, ask for the decision instead of assuming it.
+5. **`status: superseded` is history, not law.** Read it for context, follow the record
    that supersedes it.
 5. **Two accepted records that contradict each other** is a defect in the record set.
    Surface it to the human; do not pick a winner alone.
@@ -103,6 +106,25 @@ Keep it short. A record nobody finishes reading protects nothing.
 own authority, even when the human clearly agreed in conversation — say the file is in
 `proposed` and ask them to confirm. The status field is their signature, not your
 summary of the chat.
+
+### A `proposed` record decides nothing
+
+Until the human flips the status, the record is a question, not an answer. While it
+sits in `proposed`, you may not:
+
+- write its rule into a `CLAUDE.md`, a plan, a spec, or a task list;
+- move, rename, or restructure a single file because of it;
+- cite it as the reason for a choice, in conversation or in a commit message.
+
+Drafting the record **is** the deliverable. Write it, index it as `proposed`, tell the
+human in your answer that it is waiting for them, and keep working the way the
+`accepted` records already describe — even when the current way is what prompted the
+draft. If the work genuinely cannot continue without the answer, stop and say so; never
+adopt your own proposal in the meantime.
+
+Accepted means the word `accepted` sits in the file, put there by the human. A "yes,
+sounds good" in the conversation is not the status field, and neither is your own
+confidence in the record.
 
 ## Changing a settled decision
 

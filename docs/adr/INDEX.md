@@ -5,10 +5,12 @@ planning anything structural: this table says which record covers your subject, 
 read one file instead of five.
 
 A record is immutable — `accepted` means binding. Do not re-propose an option a record
-already rejected under `## Why not something else`.
+already rejected under `## Why not something else`. A `proposed` line is a draft
+waiting for Colin: it settles nothing, and nothing is built on it until he says so.
 
 | Record                                                                         | Date       | Status   | What it settles                                                                                                                                           |
 | ------------------------------------------------------------------------------ | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Mobile code layout — feature folders](2026-09-03-mobile-feature-folders.md)   | 2026-09-03 | accepted | Business code grouped by subject in `mobile/src/features/<subject>/`, files flat inside; `src/lib/` reserved for technical setup. No DDD.                 |
 | [Grouping key — declared city, not GPS radius](2026-08-31-matching-by-city.md) | 2026-08-31 | accepted | Users pick their city from a list at sign-up; groups are formed within a city. Lyon only for the pilot, no geolocation, `expo-location` out of the stack. |
 | [Backend — Supabase](2026-08-31-backend-supabase.md)                           | 2026-08-31 | accepted | Postgres + Auth (Apple/Google) + Realtime chat + Storage + `pg_cron` for the Thursday job, in a `supabase/` directory. Replaces the reserved `api/`.      |
 | [Repository structure](2026-08-30-repository-structure.md)                     | 2026-08-30 | accepted | One repository, one directory per deployable (`mobile/`, `supabase/`, `docs/`), no monorepo tooling.                                                      |
@@ -18,6 +20,7 @@ already rejected under `## Why not something else`.
 ## By subject
 
 - **Where the code lives, how the repo is laid out** → repository structure
+- **Where a helper file goes inside `mobile/src`, features vs lib** → mobile code layout
 - **Data, auth, chat, scheduled jobs, migrations** → backend Supabase
 - **Navigation, TypeScript, package manager, Node version** → mobile stack
 - **Linting, formatting, when checks run** → code quality
@@ -33,5 +36,6 @@ updating its status here too, and pointing the line at the record that replaces 
 index that lags behind the directory is worse than no index, because it is still
 trusted.
 
-Related living documents: `docs/SPEC.md` (what the product does today) and
-`docs/ideas/` (ideation notes and user stories).
+Related living documents: `docs/SPEC.md` (what the product does today),
+`docs/ideas/` (ideation notes and user stories) and `docs/specs/` (one build spec per
+user story, written just before implementation).
