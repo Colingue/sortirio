@@ -1,11 +1,5 @@
 # Rules for `mobile/`
 
-## No comments in code
-
-Never write comments in the code — no `//`, no `/* */`, no JSDoc block, no TODO, no
-section banner, no header explaining what a file does. This holds for TypeScript, TSX,
-and config files alike.
-
 The code says what it does on its own: name things so the intent is in the identifier,
 extract a function instead of writing a sentence above a block, and let types carry the
 contract. If a piece of code needs a sentence to be understood, rewrite the code.
