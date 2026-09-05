@@ -39,7 +39,7 @@ l'âge seul, lieux gérés en SQL à la main.
 ## Périmètre du MVP
 
 **Compte & profil** — connexion Apple / Google · photo, prénom, date de naissance,
-genre, préférence de genre (optionnelle) · **ville choisie dans une liste** à
+genre · **ville choisie dans une liste** à
 l'inscription (Lyon seule ouverte, les autres en « bientôt ») · modification du
 profil. Pas de géolocalisation : la question utile est « où veux-tu sortir », pas
 « où es-tu maintenant ».
@@ -48,7 +48,7 @@ profil. Pas de géolocalisation : la question utile est « où veux-tu sortir »
 jusqu'au jeudi 19 h · écran d'attente avec compte à rebours et nombre d'inscrits.
 
 **Formation des groupes** — tâche planifiée le jeudi à 19 h (aucun écran) · groupes de
-3 à 6 par ville, âge et préférence de genre · exclusion des paires signalées · un lieu
+3 à 6 par ville et âge · exclusion des paires signalées · un lieu
 distinct par groupe, tiré d'une table remplie à la main · notification push.
 
 **Le groupe** — écran avec lieu, adresse, heure et membres (photo, prénom, âge) ·

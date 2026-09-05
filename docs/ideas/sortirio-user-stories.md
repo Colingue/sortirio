@@ -59,12 +59,11 @@ Priorités : **High** = sans elle le pilote du premier vendredi n'a pas lieu ·
 
 - **Title:** Créer et modifier mon profil minimal
 - **Story:** En tant qu'utilisateur qui vient de se connecter, je veux renseigner ma
-  photo, mon prénom, ma date de naissance, mon genre et éventuellement ma préférence de
-  genre, afin d'être plaçable dans un groupe et reconnaissable au bar.
+  photo, mon prénom, ma date de naissance et mon genre, afin d'être plaçable dans un
+  groupe et reconnaissable au bar.
 - **Acceptance Criteria:**
   - Given je suis sur la création de profil, When photo, prénom, date de naissance ou
-    genre est manquant, Then le bouton « Continuer » reste désactivé (la préférence de
-    genre, elle, peut rester vide).
+    genre est manquant, Then le bouton « Continuer » reste désactivé.
   - Given j'ai rempli les champs obligatoires, When je valide, Then **rien n'est encore
     enregistré** : mes réponses sont gardées en mémoire et j'arrive sur l'écran de choix
     de la ville.
@@ -174,7 +173,7 @@ Priorités : **High** = sans elle le pilote du premier vendredi n'a pas lieu ·
 
 ### 3.1
 
-- **Title:** Former des groupes de 3 à 6 selon ville, âge et préférence de genre
+- **Title:** Former des groupes de 3 à 6 selon ville et âge
 - **Story:** En tant que système, je veux composer automatiquement les groupes le jeudi
   à 19 h, afin que l'utilisateur n'ait jamais à choisir avec qui il sort.
 - **Acceptance Criteria:**
@@ -183,8 +182,6 @@ Priorités : **High** = sans elle le pilote du premier vendredi n'a pas lieu ·
     aucun utilisateur n'appartient à deux groupes.
   - Given deux utilisateurs n'ont pas la même ville, ou ont des âges incompatibles,
     When les groupes sont formés, Then ils ne sont pas placés dans le même groupe.
-  - Given un utilisateur a déclaré une préférence de genre, When il est placé, Then tous
-    les membres de son groupe respectent cette préférence.
   - Given il reste moins de 3 personnes non groupées, When le job se termine, Then
     aucun groupe partiel n'est créé et ces utilisateurs voient sur l'accueil qu'il n'y
     avait pas assez de monde cette semaine.

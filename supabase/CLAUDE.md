@@ -10,6 +10,10 @@ Backend choices are settled in `docs/adr/2026-08-31-backend-supabase.md`.
   the commit message.
 - One migration per change, created with `npx supabase migration new <name>`.
 - Never edit a migration that has been pushed. Write a new one.
+  - **Exception, until the pilot starts:** there is one environment and no testers, so
+    a migration may be rewritten and the database replayed from scratch
+    (`db reset --linked`) rather than patched. Used once, on 2026-09-05, to drop
+    `gender_preference`. This exception dies the day a tester installs the app.
 - Never change the schema by hand in the dashboard — environments drift.
 
 ## Secrets

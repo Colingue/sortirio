@@ -64,10 +64,9 @@ Pas de mot de passe, pas d'inscription par email. Conséquence assumée : l'app 
 tourne plus dans Expo Go, un **build de développement EAS** est nécessaire dès le
 début (voir _Stack technique_).
 
-Le profil est volontairement pauvre : **photo, prénom, date de naissance, genre,
-préférence de genre (optionnelle)**, et la **ville** choisie à l'inscription. C'est
-tout ce que les autres membres du groupe verront — et encore, seulement photo,
-prénom et âge.
+Le profil est volontairement pauvre : **photo, prénom, date de naissance,
+genre**, et la **ville** choisie à l'inscription. C'est tout ce que les autres
+membres du groupe verront — et encore, seulement photo, prénom et âge.
 
 ### Le choix de la ville
 
@@ -115,11 +114,9 @@ seuil de déclenchement. Le risque assumé est qu'un désistement ramène le gro
 - **Âge** (critère principal)
 - **Créneau choisi**
 - **Ville** (choisie par l'utilisateur, une seule ouverte au pilote : Lyon)
-- **Préférence de genre** (optionnelle — ex: une fille peut vouloir ne rencontrer
-  que des filles)
 
-Volontairement simple pour le MVP : pas de centres d'intérêt, pas de langue, pas
-de personnalité.
+Volontairement simple pour le MVP : pas de préférence de genre, pas de centres
+d'intérêt, pas de langue, pas de personnalité.
 
 ## Déroulé d'une semaine
 
@@ -208,6 +205,9 @@ mécanisme.
   durée du pilote
 - **Autres créneaux que le vendredi** et **toute ville autre que Lyon** — les
   autres villes sont visibles dans la liste mais fermées
+- **Préférence de genre** — ni demandée à l'inscription, ni utilisée par le
+  matching (retirée le 2026-09-05). Le genre reste demandé et stocké, mais n'est
+  affiché à personne
 - **Centres d'intérêt, personnalité, langue** dans le matching
 - **Remplacement automatique** en cas de désistement
 - **Réservation ou partenariat avec les lieux** — la liste est du SQL à la main

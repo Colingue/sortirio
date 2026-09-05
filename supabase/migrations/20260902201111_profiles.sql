@@ -1,14 +1,13 @@
 -- One row per signed-up user. Story 1.1 only reads whether the row exists; stories
--- 1.2 and 1.3 fill it in. Every column is not null except gender_preference, so a
--- half-written profile cannot exist — that is the "nothing is saved before the last
--- button" rule of the sign-up flow, enforced by the database rather than the app.
+-- 1.2 and 1.3 fill it in. Every column is not null, so a half-written profile cannot
+-- exist — that is the "nothing is saved before the last button" rule of the sign-up
+-- flow, enforced by the database rather than the app.
 
 create table public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
   first_name text not null,
   birthdate date not null,
   gender text not null,
-  gender_preference text,
   photo_path text not null,
   city text not null,
   created_at timestamptz not null default now()

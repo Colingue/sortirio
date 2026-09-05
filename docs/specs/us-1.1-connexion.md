@@ -159,7 +159,6 @@ create table public.profiles (
   first_name text not null,
   birthdate date not null,
   gender text not null,
-  gender_preference text,
   photo_path text not null,
   city text not null,
   created_at timestamptz not null default now()
@@ -178,9 +177,12 @@ create policy "profiles_update_own" on public.profiles
   with check ((select auth.uid()) = id);
 ```
 
-Toutes les colonnes sont `not null` sauf la préférence de genre : une ligne
-`profiles` ne peut donc pas exister à moitié, ce qui est exactement la règle
-« rien n'est écrit avant le dernier bouton » des stories 1.2 et 1.3.
+Toutes les colonnes sont `not null` : une ligne `profiles` ne peut donc pas
+exister à moitié, ce qui est exactement la règle « rien n'est écrit avant le
+dernier bouton » des stories 1.2 et 1.3.
+
+_Mise à jour du 2026-09-05 : la colonne `gender_preference` a été retirée de cette
+migration, la préférence de genre étant sortie du MVP._
 
 La lecture faite par le routage :
 
