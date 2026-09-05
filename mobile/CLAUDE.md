@@ -1,9 +1,5 @@
 # Rules for `mobile/`
 
-The code says what it does on its own: name things so the intent is in the identifier,
-extract a function instead of writing a sentence above a block, and let types carry the
-contract. If a piece of code needs a sentence to be understood, rewrite the code.
-
 ## Where a file goes
 
 Judge by the name, not the technology.

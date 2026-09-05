@@ -65,19 +65,25 @@ export async function signInWithGoogle(): Promise<'signed-in' | 'cancelled'> {
   const { nonce, hashedNonce } = await createNonce();
 
   const idToken = await new Promise<string | null>((resolve) => {
+    const timeout = setTimeout(() => resolve(null), 10_000);
+    const settle = (value: string | null) => {
+      clearTimeout(timeout);
+      resolve(value);
+    };
+
     google.accounts.id.initialize({
       client_id: clientId,
       nonce: hashedNonce,
-      callback: ({ credential }) => resolve(credential),
+      callback: ({ credential }) => settle(credential),
     });
     google.accounts.id.prompt((notification) => {
       if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-        resolve(null);
+        settle(null);
       } else if (
         notification.isDismissedMoment() &&
         notification.getDismissedReason() !== 'credential_returned'
       ) {
-        resolve(null);
+        settle(null);
       }
     });
   });
