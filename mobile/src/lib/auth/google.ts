@@ -1,0 +1,28 @@
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+import { supabase } from '@/lib/supabase';
+
+const clientId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID;
+
+/** Closing the Google sheet is not a failure, so it is a return value, not a throw. */
+export async function signInWithGoogle(): Promise<'signed-in' | 'cancelled'> {
+  if (!clientId) {
+    throw new Error('Missing EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID — see .env.example.');
+  }
+
+  GoogleSignin.configure({ webClientId: clientId });
+  await GoogleSignin.hasPlayServices();
+
+  const response = await GoogleSignin.signIn();
+  if (response.type === 'cancelled') return 'cancelled';
+
+  const idToken = response.data.idToken;
+  if (!idToken) throw new Error("Google n'a pas renvoyé de jeton d'identité.");
+
+  const { error } = await supabase.auth.signInWithIdToken({
+    provider: 'google',
+    token: idToken,
+  });
+  if (error) throw error;
+  return 'signed-in';
+}

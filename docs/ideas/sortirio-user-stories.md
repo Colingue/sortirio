@@ -11,20 +11,48 @@ Priorités : **High** = sans elle le pilote du premier vendredi n'a pas lieu ·
 
 ### 1.1
 
-- **Title:** Connexion en un tap avec Apple ou Google
+- **Title:** Connexion en un tap avec Google
 - **Story:** En tant que nouvel arrivant qui vient de télécharger l'app, je veux me
-  connecter avec mon compte Apple ou Google, afin de commencer sans créer ni retenir
-  un mot de passe.
+  connecter avec mon compte Google, afin de commencer sans créer ni retenir un mot de
+  passe.
 - **Acceptance Criteria:**
-  - Given je lance l'app sans être connecté, When l'écran d'accueil s'affiche, Then je
-    vois exactement deux boutons : « Continuer avec Apple » et « Continuer avec Google ».
-  - Given je choisis un provider et j'autorise le partage, When l'authentification
+  - Given je lance l'app sans être connecté, When l'écran de connexion s'affiche, Then je
+    vois un seul bouton, « Continuer avec Google », et rien d'autre.
+  - Given je lance l'app, When elle vérifie si j'ai une session, Then l'écran de démarrage
+    reste affiché jusqu'à ce que ma destination soit connue — l'écran de connexion
+    n'apparaît jamais, même une fraction de seconde, à quelqu'un qui est déjà connecté.
+  - Given je lance l'app, When le démarrage se termine, Then j'arrive à l'un de ces trois
+    endroits et à aucun autre : l'écran de connexion si je n'ai pas de session,
+    l'inscription (page pour créer son profil) si j'ai une session mais pas encore de profil, l'accueil si j'ai les
+    deux.
+  - Given j'appuie sur le bouton et je choisis mon compte Google, When l'authentification
     réussit, Then une session Supabase est créée et je suis redirigé vers la création de
     profil.
-  - Given je suis déjà connecté, When je relance l'app, Then j'arrive directement sur
-    l'accueil sans repasser par l'écran de connexion.
-  - Given j'annule la fenêtre du provider, When je reviens dans l'app, Then je retrouve
-    l'écran de connexion avec un message d'erreur et aucune session créée.
+  - Given je ferme l'app à n'importe quel moment de l'inscription, When je la rouvre,
+    Then je **recommence l'inscription depuis le début**, écrans vides : rien n'est écrit
+    en base avant le tout dernier bouton, il n'existe donc aucun profil incomplet.
+  - Given je referme la fenêtre Google sans choisir de compte, When je reviens dans l'app,
+    Then je retrouve l'écran de connexion inchangé, sans message d'erreur et sans session
+    créée — annuler n'est pas une erreur.
+  - Given l'authentification échoue réellement (réseau coupé, Google indisponible),
+    When je reviens dans l'app, Then un message m'explique que ça n'a pas marché et me
+    propose de réessayer.
+- **Notes:**
+  - **Doubles comptes assumés, pour plus tard.** Le jour où le bouton Apple arrive, un
+    utilisateur déjà connecté en Google obtiendra un second compte vierge : aucun
+    rattachement automatique par email, parce qu'Apple propose « Masquer mon adresse » et
+    rend une partie des correspondances impossible. Sur un pilote de testeurs recrutés à
+    la main, le cas est rare et se répare à la main.
+  - **Pas de déconnexion, pas de suppression de compte dans le MVP.** Repartir d'un compte
+    vierge pendant le développement se fait en supprimant l'utilisateur depuis Supabase.
+    La suppression de compte in-app est exigée par la guideline Apple 5.1.1 (v) — sans
+    fiche store, personne ne l'impose au pilote ; à traiter avant toute publication.
+  - **C'est la story à faire tourner en premier sur un vrai téléphone.** Identifiants
+    clients Google (Android + web) et empreinte de signature Android : rien de tout cela
+    ne se teste dans Expo Go, il faut un build de développement EAS. En natif la connexion
+    ne passe pas par une redirection web (le téléphone obtient un jeton que l'app remet à
+    Supabase), donc pas d'URL de retour « localhost » à déclarer. L'empreinte de signature
+    peut en revanche différer entre le build de dev et l'APK distribué aux testeurs.
 - **Priority:** High
 
 ### 1.2
@@ -37,14 +65,18 @@ Priorités : **High** = sans elle le pilote du premier vendredi n'a pas lieu ·
   - Given je suis sur la création de profil, When photo, prénom, date de naissance ou
     genre est manquant, Then le bouton « Continuer » reste désactivé (la préférence de
     genre, elle, peut rester vide).
-  - Given j'ai rempli les champs obligatoires, When je valide, Then la photo est
-    envoyée dans Supabase Storage, le profil est enregistré et j'arrive sur l'écran
-    de choix de la ville.
+  - Given j'ai rempli les champs obligatoires, When je valide, Then **rien n'est encore
+    enregistré** : mes réponses sont gardées en mémoire et j'arrive sur l'écran de choix
+    de la ville.
   - Given ma date de naissance donne un âge < 18 ans, When je valide, Then l'inscription
     est refusée avec un message explicite et aucun profil n'est créé.
   - Given j'ai déjà un profil, When j'ouvre l'écran Profil et que je change ma photo ou
     mon prénom, Then la modification est visible par les autres membres de mon groupe au
     prochain chargement.
+- **Notes:**
+  - L'envoi de la photo dans Supabase Storage et l'écriture du profil ont lieu à la
+    validation de la **ville** (story 1.3), pas ici. Une inscription abandonnée ne laisse
+    donc ni ligne en base ni fichier orphelin dans le stockage.
 - **Priority:** High
 
 ### 1.3
@@ -57,11 +89,13 @@ Priorités : **High** = sans elle le pilote du premier vendredi n'a pas lieu ·
   - Given je viens de terminer mon profil, When l'écran de choix de la ville s'affiche,
     Then je vois une liste de villes où seule **Lyon** est sélectionnable, les autres
     étant marquées « bientôt ».
-  - Given je sélectionne Lyon, When je valide, Then ma ville est enregistrée sur mon
-    profil et j'arrive sur l'écran « Se déclarer dispo ».
-  - Given je sélectionne une ville marquée « bientôt », When je valide, Then mon intérêt
-    pour cette ville est enregistré, l'app me dit qu'elle n'est pas encore ouverte, et
-    je ne peux pas poser de disponibilité.
+  - Given je sélectionne Lyon, When je valide, Then **tout est écrit d'un coup** : la
+    photo part dans Supabase Storage, le profil et la ville sont enregistrés, et j'arrive
+    sur l'écran « Se déclarer dispo ».
+  - Given je sélectionne une ville marquée « bientôt », When je valide, Then mon profil
+    et ma ville sont enregistrés comme pour Lyon — sinon je n'aurais pas de profil et
+    l'app me renverrait indéfiniment à l'inscription — l'app me dit que la ville n'est
+    pas encore ouverte, et je ne peux pas poser de disponibilité.
   - Given l'app est installée, When je parcours l'inscription de bout en bout, Then
     aucune permission de localisation n'est demandée.
 - **Priority:** High
@@ -381,3 +415,10 @@ Priorités : **High** = sans elle le pilote du premier vendredi n'a pas lieu ·
 - **Villes « bientôt »** (story 1.3) : afficher les villes fermées et enregistrer
   l'intérêt n'est pas strictement nécessaire au pilote. C'est le moyen le moins cher de
   savoir où ouvrir ensuite — à couper si le mois est serré, en ne laissant que Lyon.
+- **Permission de notification** : ne pas la demander à la connexion — sans contexte, le
+  refus est quasi certain, et sans push l'utilisateur ne saura jamais que son groupe est
+  formé (story 3.3). Le bon moment est le tap sur « Je suis dispo » (« on te prévient
+  jeudi 19 h »). À trancher, puis à écrire dans la story 2.1.
+- **Ouverture depuis une notification** : la story 3.3 exige d'arriver directement sur
+  l'écran du groupe. Ça n'est vrai que si le routage de démarrage de la story 1.1 ne
+  s'interpose pas pendant qu'il vérifie la session.
