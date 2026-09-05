@@ -25,8 +25,6 @@ function RootNavigator() {
     if (ready) SplashScreen.hideAsync();
   }, [ready]);
 
-  // The splash is still up. Mounting the Stack now would pick a destination from a
-  // session we have not read yet, and the login screen would flash by.
   if (state.status !== 'ready') return null;
 
   const destination = destinationFor({

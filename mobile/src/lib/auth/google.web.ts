@@ -1,9 +1,5 @@
 import { supabase } from '@/lib/supabase';
 
-// The native module's web implementation is sponsor-only and throws, so on web we
-// talk to Google Identity Services directly. It returns the same kind of ID token,
-// so the Supabase call below is identical to the native one in google.ts.
-
 const clientId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID;
 const scriptSrc = 'https://accounts.google.com/gsi/client';
 
@@ -33,11 +29,6 @@ declare global {
   }
 }
 
-/**
- * Google Identity Services puts a nonce in the ID token whether or not we ask for
- * one, and Supabase rejects a token whose nonce it cannot check. So we own it:
- * Google gets the SHA-256 hash, Supabase gets the plaintext it hashes itself.
- */
 async function createNonce(): Promise<{ nonce: string; hashedNonce: string }> {
   const random = crypto.getRandomValues(new Uint8Array(32));
   const nonce = btoa(String.fromCharCode(...random));
@@ -62,7 +53,6 @@ function loadGoogleIdentityServices(): Promise<void> {
   return loading;
 }
 
-/** Closing the Google sheet is not a failure, so it is a return value, not a throw. */
 export async function signInWithGoogle(): Promise<'signed-in' | 'cancelled'> {
   if (!clientId) {
     throw new Error('Missing EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID — see .env.example.');

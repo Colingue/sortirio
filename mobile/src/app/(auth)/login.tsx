@@ -16,8 +16,6 @@ export default function LoginScreen() {
     setBusy(true);
     setFailed(false);
     try {
-      // A 'cancelled' result changes nothing on purpose: closing the Google sheet is
-      // not a failure, and saying anything about it would be noise.
       await signInWithGoogle();
     } catch {
       setFailed(true);
@@ -26,8 +24,6 @@ export default function LoginScreen() {
     }
   }
 
-  // On success nothing happens here. The session changes, the guard in the root
-  // layout flips, and the navigation moves on its own.
   return (
     <ThemedView style={styles.container}>
       <Pressable

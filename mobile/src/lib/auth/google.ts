@@ -4,7 +4,6 @@ import { supabase } from '@/lib/supabase';
 
 const clientId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID;
 
-/** Closing the Google sheet is not a failure, so it is a return value, not a throw. */
 export async function signInWithGoogle(): Promise<'signed-in' | 'cancelled'> {
   if (!clientId) {
     throw new Error('Missing EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID — see .env.example.');

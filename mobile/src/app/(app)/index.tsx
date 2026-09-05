@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
-// Empty on purpose: story 2.1 fills this in.
 export default function HomeScreen() {
   return (
     <ThemedView style={styles.container}>

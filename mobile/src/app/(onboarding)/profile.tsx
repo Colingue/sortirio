@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
-// Empty on purpose: story 1.2 fills this in.
 export default function ProfileScreen() {
   return (
     <ThemedView style={styles.container}>
