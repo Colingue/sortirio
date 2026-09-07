@@ -63,5 +63,5 @@ The app **does not use geolocation** — `expo-location` leaves the MVP stack.
 - ⚠️ The interest recorded on closed cities creates an expectation. If we never open the
   city, those users are left waiting with no follow-up.
 - → Generates: the city list and the `cities` table, the sign-up city screen and its
-  edit from the profile (user stories 1.3 and 1.4), the city column on venues, and the
+  edit from the profile (user stories 1.2 and 1.4), the city column on venues, and the
   city equality in the group formation job.

@@ -10,8 +10,11 @@ _Écrit le 2026-09-02. Source : `docs/ideas/sortirio-user-stories.md` (story 1.1
    `src/lib/supabase.ts` lève une erreur au démarrage sinon).
 2. Il n'y a pas encore de compte Expo / EAS ni de projet Google Cloud : les deux
    sont à créer, gratuitement, pendant cette story.
-3. Le téléphone de test est un **Android physique**. L'émulateur suffit pour tout
-   sauf la connexion Google, qui a besoin des Google Play Services.
+3. ~~Le téléphone de test est un **Android physique**.~~ ~~Tout se teste dans le
+   navigateur (`npm run web`).~~ **Corrigé le 2026-09-06 : tout se teste sur le
+   **simulateur iOS** (`npm run ios`), voir le record
+   `2026-09-06-testing-on-ios-simulator`. Le web n'est plus une cible ; Android
+   est écrit mais vérifié seulement à son premier build EAS.**
 4. Le template Expo présent dans `mobile/src/app` (`index.tsx`, `explore.tsx`,
    les onglets, la splash animée au logo Expo) est **jetable** : cette story le
    remplace par la vraie navigation.
@@ -53,29 +56,30 @@ passe pas tuerait le pilote ; c'est pour ça qu'elle est en tête.
 
 ## Décisions techniques
 
-| Sujet               | Choix                                                                                                                                 |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| Bibliothèque Google | `@react-native-google-signin/google-signin` — jeton d'identité natif, pas de redirection web                                          |
-| Remise à Supabase   | `supabase.auth.signInWithIdToken({ provider: 'google', token })`                                                                      |
-| Identifiants Google | un client **Web** (celui que Supabase et Android utilisent) + un client **Android** (nom de package + empreinte SHA-1 issue d'EAS)    |
-| Session             | déjà en place : `expo-sqlite/kv-store` + `autoRefreshToken` dans `src/lib/supabase.ts`                                                |
-| Routage             | `Stack.Protected guard={…}` d'expo-router, dans le layout racine — pas de `router.replace` impératif                                  |
-| Écran de démarrage  | `SplashScreen.preventAutoHideAsync()` puis `hideAsync()` quand la destination est connue ; la splash animée du template est supprimée |
-| Décision de routage | une fonction pure `destinationFor()`, testée unitairement                                                                             |
+| Sujet               | Choix                                                                                                                                                                                             |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bibliothèque Google | `@react-native-google-signin/google-signin` — jeton d'identité natif, pas de redirection web                                                                                                      |
+| Remise à Supabase   | `supabase.auth.signInWithIdToken({ provider: 'google', token })`                                                                                                                                  |
+| Identifiants Google | un client **Web** (Supabase, et `webClientId` sur toutes les plateformes) + un client **iOS** (bundle `com.sortirio.app`, pas d'empreinte) + un client **Android** par empreinte SHA-1, plus tard |
+| Session             | déjà en place : `expo-sqlite/kv-store` + `autoRefreshToken` dans `src/lib/supabase.ts`                                                                                                            |
+| Routage             | `Stack.Protected guard={…}` d'expo-router, dans le layout racine — pas de `router.replace` impératif                                                                                              |
+| Écran de démarrage  | `SplashScreen.preventAutoHideAsync()` puis `hideAsync()` quand la destination est connue ; la splash animée du template est supprimée                                                             |
+| Décision de routage | une fonction pure `destinationFor()`, testée unitairement                                                                                                                                         |
 
 ## Commandes
 
 ```bash
 # mobile/
 npm run start                 # Metro pour le build de développement
-npm run android               # lance sur l'appareil connecté
+npm run ios                   # lance sur le simulateur iOS
+npx expo prebuild             # régénère mobile/ios après un changement d'app.json
 npm run lint                  # ESLint
 npm run format:check          # Prettier
 npm run typecheck             # tsc --noEmit  (script à ajouter)
 npm test                      # jest-expo     (à ajouter, voir Tests)
 
-# builds
-npx eas build --profile development --platform android  # le seul build de cette story
+# builds — hors de cette story désormais, gardés pour la story Android
+npx eas build --profile development --platform android
 npx eas credentials --platform android                  # lire l'empreinte SHA-1
 
 # base de données (à la racine du dépôt)
@@ -181,7 +185,7 @@ Toutes les colonnes sont `not null` : une ligne `profiles` ne peut donc pas
 exister à moitié, ce qui est exactement la règle « rien n'est écrit avant le
 dernier bouton » des stories 1.2 et 1.3.
 
-_Mise à jour du 2026-09-05 : la colonne `gender_preference` a été retirée de cette
+_Mise à jour du 2026-09-06 : la colonne `gender_preference` a été retirée de cette
 migration, la préférence de genre étant sortie du MVP._
 
 La lecture faite par le routage :
@@ -201,15 +205,17 @@ const hasProfile = data !== null;
   session, session sans profil, session avec profil. C'est la seule vraie logique
   de la story, et c'est celle qui produit le bug du « flash de l'écran de
   connexion ». Trois tests, un fichier, aucune infrastructure.
-- **Manuel, sur un Android physique**, une case par critère d'acceptation :
+- **Manuel, sur le simulateur iOS** (`npm run ios` — voir le record
+  `2026-09-06-testing-on-ios-simulator`), une case par critère d'acceptation :
   1. app fraîchement installée → un seul bouton
   2. connexion → arrivée sur l'inscription
   3. app tuée puis relancée **avec du réseau** → arrivée directe sur
      l'inscription, **sans voir l'écran de connexion**
   4. inscription abandonnée → on repart de son début, écrans vides
   5. fenêtre Google refermée → écran de connexion inchangé, aucun message
-  6. mode avion au démarrage → retour à l'écran de connexion ; un tap sur le
-     bouton y affiche le message d'erreur avec « Réessayer »
+  6. réseau coupé au démarrage (Simulator → Features → Network Link
+     Conditioner, ou couper le Wi-Fi du Mac) → retour à l'écran de connexion ;
+     un tap sur le bouton y affiche le message d'erreur avec « Réessayer »
   7. utilisateur supprimé depuis Supabase → retour à l'écran de connexion
 
 Pas d'autre test automatisé dans cette story : le reste est de la configuration
@@ -228,8 +234,7 @@ externe, qu'aucun test local ne peut valider.
 
 ## Critères de réussite
 
-La story est finie quand, sur ton Android physique avec le build de
-développement :
+La story est finie quand, sur le simulateur iOS :
 
 1. Une installation neuve affiche un unique bouton « Continuer avec Google ».
 2. Un tap ouvre le sélecteur de comptes Google natif, et le retour crée une

@@ -57,47 +57,52 @@ Priorités : **High** = sans elle le pilote du premier vendredi n'a pas lieu ·
 
 ### 1.2
 
-- **Title:** Créer et modifier mon profil minimal
-- **Story:** En tant qu'utilisateur qui vient de se connecter, je veux renseigner ma
-  photo, mon prénom, ma date de naissance et mon genre, afin d'être plaçable dans un
-  groupe et reconnaissable au bar.
+_Fusion des anciennes stories 1.2 (profil) et 1.3 (ville), le 2026-09-06 : la ville
+passant en premier, les deux ne se testent plus séparément._
+
+- **Title:** M'inscrire — ma ville, puis mon profil
+- **Story:** En tant qu'utilisateur qui vient de se connecter, je veux dire où je veux
+  sortir puis me présenter en quatre questions, afin d'être plaçable dans un groupe et
+  reconnaissable au bar.
 - **Acceptance Criteria:**
-  - Given je suis sur la création de profil, When photo, prénom, date de naissance ou
-    genre est manquant, Then le bouton « Continuer » reste désactivé.
-  - Given j'ai rempli les champs obligatoires, When je valide, Then **rien n'est encore
-    enregistré** : mes réponses sont gardées en mémoire et j'arrive sur l'écran de choix
-    de la ville.
+  - Given je viens de me connecter, When le premier écran de l'inscription s'affiche,
+    Then c'est le choix de la ville : une liste où seule **Lyon** est sélectionnable,
+    les autres étant marquées « bientôt ».
+  - Given je sélectionne une ville marquée « bientôt », When je valide, Then l'app me dit
+    tout de suite qu'elle n'est pas encore ouverte — avant de m'avoir fait remplir quoi
+    que ce soit — et je peux quand même continuer, sinon je n'aurais jamais de profil et
+    l'app me renverrait indéfiniment à l'inscription. Je ne pourrai pas poser de
+    disponibilité.
+  - Given ma ville est choisie, When je continue, Then je réponds à quatre questions, une
+    par écran : prénom, date de naissance, genre, photo.
+  - Given une réponse manque, When je regarde le bouton « Continuer », Then il est
+    désactivé.
+  - Given je réponds à une question, When je valide, Then **rien n'est encore
+    enregistré** : ma réponse est gardée en mémoire et je passe à la suivante.
   - Given ma date de naissance donne un âge < 18 ans, When je valide, Then l'inscription
     est refusée avec un message explicite et aucun profil n'est créé.
-  - Given j'ai déjà un profil, When j'ouvre l'écran Profil et que je change ma photo ou
-    mon prénom, Then la modification est visible par les autres membres de mon groupe au
-    prochain chargement.
+  - Given je reviens en arrière, When un écran déjà rempli s'affiche, Then ma réponse
+    précédente y est toujours.
+  - Given j'ai terminé le dernier écran, When je valide, Then **tout est écrit d'un
+    coup** : la photo part dans Supabase Storage, le profil et la ville sont enregistrés,
+    et j'arrive sur l'écran « Se déclarer dispo ».
+  - Given l'écriture échoue, When je reviens à l'app, Then un message me propose de
+    réessayer, et il n'existe **ni ligne de profil incomplète, ni fichier orphelin**.
+  - Given je ferme l'app avant le dernier bouton, When je la rouvre, Then je recommence
+    l'inscription depuis la ville, écrans vides, et rien n'a été écrit.
+  - Given l'app est installée, When je parcours l'inscription de bout en bout, Then
+    aucune permission de localisation n'est demandée.
 - **Notes:**
-  - L'envoi de la photo dans Supabase Storage et l'écriture du profil ont lieu à la
-    validation de la **ville** (story 1.3), pas ici. Une inscription abandonnée ne laisse
-    donc ni ligne en base ni fichier orphelin dans le stockage.
+  - **La préférence de genre est sortie du MVP** le 2026-09-06 : ni demandée, ni
+    utilisée par le matching.
+  - **Modifier son profil est une autre story** (1.4, qui touche déjà le même écran pour
+    la ville) : ici on ne fait que créer.
 - **Priority:** High
 
 ### 1.3
 
-- **Title:** Choisir ma ville à l'inscription
-- **Story:** En tant qu'utilisateur, je veux choisir la ville où je veux sortir le
-  vendredi soir, afin d'être groupé avec des gens qui sortent au même endroit que moi —
-  sans donner l'accès à ma position.
-- **Acceptance Criteria:**
-  - Given je viens de terminer mon profil, When l'écran de choix de la ville s'affiche,
-    Then je vois une liste de villes où seule **Lyon** est sélectionnable, les autres
-    étant marquées « bientôt ».
-  - Given je sélectionne Lyon, When je valide, Then **tout est écrit d'un coup** : la
-    photo part dans Supabase Storage, le profil et la ville sont enregistrés, et j'arrive
-    sur l'écran « Se déclarer dispo ».
-  - Given je sélectionne une ville marquée « bientôt », When je valide, Then mon profil
-    et ma ville sont enregistrés comme pour Lyon — sinon je n'aurais pas de profil et
-    l'app me renverrait indéfiniment à l'inscription — l'app me dit que la ville n'est
-    pas encore ouverte, et je ne peux pas poser de disponibilité.
-  - Given l'app est installée, When je parcours l'inscription de bout en bout, Then
-    aucune permission de localisation n'est demandée.
-- **Priority:** High
+_Fusionnée dans la story 1.2 le 2026-09-06. Le numéro reste vide pour ne pas décaler la
+suite de la liste._
 
 ### 1.4
 
@@ -409,7 +414,7 @@ Priorités : **High** = sans elle le pilote du premier vendredi n'a pas lieu ·
   afficher en dessous de 6.
 - **Âge minimum 18 ans** (story 1.2) : non écrit dans le MVP, ajouté ici parce que
   l'app fait se rencontrer des inconnus. À valider.
-- **Villes « bientôt »** (story 1.3) : afficher les villes fermées et enregistrer
+- **Villes « bientôt »** (story 1.2) : afficher les villes fermées et enregistrer
   l'intérêt n'est pas strictement nécessaire au pilote. C'est le moyen le moins cher de
   savoir où ouvrir ensuite — à couper si le mois est serré, en ne laissant que Lyon.
 - **Permission de notification** : ne pas la demander à la connexion — sans contexte, le

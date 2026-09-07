@@ -70,8 +70,9 @@ membres du groupe verront — et encore, seulement photo, prénom et âge.
 
 ### Le choix de la ville
 
-L'utilisateur **choisit sa ville dans une liste** à l'inscription, juste après son
-profil. Pas de géolocalisation : le GPS répond « où es-tu maintenant », alors que la
+L'utilisateur **choisit sa ville dans une liste** au **tout début de
+l'inscription**, avant son profil : une seule ville est ouverte, autant le dire
+avant de faire remplir quoi que ce soit. Pas de géolocalisation : le GPS répond « où es-tu maintenant », alors que la
 question utile est « où veux-tu sortir le vendredi soir » — ce n'est pas la même
 chose pour quelqu'un qui vient d'emménager, qui habite en périphérie ou qui rentre
 chez ses parents le week-end. Une ville déclarée est aussi un critère de matching
@@ -206,7 +207,7 @@ mécanisme.
 - **Autres créneaux que le vendredi** et **toute ville autre que Lyon** — les
   autres villes sont visibles dans la liste mais fermées
 - **Préférence de genre** — ni demandée à l'inscription, ni utilisée par le
-  matching (retirée le 2026-09-05). Le genre reste demandé et stocké, mais n'est
+  matching (retirée le 2026-09-06). Le genre reste demandé et stocké, mais n'est
   affiché à personne
 - **Centres d'intérêt, personnalité, langue** dans le matching
 - **Remplacement automatique** en cas de désistement
