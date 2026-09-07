@@ -8,7 +8,8 @@
     "scheme": "sortirio",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "com.sortirio.app"
     },
     "android": {
       "package": "com.sortirio.app",
@@ -35,7 +36,12 @@
         }
       ],
       "expo-sqlite",
-      "@react-native-google-signin/google-signin"
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.450521523370-dfi7f7rtm2vdf0d74mpmcihqrudh8mk8"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

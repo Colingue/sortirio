@@ -1,15 +1,20 @@
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { Platform } from 'react-native';
 
 import { supabase } from '@/lib/supabase';
 
-const clientId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID;
+const webClientId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID;
+const iosClientId = process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID;
 
 export async function signInWithGoogle(): Promise<'signed-in' | 'cancelled'> {
-  if (!clientId) {
+  if (!webClientId) {
     throw new Error('Missing EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID — see .env.example.');
   }
+  if (Platform.OS === 'ios' && !iosClientId) {
+    throw new Error('Missing EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID — see .env.example.');
+  }
 
-  GoogleSignin.configure({ webClientId: clientId });
+  GoogleSignin.configure({ webClientId, iosClientId });
   await GoogleSignin.hasPlayServices();
 
   const response = await GoogleSignin.signIn();
