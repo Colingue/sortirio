@@ -10,8 +10,9 @@ waiting for Colin: it settles nothing, and nothing is built on it until he says 
 
 | Record                                                                         | Date       | Status     | What it settles                                                                                                                                                                              |
 | ------------------------------------------------------------------------------ | ---------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [The profile has no gender](2026-09-08-no-gender-in-profile.md)                 | 2026-09-08 | accepted   | The gender leaves the profile entirely: not asked at sign-up, not stored, not used. Sign-up drops to four screens.                                                                          |
 | [Testing platform — the iOS simulator](2026-09-06-testing-on-ios-simulator.md) | 2026-09-06 | accepted   | Stories are built and verified in `npm run ios`; the web target is dropped and its `.web.ts` files deleted; Android is verified only at its first EAS build. Supersedes the Expo web record. |
-| [City screen — first, and Lyon alone](2026-09-06-city-first-lyon-only.md)      | 2026-09-06 | proposed   | The city is the first sign-up screen and offers Lyon only; no "bientôt" list, no demand signal. Would supersede the 2026-08-31 record on those two points.                                   |
+| [City screen — first, and Lyon alone](2026-09-06-city-first-lyon-only.md)      | 2026-09-06 | accepted   | The city is the first sign-up screen and offers Lyon only; no "bientôt" list, no demand signal. Supersedes the 2026-08-31 record on those two points.                                        |
 | [Testing platform — Expo web first](2026-09-06-testing-on-expo-web.md)         | 2026-09-06 | superseded | History. Stories were built and verified in `npm run web`. Replaced by the iOS simulator record above.                                                                                       |
 | [Mobile code layout — feature folders](2026-09-03-mobile-feature-folders.md)   | 2026-09-03 | accepted   | Business code grouped by subject in `mobile/src/features/<subject>/`, files flat inside; `src/lib/` reserved for technical setup. No DDD.                                                    |
 | [Grouping key — declared city, not GPS radius](2026-08-31-matching-by-city.md) | 2026-08-31 | accepted   | Users pick their city from a list at sign-up; groups are formed within a city. Lyon only for the pilot, no geolocation, `expo-location` out of the stack.                                    |
@@ -30,6 +31,7 @@ waiting for Colin: it settles nothing, and nothing is built on it until he says 
 - **Where the app is tested, simulator vs web vs real device** → testing platform (iOS
   simulator), then the superseded Expo web record for the history
 - **Who gets grouped with whom, cities, geolocation** → grouping key, then city screen
+- **What the profile holds, what is asked at sign-up** → the profile has no gender
 
 ## Keeping this file honest
 

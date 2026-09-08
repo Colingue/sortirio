@@ -58,23 +58,19 @@ Priorités : **High** = sans elle le pilote du premier vendredi n'a pas lieu ·
 ### 1.2
 
 _Fusion des anciennes stories 1.2 (profil) et 1.3 (ville), le 2026-09-06 : la ville
-passant en premier, les deux ne se testent plus séparément._
+passant en premier, les deux ne se testent plus séparément. Réécrite le 2026-09-08 :
+Lyon seule affichée, écran genre supprimé._
 
 - **Title:** M'inscrire — ma ville, puis mon profil
 - **Story:** En tant qu'utilisateur qui vient de se connecter, je veux dire où je veux
-  sortir puis me présenter en quatre questions, afin d'être plaçable dans un groupe et
+  sortir puis me présenter en trois questions, afin d'être plaçable dans un groupe et
   reconnaissable au bar.
 - **Acceptance Criteria:**
   - Given je viens de me connecter, When le premier écran de l'inscription s'affiche,
-    Then c'est le choix de la ville : une liste où seule **Lyon** est sélectionnable,
-    les autres étant marquées « bientôt ».
-  - Given je sélectionne une ville marquée « bientôt », When je valide, Then l'app me dit
-    tout de suite qu'elle n'est pas encore ouverte — avant de m'avoir fait remplir quoi
-    que ce soit — et je peux quand même continuer, sinon je n'aurais jamais de profil et
-    l'app me renverrait indéfiniment à l'inscription. Je ne pourrai pas poser de
-    disponibilité.
-  - Given ma ville est choisie, When je continue, Then je réponds à quatre questions, une
-    par écran : prénom, date de naissance, genre, photo.
+    Then c'est la ville, et **Lyon est la seule affichée** : aucune ville fermée, aucune
+    mention « bientôt ».
+  - Given ma ville est choisie, When je continue, Then je réponds à trois questions, une
+    par écran : prénom, date de naissance, photo.
   - Given une réponse manque, When je regarde le bouton « Continuer », Then il est
     désactivé.
   - Given je réponds à une question, When je valide, Then **rien n'est encore
@@ -87,14 +83,17 @@ passant en premier, les deux ne se testent plus séparément._
     coup** : la photo part dans Supabase Storage, le profil et la ville sont enregistrés,
     et j'arrive sur l'écran « Se déclarer dispo ».
   - Given l'écriture échoue, When je reviens à l'app, Then un message me propose de
-    réessayer, et il n'existe **ni ligne de profil incomplète, ni fichier orphelin**.
+    réessayer, et **aucune ligne de profil incomplète n'existe**.
   - Given je ferme l'app avant le dernier bouton, When je la rouvre, Then je recommence
     l'inscription depuis la ville, écrans vides, et rien n'a été écrit.
   - Given l'app est installée, When je parcours l'inscription de bout en bout, Then
     aucune permission de localisation n'est demandée.
 - **Notes:**
-  - **La préférence de genre est sortie du MVP** le 2026-09-06 : ni demandée, ni
-    utilisée par le matching.
+  - **Le genre sort entièrement du MVP** le 2026-09-08 : pas d'écran, pas de colonne,
+    pas d'usage. La préférence de genre était déjà sortie le 2026-09-06.
+  - **Une photo envoyée sans profil derrière n'est pas un problème** : l'app la
+    supprime si elle le peut, et une nouvelle tentative écrit au même chemin. Pas de
+    ménage côté serveur dans cette story.
   - **Modifier son profil est une autre story** (1.4, qui touche déjà le même écran pour
     la ville) : ici on ne fait que créer.
 - **Priority:** High

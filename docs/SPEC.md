@@ -64,9 +64,9 @@ Pas de mot de passe, pas d'inscription par email. Conséquence assumée : l'app 
 tourne plus dans Expo Go, un **build de développement EAS** est nécessaire dès le
 début (voir _Stack technique_).
 
-Le profil est volontairement pauvre : **photo, prénom, date de naissance,
-genre**, et la **ville** choisie à l'inscription. C'est tout ce que les autres
-membres du groupe verront — et encore, seulement photo, prénom et âge.
+Le profil est volontairement pauvre : **photo, prénom, date de naissance**, et
+la **ville** choisie à l'inscription. C'est tout ce que les autres membres du
+groupe verront — et encore, seulement photo, prénom et âge.
 
 ### Le choix de la ville
 
@@ -79,10 +79,10 @@ chez ses parents le week-end. Une ville déclarée est aussi un critère de matc
 stable et lisible, là où un rayon de 10 km découpe les groupes sur une frontière
 invisible.
 
-**Lyon est la seule ville ouverte pour le pilote.** Les autres villes de la liste
-sont affichées comme « bientôt » : les sélectionner n'inscrit à rien mais enregistre
-la demande, ce qui indique gratuitement où ouvrir ensuite. La ville est modifiable
-depuis le profil (déménagement), sans effet sur les groupes déjà formés.
+**Lyon est la seule ville ouverte pour le pilote, et la seule affichée.** Aucune
+ville fermée n'apparaît dans la liste : l'écran annonce la couverture au lieu de
+proposer des choix qui n'en sont pas. La ville est modifiable depuis le profil
+(déménagement), sans effet sur les groupes déjà formés.
 
 Conséquence : `expo-location` sort de la stack du MVP, et avec lui une permission
 système à l'inscription. Voir `docs/adr/2026-08-31-matching-by-city.md` (index des
@@ -116,8 +116,8 @@ seuil de déclenchement. Le risque assumé est qu'un désistement ramène le gro
 - **Créneau choisi**
 - **Ville** (choisie par l'utilisateur, une seule ouverte au pilote : Lyon)
 
-Volontairement simple pour le MVP : pas de préférence de genre, pas de centres
-d'intérêt, pas de langue, pas de personnalité.
+Volontairement simple pour le MVP : pas de genre, pas de centres d'intérêt, pas
+de langue, pas de personnalité.
 
 ## Déroulé d'une semaine
 
@@ -204,11 +204,11 @@ mécanisme.
 
 - **Archivage des chats de groupe** — un testeur en accumulera 4 au maximum sur la
   durée du pilote
-- **Autres créneaux que le vendredi** et **toute ville autre que Lyon** — les
-  autres villes sont visibles dans la liste mais fermées
-- **Préférence de genre** — ni demandée à l'inscription, ni utilisée par le
-  matching (retirée le 2026-09-06). Le genre reste demandé et stocké, mais n'est
-  affiché à personne
+- **Autres créneaux que le vendredi** et **toute ville autre que Lyon** — aucune
+  autre ville n'est affichée à l'inscription
+- **Le genre** — retiré entièrement le 2026-09-08 : ni demandé à l'inscription, ni
+  stocké, ni utilisé par le matching. La préférence de genre était déjà sortie le
+  2026-09-06
 - **Centres d'intérêt, personnalité, langue** dans le matching
 - **Remplacement automatique** en cas de désistement
 - **Réservation ou partenariat avec les lieux** — la liste est du SQL à la main
