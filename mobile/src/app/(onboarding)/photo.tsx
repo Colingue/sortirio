@@ -6,22 +6,38 @@ import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
+import { useProfileCreated, useSessionState } from '@/features/auth/session-provider';
 import { pickFromLibrary, takePhoto, type PickedPhoto } from '@/features/profile/photo';
-import { useSignupDraft } from '@/features/signup/signup-draft';
+import { createProfile } from '@/features/signup/create-profile';
+import { completeDraft, useSignupDraft } from '@/features/signup/signup-draft';
 import { useTheme } from '@/hooks/use-theme';
 
 export default function PhotoScreen() {
-  const theme = useTheme();
   const { draft, update } = useSignupDraft();
-  const [busy, setBusy] = useState(false);
+  const state = useSessionState();
+  const profileCreated = useProfileCreated();
+  const [saving, setSaving] = useState(false);
+  const [failed, setFailed] = useState(false);
+
+  const complete = completeDraft(draft);
+  const userId = state.status === 'ready' ? state.session?.user.id : undefined;
 
   async function choose(pick: () => Promise<PickedPhoto>) {
-    setBusy(true);
+    const photo = await pick();
+    if (photo.type === 'picked') update({ photoUri: photo.uri });
+  }
+
+  async function finish() {
+    if (!complete || !userId) return;
+
+    setSaving(true);
+    setFailed(false);
     try {
-      const photo = await pick();
-      if (photo.type === 'picked') update({ photoUri: photo.uri });
-    } finally {
-      setBusy(false);
+      await createProfile(complete, userId);
+      profileCreated();
+    } catch {
+      setFailed(true);
+      setSaving(false);
     }
   }
 
@@ -34,29 +50,20 @@ export default function PhotoScreen() {
         </ThemedText>
 
         <Preview uri={draft.photoUri} />
+        <Choices busy={saving} onPick={choose} />
 
-        <ThemedView style={styles.choices}>
-          <Pressable
-            accessibilityRole="button"
-            disabled={busy}
-            onPress={() => void choose(pickFromLibrary)}
-            style={[styles.choice, { backgroundColor: theme.backgroundElement }]}
-          >
-            <ThemedText>Choisir une photo</ThemedText>
-          </Pressable>
-
-          <Pressable
-            accessibilityRole="button"
-            disabled={busy}
-            onPress={() => void choose(takePhoto)}
-            style={[styles.choice, { backgroundColor: theme.backgroundElement }]}
-          >
-            <ThemedText>Prendre une photo</ThemedText>
-          </Pressable>
-        </ThemedView>
+        {failed ? (
+          <ThemedText type="small" themeColor="textSecondary" style={styles.centered}>
+            L&apos;inscription n&apos;a pas abouti. Réessayer.
+          </ThemedText>
+        ) : null}
       </ThemedView>
 
-      <PrimaryButton label="Terminer" onPress={() => {}} disabled={!draft.photoUri} />
+      <PrimaryButton
+        label={saving ? 'Un instant…' : 'Terminer'}
+        onPress={() => void finish()}
+        disabled={!complete || !userId || saving}
+      />
     </ThemedView>
   );
 }
@@ -69,6 +76,39 @@ function Preview({ uri }: { uri?: string }) {
   }
 
   return <Image source={{ uri }} style={styles.preview} contentFit="cover" />;
+}
+
+function Choices({
+  busy,
+  onPick,
+}: {
+  busy: boolean;
+  onPick: (pick: () => Promise<PickedPhoto>) => Promise<void>;
+}) {
+  const theme = useTheme();
+  const style = [styles.choice, { backgroundColor: theme.backgroundElement }];
+
+  return (
+    <ThemedView style={styles.choices}>
+      <Pressable
+        accessibilityRole="button"
+        disabled={busy}
+        onPress={() => void onPick(pickFromLibrary)}
+        style={style}
+      >
+        <ThemedText>Choisir une photo</ThemedText>
+      </Pressable>
+
+      <Pressable
+        accessibilityRole="button"
+        disabled={busy}
+        onPress={() => void onPick(takePhoto)}
+        style={style}
+      >
+        <ThemedText>Prendre une photo</ThemedText>
+      </Pressable>
+    </ThemedView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -95,5 +135,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: Spacing.three,
     borderRadius: Spacing.three,
+  },
+  centered: {
+    textAlign: 'center',
   },
 });

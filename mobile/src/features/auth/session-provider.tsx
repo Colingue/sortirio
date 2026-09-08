@@ -1,5 +1,5 @@
 import type { Session } from '@supabase/supabase-js';
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 
 import { hasProfile } from '@/features/profile/has-profile';
 import { supabase } from '@/lib/supabase';
@@ -8,13 +8,24 @@ export type SessionState =
   { status: 'loading' } | { status: 'ready'; session: Session | null; hasProfile: boolean };
 
 const SessionContext = createContext<SessionState>({ status: 'loading' });
+const ProfileCreatedContext = createContext<() => void>(() => {});
 
 export function useSessionState(): SessionState {
   return useContext(SessionContext);
 }
 
+export function useProfileCreated(): () => void {
+  return useContext(ProfileCreatedContext);
+}
+
 export function SessionProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<SessionState>({ status: 'loading' });
+
+  const profileCreated = useCallback(() => {
+    setState((current) =>
+      current.status === 'ready' ? { ...current, hasProfile: true } : current,
+    );
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -52,5 +63,11 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  return <SessionContext.Provider value={state}>{children}</SessionContext.Provider>;
+  return (
+    <SessionContext.Provider value={state}>
+      <ProfileCreatedContext.Provider value={profileCreated}>
+        {children}
+      </ProfileCreatedContext.Provider>
+    </SessionContext.Provider>
+  );
 }
