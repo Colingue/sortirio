@@ -41,6 +41,13 @@
         {
           "iosUrlScheme": "com.googleusercontent.apps.450521523370-dfi7f7rtm2vdf0d74mpmcihqrudh8mk8"
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Sortirio utilise vos photos pour votre photo de profil, celle qui vous rend reconnaissable au bar.",
+          "cameraPermission": "Sortirio utilise l'appareil photo pour prendre votre photo de profil, celle qui vous rend reconnaissable au bar."
+        }
       ]
     ],
     "experiments": {
