@@ -40,8 +40,7 @@ function RootNavigator() {
         </Stack.Protected>
 
         <Stack.Protected guard={destination === 'onboarding'}>
-          <Stack.Screen name="(onboarding)/profile" />
-          <Stack.Screen name="(onboarding)/city" />
+          <Stack.Screen name="(onboarding)" />
         </Stack.Protected>
 
         <Stack.Protected guard={destination === 'home'}>

@@ -3,10 +3,10 @@ import { StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
-export default function ProfileScreen() {
+export default function BirthdateScreen() {
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="title">Inscription — profil</ThemedText>
+      <ThemedText type="title">Inscription — date</ThemedText>
     </ThemedView>
   );
 }
