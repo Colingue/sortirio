@@ -3,8 +3,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 
-import { destinationFor } from '@/lib/auth/destination';
-import { SessionProvider, useSessionState } from '@/lib/auth/session-provider';
+import { destinationFor } from '@/features/routing/destination';
+import { SessionProvider, useSessionState } from '@/features/auth/session-provider';
 
 SplashScreen.preventAutoHideAsync();
 
