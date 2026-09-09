@@ -19,8 +19,8 @@ src/
 ```
 
 - One folder per subject, in the product's vocabulary: `auth/`, `profile/`, `routing/`.
-- Keep files flat in a feature. Add sub-folders only when the folder stops scanning at
-  a glance.
+- Inside a feature, the layout is fixed: `components/`, `helpers/`, `providers/`, one
+  folder per file. Read `src/features/CLAUDE.md` before adding a file there.
 - Name a file after its subject, kebab-case. Several functions per file, one subject
   per file.
 - Rename when the content outgrows the name: `has-profile.ts` → `profile.ts`.
@@ -30,9 +30,35 @@ src/
 - A feature importing another feature: fine once, suspicious twice — extract the shared
   piece into its own feature.
 
-### Pure logic stays pure
+### Where a type goes
 
-A function that only decides — no network, no React, no SDK — lives in its own
-file and takes its inputs as arguments. `destinationFor({ session, hasProfile })`
-is that shape: it can be tested without a server, and its test sits next to it as
-`destination.test.ts`.
+- Used in **one** place → in the file that uses it, next to what it describes.
+- Used in **several** places → a `*.types.ts` at the smallest level that covers every
+  user of it: the feature's folder if the feature is the only one, `src/` if not.
+- Never a global `src/types/` bucket, never a `types/` folder inside a feature: a
+  folder is named after a purpose, not after the nature of what it holds.
+
+## Naming things
+
+A name must say what the thing is or does, without the reader opening it.
+
+- **Descriptive and unambiguous.** `next()` named the button, not the work. It is now
+  `confirmCity()`, `confirmFirstName()`, `confirmBirthdate()` — three screens, three
+  names, and no guessing which one you are reading.
+- **Meaningful distinctions.** Two names in one scope differ by meaning, never by a
+  digit or a filler word: not `city1` / `city2`, not `profile` / `profileData`.
+- **Pronounceable and searchable.** If you cannot say it out loud, rename it. If
+  grepping it returns noise, it is too short.
+- **No encodings.** A name never carries its type: not `strCity`, not `arrCities`,
+  not `IProfile`. TypeScript already knows.
+
+A verb for a function, a noun for a value: `saveProfile()`, never `profileSave()` nor
+`handleClick()`.
+
+The linter helps but does not decide:
+
+- `id-denylist` refuses a fixed list of empty names (`next`, `handler`, `res`, `str`…).
+  Meet a new one → add it to the list in `eslint.config.js`.
+- `id-length` refuses one-letter names.
+- `naming-convention` refuses the `IProfile` shape.
+- **Nothing** can check that a name is truly descriptive. That part is yours.

@@ -6,7 +6,7 @@ import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
-import { useSignupDraft } from '@/features/signup/signup-draft';
+import { useSignupDraft } from '@/features/signup/providers/signup-draft/signup-draft';
 import { useTheme } from '@/hooks/use-theme';
 
 const MAX_LENGTH = 30;
@@ -17,7 +17,7 @@ export default function FirstNameScreen() {
   const [typed, setTyped] = useState(draft.firstName ?? '');
   const firstName = typed.trim();
 
-  function next() {
+  function confirmFirstName() {
     update({ firstName });
     router.push('/birthdate');
   }
@@ -40,7 +40,11 @@ export default function FirstNameScreen() {
         />
       </ThemedView>
 
-      <PrimaryButton label="Continuer" onPress={next} disabled={firstName.length === 0} />
+      <PrimaryButton
+        label="Continuer"
+        onPress={confirmFirstName}
+        disabled={firstName.length === 0}
+      />
     </ThemedView>
   );
 }

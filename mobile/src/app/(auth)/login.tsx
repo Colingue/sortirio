@@ -5,7 +5,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
-import { signInWithGoogle } from '@/features/auth/sign-in-with-google';
+import { signInWithGoogle } from '@/features/auth/helpers/sign-in-with-google/sign-in-with-google';
 
 export default function LoginScreen() {
   const theme = useTheme();

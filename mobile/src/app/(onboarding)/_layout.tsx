@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-import { SignupDraftProvider } from '@/features/signup/signup-draft';
+import { SignupDraftProvider } from '@/features/signup/providers/signup-draft/signup-draft';
 
 export default function OnboardingLayout() {
   return (

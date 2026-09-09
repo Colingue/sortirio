@@ -1,7 +1,7 @@
 import { File } from 'expo-file-system';
 
-import { isoDay } from '@/features/signup/iso-day';
-import type { CompleteDraft } from '@/features/signup/signup-draft';
+import { isoDay } from '@/features/signup/helpers/iso-day/iso-day';
+import type { CompleteDraft } from '@/features/signup/providers/signup-draft/signup-draft';
 import { supabase } from '@/lib/supabase';
 
 const BUCKET = 'profile-photos';

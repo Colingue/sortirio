@@ -41,3 +41,6 @@ example
 # generated native folders
 /mobile/ios
 /mobile/android
+
+# working notes, not shared
+/tasks/

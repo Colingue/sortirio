@@ -7,14 +7,9 @@ import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
-import { ageOn, isAdult } from '@/features/signup/age';
-import { useSignupDraft } from '@/features/signup/signup-draft';
-
-const DEFAULT_AGE = 25;
-
-function defaultBirthdate(today: Date): Date {
-  return new Date(today.getFullYear() - DEFAULT_AGE, today.getMonth(), today.getDate());
-}
+import { ageOn, isAdult } from '@/features/signup/helpers/age/age';
+import { defaultBirthdate } from '@/features/signup/helpers/default-birthdate/default-birthdate';
+import { useSignupDraft } from '@/features/signup/providers/signup-draft/signup-draft';
 
 export default function BirthdateScreen() {
   const { draft, update } = useSignupDraft();
@@ -22,7 +17,7 @@ export default function BirthdateScreen() {
   const [birthdate, setBirthdate] = useState(draft.birthdate ?? defaultBirthdate(today));
   const adult = isAdult(birthdate, today);
 
-  function next() {
+  function confirmBirthdate() {
     update({ birthdate });
     router.push('/photo');
   }
@@ -52,7 +47,7 @@ export default function BirthdateScreen() {
         )}
       </ThemedView>
 
-      <PrimaryButton label="Continuer" onPress={next} disabled={!adult} />
+      <PrimaryButton label="Continuer" onPress={confirmBirthdate} disabled={!adult} />
     </ThemedView>
   );
 }

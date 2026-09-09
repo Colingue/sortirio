@@ -5,14 +5,14 @@ import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
-import { cities } from '@/features/city/cities';
-import { useSignupDraft } from '@/features/signup/signup-draft';
+import { cities } from '@/features/city/helpers/cities/cities';
+import { useSignupDraft } from '@/features/signup/providers/signup-draft/signup-draft';
 
 export default function CityScreen() {
   const { update } = useSignupDraft();
   const [city] = cities;
 
-  function next() {
+  function confirmCity() {
     update({ city: city.id });
     router.push('/first-name');
   }
@@ -27,7 +27,7 @@ export default function CityScreen() {
         </ThemedText>
       </ThemedView>
 
-      <PrimaryButton label="Continuer" onPress={next} />
+      <PrimaryButton label="Continuer" onPress={confirmCity} />
     </ThemedView>
   );
 }

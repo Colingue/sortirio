@@ -1,7 +1,7 @@
 import type { Session } from '@supabase/supabase-js';
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 
-import { hasProfile } from '@/features/profile/has-profile';
+import { hasProfile } from '@/features/profile/helpers/has-profile/has-profile';
 import { supabase } from '@/lib/supabase';
 
 export type SessionState =

@@ -1,16 +1,22 @@
-import { Image } from 'expo-image';
 import { useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
-import { useProfileCreated, useSessionState } from '@/features/auth/session-provider';
-import { pickFromLibrary, takePhoto, type PickedPhoto } from '@/features/profile/photo';
-import { createProfile } from '@/features/signup/create-profile';
-import { completeDraft, useSignupDraft } from '@/features/signup/signup-draft';
-import { useTheme } from '@/hooks/use-theme';
+import {
+  useProfileCreated,
+  useSessionState,
+} from '@/features/auth/providers/session-provider/session-provider';
+import { type PickedPhoto } from '@/features/profile/helpers/photo/photo';
+import { PhotoPreview } from '@/features/signup/components/photo-preview/photo-preview';
+import { PhotoSourceButtons } from '@/features/signup/components/photo-source-buttons/photo-source-buttons';
+import { createProfile } from '@/features/signup/helpers/create-profile/create-profile';
+import {
+  completeDraft,
+  useSignupDraft,
+} from '@/features/signup/providers/signup-draft/signup-draft';
 
 export default function PhotoScreen() {
   const { draft, update } = useSignupDraft();
@@ -22,12 +28,12 @@ export default function PhotoScreen() {
   const complete = completeDraft(draft);
   const userId = state.status === 'ready' ? state.session?.user.id : undefined;
 
-  async function choose(pick: () => Promise<PickedPhoto>) {
+  async function choosePhoto(pick: () => Promise<PickedPhoto>) {
     const photo = await pick();
     if (photo.type === 'picked') update({ photoUri: photo.uri });
   }
 
-  async function finish() {
+  async function saveProfile() {
     if (!complete || !userId) return;
 
     setSaving(true);
@@ -49,8 +55,8 @@ export default function PhotoScreen() {
           C&apos;est elle qui te rend reconnaissable au bar. Une seule suffit.
         </ThemedText>
 
-        <Preview uri={draft.photoUri} />
-        <Choices busy={saving} onPick={choose} />
+        <PhotoPreview uri={draft.photoUri} />
+        <PhotoSourceButtons busy={saving} onPick={choosePhoto} />
 
         {failed ? (
           <ThemedText type="small" themeColor="textSecondary" style={styles.centered}>
@@ -61,52 +67,9 @@ export default function PhotoScreen() {
 
       <PrimaryButton
         label={saving ? 'Un instant…' : 'Terminer'}
-        onPress={() => void finish()}
+        onPress={() => void saveProfile()}
         disabled={!complete || !userId || saving}
       />
-    </ThemedView>
-  );
-}
-
-function Preview({ uri }: { uri?: string }) {
-  const theme = useTheme();
-
-  if (!uri) {
-    return <ThemedView style={[styles.preview, { backgroundColor: theme.backgroundElement }]} />;
-  }
-
-  return <Image source={{ uri }} style={styles.preview} contentFit="cover" />;
-}
-
-function Choices({
-  busy,
-  onPick,
-}: {
-  busy: boolean;
-  onPick: (pick: () => Promise<PickedPhoto>) => Promise<void>;
-}) {
-  const theme = useTheme();
-  const style = [styles.choice, { backgroundColor: theme.backgroundElement }];
-
-  return (
-    <ThemedView style={styles.choices}>
-      <Pressable
-        accessibilityRole="button"
-        disabled={busy}
-        onPress={() => void onPick(pickFromLibrary)}
-        style={style}
-      >
-        <ThemedText>Choisir une photo</ThemedText>
-      </Pressable>
-
-      <Pressable
-        accessibilityRole="button"
-        disabled={busy}
-        onPress={() => void onPick(takePhoto)}
-        style={style}
-      >
-        <ThemedText>Prendre une photo</ThemedText>
-      </Pressable>
     </ThemedView>
   );
 }
@@ -120,21 +83,6 @@ const styles = StyleSheet.create({
   },
   words: {
     gap: Spacing.three,
-  },
-  preview: {
-    alignSelf: 'center',
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    marginVertical: Spacing.three,
-  },
-  choices: {
-    gap: Spacing.two,
-  },
-  choice: {
-    alignItems: 'center',
-    paddingVertical: Spacing.three,
-    borderRadius: Spacing.three,
   },
   centered: {
     textAlign: 'center',
