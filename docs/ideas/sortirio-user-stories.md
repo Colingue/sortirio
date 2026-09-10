@@ -103,20 +103,6 @@ Lyon seule affichée, écran genre supprimé._
 _Fusionnée dans la story 1.2 le 2026-09-06. Le numéro reste vide pour ne pas décaler la
 suite de la liste._
 
-### 1.4
-
-- **Title:** Changer de ville depuis mon profil
-- **Story:** En tant qu'utilisateur qui déménage ou qui s'est trompé, je veux changer ma
-  ville depuis mon profil, afin d'être groupé au bon endroit dès le vendredi suivant.
-- **Acceptance Criteria:**
-  - Given je suis inscrit, When j'ouvre mon profil, Then ma ville actuelle est affichée
-    et modifiable via la même liste qu'à l'inscription.
-  - Given je change de ville, When la formation des groupes s'exécute le jeudi suivant,
-    Then je suis groupé dans ma nouvelle ville.
-  - Given je change de ville alors qu'un groupe est déjà formé pour moi, When je rouvre
-    l'écran du groupe, Then ce groupe et son lieu restent inchangés.
-- **Priority:** Medium
-
 ---
 
 ## 2. Se déclarer dispo
