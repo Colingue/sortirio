@@ -3,55 +3,73 @@ import { ActivityIndicator, StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { useSessionState } from '@/features/auth/providers/session-provider/session-provider';
 import { AvailabilityInvitation } from '@/features/availability/components/availability-invitation/availability-invitation';
 import { AvailabilityNoted } from '@/features/availability/components/availability-noted/availability-noted';
+import { declareAvailability } from '@/features/availability/helpers/declare-availability/declare-availability';
 import {
   fetchFridayState,
   type FridayState,
 } from '@/features/availability/helpers/friday-state/friday-state';
 
 type ScreenState =
-  { status: 'loading' } | { status: 'failed' } | { status: 'ready'; fridayState: FridayState };
+  | { status: 'loading' }
+  | { status: 'failed' }
+  | { status: 'ready'; fridayState: FridayState; saving: boolean; saveFailed: boolean };
 
 export default function HomeScreen() {
+  const session = useSessionState();
   const [state, setState] = useState<ScreenState>({ status: 'loading' });
+  const userId = session.status === 'ready' ? session.session?.user.id : undefined;
 
   useEffect(() => {
     let cancelled = false;
+    const ready = (fridayState: FridayState) =>
+      !cancelled && setState({ status: 'ready', fridayState, saving: false, saveFailed: false });
 
     fetchFridayState()
-      .then((fridayState) => {
-        if (!cancelled) setState({ status: 'ready', fridayState });
-      })
-      .catch(() => {
-        if (!cancelled) setState({ status: 'failed' });
-      });
+      .then(ready)
+      .catch(() => !cancelled && setState({ status: 'failed' }));
 
     return () => {
       cancelled = true;
     };
   }, []);
 
-  if (state.status === 'loading') {
-    return (
-      <ThemedView style={styles.centered}>
-        <ActivityIndicator />
-      </ThemedView>
-    );
+  async function declare() {
+    if (!userId || state.status !== 'ready') return;
+
+    setState({ ...state, saving: true, saveFailed: false });
+    try {
+      const postedFriday = state.fridayState.openFriday;
+      await declareAvailability(userId);
+      setState({ ...state, saving: false, fridayState: { ...state.fridayState, postedFriday } });
+    } catch {
+      setState({ ...state, saving: false, saveFailed: true });
+    }
   }
 
-  if (state.status === 'failed') {
+  if (state.status !== 'ready') {
     return (
       <ThemedView style={styles.centered}>
-        <ThemedText themeColor="textSecondary">
-          Une erreur est survenue. Réessaie plus tard.
-        </ThemedText>
+        {state.status === 'loading' ? (
+          <ActivityIndicator />
+        ) : (
+          <ThemedText themeColor="textSecondary">Une erreur, réessaie plus tard.</ThemedText>
+        )}
       </ThemedView>
     );
   }
 
   if (state.fridayState.postedFriday === null) {
-    return <AvailabilityInvitation openFriday={state.fridayState.openFriday} />;
+    return (
+      <AvailabilityInvitation
+        openFriday={state.fridayState.openFriday}
+        onPress={() => void declare()}
+        saving={state.saving}
+        failed={state.saveFailed}
+      />
+    );
   }
 
   return <AvailabilityNoted />;
