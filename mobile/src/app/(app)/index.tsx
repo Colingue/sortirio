@@ -7,6 +7,7 @@ import { useSessionState } from '@/features/auth/providers/session-provider/sess
 import { AvailabilityInvitation } from '@/features/availability/components/availability-invitation/availability-invitation';
 import { AvailabilityNoted } from '@/features/availability/components/availability-noted/availability-noted';
 import { declareAvailability } from '@/features/availability/helpers/declare-availability/declare-availability';
+import { askNotificationPermission } from '@/features/notifications/helpers/ask-notification-permission/ask-notification-permission';
 import {
   fetchFridayState,
   type FridayState,
@@ -44,6 +45,7 @@ export default function HomeScreen() {
       const postedFriday = state.fridayState.openFriday;
       await declareAvailability(userId);
       setState({ ...state, saving: false, fridayState: { ...state.fridayState, postedFriday } });
+      void askNotificationPermission();
     } catch {
       setState({ ...state, saving: false, saveFailed: true });
     }
