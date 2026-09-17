@@ -114,16 +114,28 @@ suite de la liste._
   vendredi en un seul tap, afin de n'avoir aucune décision à prendre (ni gens, ni lieu,
   ni heure).
 - **Acceptance Criteria:**
-  - Given nous sommes entre samedi et jeudi 19 h et que je n'ai pas de dispo posée,
-    When j'ouvre l'accueil, Then je vois la date du prochain vendredi et un unique
-    bouton « Je suis dispo ».
+  - Given je n'ai pas de dispo posée pour le prochain vendredi ouvert, When j'ouvre
+    l'accueil, Then je vois sa date et un unique bouton « Je suis dispo ».
   - Given j'appuie sur ce bouton, When l'enregistrement réussit, Then ma disponibilité
     est créée pour ce vendredi et l'écran bascule sur l'état d'attente sans rechargement
     manuel.
   - Given j'ai déjà posé une dispo pour ce vendredi, When je rouvre l'app, Then le
     bouton « Je suis dispo » n'est plus proposé une seconde fois.
-  - Given il est jeudi 19 h 01, When j'ouvre l'accueil, Then le bouton est indisponible
-    et l'écran annonce le prochain vendredi ouvert aux inscriptions.
+  - Given il est jeudi 19 h 01, que les groupes sont partis et que je n'avais rien posé,
+    When j'ouvre l'accueil, Then le même bouton m'est proposé, avec la date du vendredi
+    de la semaine suivante.
+  - Given il est jeudi 19 h 01 et que j'avais posé ma dispo pour le vendredi qui vient
+    d'être formé, When j'ouvre l'accueil, Then je garde l'état d'attente et aucun bouton
+    ne m'est proposé jusqu'au samedi.
+- **Notes:**
+  - **La permission de notification est demandée ici**, juste après le tap (point
+    ouvert tranché le 2026-09-15). Un refus ne bloque rien.
+  - **Il n'y a pas de creux entre jeudi 19 h et samedi** : le critère qui rendait le
+    bouton indisponible après jeudi 19 h a été retiré le 2026-09-15. Voir
+    `docs/specs/us-2.1-se-declarer-dispo.md`.
+  - **Le bouton ne revient qu'à qui n'a rien posé** (précisé le 2026-09-16). Celui qui a
+    coché son vendredi garde « on te prévient jeudi 19 h » jusqu'au samedi : on ne lui
+    propose pas le vendredi suivant pendant que le sien arrive.
 - **Priority:** High
 
 ### 2.2
@@ -402,10 +414,10 @@ suite de la liste._
 - **Villes « bientôt »** (story 1.2) : afficher les villes fermées et enregistrer
   l'intérêt n'est pas strictement nécessaire au pilote. C'est le moyen le moins cher de
   savoir où ouvrir ensuite — à couper si le mois est serré, en ne laissant que Lyon.
-- **Permission de notification** : ne pas la demander à la connexion — sans contexte, le
-  refus est quasi certain, et sans push l'utilisateur ne saura jamais que son groupe est
-  formé (story 3.3). Le bon moment est le tap sur « Je suis dispo » (« on te prévient
-  jeudi 19 h »). À trancher, puis à écrire dans la story 2.1.
+- **Permission de notification** — _tranché le 2026-09-15_ : demandée au tap sur
+  « Je suis dispo », après l'écriture, une seule fois, et un refus ne bloque rien. Pas à
+  la connexion : sans contexte, le refus est quasi certain, et sans push l'utilisateur
+  ne saura jamais que son groupe est formé (story 3.3). Écrit dans la story 2.1.
 - **Ouverture depuis une notification** : la story 3.3 exige d'arriver directement sur
   l'écran du groupe. Ça n'est vrai que si le routage de démarrage de la story 1.1 ne
   s'interpose pas pendant qu'il vérifie la session.
