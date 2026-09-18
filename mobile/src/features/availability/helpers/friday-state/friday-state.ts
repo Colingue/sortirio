@@ -1,16 +1,16 @@
 import { supabase } from '@/lib/supabase';
 
 export type FridayState = {
-  openFriday: string;
+  nextOpenFriday: string;
   postedFriday: string | null;
 };
 
-type FridayStateRow = { open_friday: string; posted_friday: string | null };
+type FridayStateRow = { next_open_friday: string; posted_friday: string | null };
 
 export async function fetchFridayState(): Promise<FridayState> {
-  const { data, error } = await supabase.rpc('friday_state').single();
+  const { data, error } = await supabase.rpc('get_friday_availability_status').single();
   if (error) throw error;
 
   const row = data as FridayStateRow;
-  return { openFriday: row.open_friday, postedFriday: row.posted_friday };
+  return { nextOpenFriday: row.next_open_friday, postedFriday: row.posted_friday };
 }

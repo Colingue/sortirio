@@ -42,7 +42,7 @@ export default function HomeScreen() {
 
     setState({ ...state, saving: true, saveFailed: false });
     try {
-      const postedFriday = state.fridayState.openFriday;
+      const postedFriday = state.fridayState.nextOpenFriday;
       await declareAvailability(userId);
       setState({ ...state, saving: false, fridayState: { ...state.fridayState, postedFriday } });
       void askNotificationPermission();
@@ -66,7 +66,7 @@ export default function HomeScreen() {
   if (state.fridayState.postedFriday === null) {
     return (
       <AvailabilityInvitation
-        openFriday={state.fridayState.openFriday}
+        nextOpenFriday={state.fridayState.nextOpenFriday}
         onPress={() => void declare()}
         saving={state.saving}
         failed={state.saveFailed}
