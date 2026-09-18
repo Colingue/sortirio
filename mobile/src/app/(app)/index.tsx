@@ -37,7 +37,7 @@ export default function HomeScreen() {
     };
   }, []);
 
-  async function declare() {
+  async function handleDeclareAvailability() {
     if (!userId || state.status !== 'ready') return;
 
     setState({ ...state, saving: true, saveFailed: false });
@@ -67,7 +67,7 @@ export default function HomeScreen() {
     return (
       <AvailabilityInvitation
         nextOpenFriday={state.fridayState.nextOpenFriday}
-        onPress={() => void declare()}
+        onPress={() => void handleDeclareAvailability()}
         saving={state.saving}
         failed={state.saveFailed}
       />

@@ -12,21 +12,14 @@ features/signup/
 
 Create a folder the day a file needs it. An empty `components/` is noise.
 
-## One folder per file
-
-The file lives in a folder that carries its name, and its test lives there too.
-
 ```
 features/signup/
   helpers/
     age/
       age.ts
       age.test.ts
-    create-profile/
-      create-profile.ts
   providers/
-    signup-draft/
-      signup-draft.tsx
+    signup-draft.tsx
 ```
 
 ## Choosing between the three
@@ -41,8 +34,8 @@ features/signup/
 
 ## Naming
 
-- kebab-case. The folder and the file carry the same name.
+- kebab-case.
 - The folder is called `helpers`; a file inside it never is. Never `utils.ts`,
   never `helpers.ts`, never a barrel `index.ts`.
 - Name after the subject, not the shape: `age.ts`, not `age-utils.ts`.
-- Rename the folder when the content outgrows the name.
+- Rename the file when the content outgrows the name.
