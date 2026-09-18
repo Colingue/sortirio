@@ -2,7 +2,7 @@ import type { Session } from '@supabase/supabase-js';
 
 export type Destination = 'login' | 'onboarding' | 'home';
 
-export function destinationFor(state: {
+export function resolveDestination(state: {
   session: Session | null;
   hasProfile: boolean;
 }): Destination {

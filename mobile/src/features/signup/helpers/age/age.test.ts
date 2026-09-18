@@ -1,29 +1,29 @@
-import { ageOn, isAdult } from './age';
+import { getAgeOn, isAdult } from './age';
 
-describe('ageOn', () => {
+describe('getAgeOn', () => {
   it('counts a plain age', () => {
-    expect(ageOn(new Date(1990, 4, 4), new Date(2026, 8, 8))).toBe(36);
+    expect(getAgeOn(new Date(1990, 4, 4), new Date(2026, 8, 8))).toBe(36);
   });
 
   it('counts the birthday itself as the new age', () => {
-    expect(ageOn(new Date(2008, 8, 8), new Date(2026, 8, 8))).toBe(18);
+    expect(getAgeOn(new Date(2008, 8, 8), new Date(2026, 8, 8))).toBe(18);
   });
 
   it('has not counted the birthday the day before', () => {
-    expect(ageOn(new Date(2008, 8, 8), new Date(2026, 8, 7))).toBe(17);
+    expect(getAgeOn(new Date(2008, 8, 8), new Date(2026, 8, 7))).toBe(17);
   });
 
   it('has not counted a birthday later in the year', () => {
-    expect(ageOn(new Date(2008, 11, 25), new Date(2026, 8, 8))).toBe(17);
+    expect(getAgeOn(new Date(2008, 11, 25), new Date(2026, 8, 8))).toBe(17);
   });
 
   it('makes someone born on 29 February wait for 1 March in a common year', () => {
-    expect(ageOn(new Date(2008, 1, 29), new Date(2026, 1, 28))).toBe(17);
-    expect(ageOn(new Date(2008, 1, 29), new Date(2026, 2, 1))).toBe(18);
+    expect(getAgeOn(new Date(2008, 1, 29), new Date(2026, 1, 28))).toBe(17);
+    expect(getAgeOn(new Date(2008, 1, 29), new Date(2026, 2, 1))).toBe(18);
   });
 
   it('counts the birthday of someone born on 29 February in a leap year', () => {
-    expect(ageOn(new Date(2008, 1, 29), new Date(2028, 1, 29))).toBe(20);
+    expect(getAgeOn(new Date(2008, 1, 29), new Date(2028, 1, 29))).toBe(20);
   });
 });
 

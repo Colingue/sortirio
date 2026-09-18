@@ -21,7 +21,15 @@ module.exports = defineConfig([
         },
         { selector: 'variable', modifiers: ['destructured'], format: null },
         { selector: 'parameter', format: ['camelCase'], leadingUnderscore: 'allow' },
-        { selector: 'function', format: ['camelCase', 'PascalCase'] },
+        {
+          selector: 'function',
+          format: ['camelCase', 'PascalCase'],
+          custom: {
+            regex:
+              '^([A-Z][a-zA-Z0-9]*|(get|fetch|set|is|has|can|should|create|update|delete|remove|save|declare|ask|check|use|format|confirm|choose|pick|take|render|handle|find|build|parse|validate|ensure|load|open|close|toggle|register|clear|reset|sign|navigate|show|hide|enable|disable|add|insert|apply|run|watch|resolve|reject|complete|convert|map|filter|sort|to)[a-zA-Z0-9]*)$',
+            match: true,
+          },
+        },
         {
           selector: 'typeLike',
           format: ['PascalCase'],

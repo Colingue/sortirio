@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 
 import { useSessionState } from '@/features/auth/providers/session-provider/session-provider';
-import { destinationFor } from '@/features/routing/helpers/destination/destination';
+import { resolveDestination } from '@/features/routing/helpers/destination/destination';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -19,7 +19,7 @@ export function RootNavigator() {
 
   if (state.status !== 'ready') return null;
 
-  const destination = destinationFor({
+  const destination = resolveDestination({
     session: state.session,
     hasProfile: state.hasProfile,
   });

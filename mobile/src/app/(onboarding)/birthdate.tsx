@@ -7,14 +7,14 @@ import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
-import { ageOn, isAdult } from '@/features/signup/helpers/age/age';
-import { defaultBirthdate } from '@/features/signup/helpers/default-birthdate/default-birthdate';
+import { getAgeOn, isAdult } from '@/features/signup/helpers/age/age';
+import { getDefaultBirthdate } from '@/features/signup/helpers/get-default-birthdate/get-default-birthdate';
 import { useSignupDraft } from '@/features/signup/providers/signup-draft/signup-draft';
 
 export default function BirthdateScreen() {
   const { draft, update } = useSignupDraft();
   const today = new Date();
-  const [birthdate, setBirthdate] = useState(draft.birthdate ?? defaultBirthdate(today));
+  const [birthdate, setBirthdate] = useState(draft.birthdate ?? getDefaultBirthdate(today));
   const adult = isAdult(birthdate, today);
 
   function confirmBirthdate() {
@@ -37,7 +37,7 @@ export default function BirthdateScreen() {
         />
 
         <ThemedText themeColor="textSecondary" style={styles.age}>
-          {ageOn(birthdate, today)} ans
+          {getAgeOn(birthdate, today)} ans
         </ThemedText>
 
         {adult ? null : (

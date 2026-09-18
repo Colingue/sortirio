@@ -4,17 +4,17 @@ import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
-import { fridayLabel } from '@/features/availability/helpers/friday-label/friday-label';
+import { formatFridayLabel } from '@/features/availability/helpers/format-friday-label/format-friday-label';
 
 export type AvailabilityInvitationProps = {
-  openFriday: string;
+  nextOpenFriday: string;
   onPress: () => void;
   saving: boolean;
   failed: boolean;
 };
 
 export function AvailabilityInvitation({
-  openFriday,
+  nextOpenFriday,
   onPress,
   saving,
   failed,
@@ -22,7 +22,7 @@ export function AvailabilityInvitation({
   return (
     <ThemedView style={styles.container}>
       <ThemedView style={styles.words}>
-        <ThemedText type="title">{fridayLabel(openFriday)}</ThemedText>
+        <ThemedText type="title">{formatFridayLabel(nextOpenFriday)}</ThemedText>
 
         {failed ? (
           <ThemedText themeColor="textSecondary">

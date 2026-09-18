@@ -1,6 +1,6 @@
 import type { Session } from '@supabase/supabase-js';
 
-import { destinationFor } from './destination';
+import { resolveDestination } from './destination';
 
 const signedInSession: Session = {
   access_token: 'access-token',
@@ -16,16 +16,16 @@ const signedInSession: Session = {
   },
 };
 
-describe('destinationFor', () => {
+describe('resolveDestination', () => {
   it('sends a visitor without a session to the login screen', () => {
-    expect(destinationFor({ session: null, hasProfile: false })).toBe('login');
+    expect(resolveDestination({ session: null, hasProfile: false })).toBe('login');
   });
 
   it('sends a signed-in user without a profile to onboarding', () => {
-    expect(destinationFor({ session: signedInSession, hasProfile: false })).toBe('onboarding');
+    expect(resolveDestination({ session: signedInSession, hasProfile: false })).toBe('onboarding');
   });
 
   it('sends a signed-in user with a profile home', () => {
-    expect(destinationFor({ session: signedInSession, hasProfile: true })).toBe('home');
+    expect(resolveDestination({ session: signedInSession, hasProfile: true })).toBe('home');
   });
 });

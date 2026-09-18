@@ -13,7 +13,7 @@ const MONTHS = [
   'décembre',
 ];
 
-export function fridayLabel(isoDate: string): string {
+export function formatFridayLabel(isoDate: string): string {
   const [year, month, day] = isoDate.split('-').map(Number);
   const date = new Date(year, month - 1, day);
 
