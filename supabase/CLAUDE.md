@@ -18,7 +18,7 @@ Backend choices are settled in `docs/adr/2026-08-31-backend-supabase.md`.
 
 ## Secrets
 
-- The mobile app holds the anon key and nothing else. A `service_role` key never leaves
+- The mobile app holds the publishable key and nothing else. A secret key never leaves
   the server.
 
 ## Commands
