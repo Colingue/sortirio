@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
@@ -6,50 +5,13 @@ import { ThemedView } from '@/components/themed-view';
 import { useSessionState } from '@/features/auth/providers/session-provider/session-provider';
 import { AvailabilityInvitation } from '@/features/availability/components/availability-invitation/availability-invitation';
 import { AvailabilityNoted } from '@/features/availability/components/availability-noted/availability-noted';
-import { declareAvailability } from '@/features/availability/helpers/declare-availability/declare-availability';
-import { askNotificationPermission } from '@/features/notifications/helpers/ask-notification-permission/ask-notification-permission';
-import {
-  fetchFridayState,
-  type FridayState,
-} from '@/features/availability/helpers/friday-state/friday-state';
-
-type ScreenState =
-  | { status: 'loading' }
-  | { status: 'failed' }
-  | { status: 'ready'; fridayState: FridayState; saving: boolean; saveFailed: boolean };
+import { useFridayAvailabilityState } from '@/features/availability/helpers/friday-availability-state/friday-availability-state';
 
 export default function HomeScreen() {
   const session = useSessionState();
-  const [state, setState] = useState<ScreenState>({ status: 'loading' });
   const userId = session.status === 'ready' ? session.session?.user.id : undefined;
-
-  useEffect(() => {
-    let cancelled = false;
-    const ready = (fridayState: FridayState) =>
-      !cancelled && setState({ status: 'ready', fridayState, saving: false, saveFailed: false });
-
-    fetchFridayState()
-      .then(ready)
-      .catch(() => !cancelled && setState({ status: 'failed' }));
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  async function handleDeclareAvailability() {
-    if (!userId || state.status !== 'ready') return;
-
-    setState({ ...state, saving: true, saveFailed: false });
-    try {
-      const postedFriday = state.fridayState.nextOpenFriday;
-      await declareAvailability(userId);
-      setState({ ...state, saving: false, fridayState: { ...state.fridayState, postedFriday } });
-      void askNotificationPermission();
-    } catch {
-      setState({ ...state, saving: false, saveFailed: true });
-    }
-  }
+  const { state, handleDeclareAvailability, handleCancelAvailability } =
+    useFridayAvailabilityState(userId);
 
   if (state.status !== 'ready') {
     return (
@@ -74,7 +36,13 @@ export default function HomeScreen() {
     );
   }
 
-  return <AvailabilityNoted />;
+  return (
+    <AvailabilityNoted
+      onConfirmCancel={() => void handleCancelAvailability()}
+      canceling={state.canceling}
+      cancelFailed={state.cancelFailed}
+    />
+  );
 }
 
 const styles = StyleSheet.create({
