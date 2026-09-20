@@ -10,3 +10,12 @@ Be extremely concise. Sacrifice grammar for the sake of concision.
 # Expo documentation
 
 Expo has changed -> Read the exact versioned docs at https://docs.expo.dev/versions/v57.0.0/ before writing any code.
+
+# Naming philosophy
+
+Function names must be readable, so you can understand what the function does.
+A function name must contain a verb.
+
+Good: getUserName() Bad: name()
+
+Naming must be: descriptive and unambiguous
