@@ -38,6 +38,7 @@ export default function HomeScreen() {
 
   return (
     <AvailabilityNoted
+      canCancel={state.fridayState.postedFriday === state.fridayState.nextOpenFriday}
       onConfirmCancel={() => void handleCancelAvailability()}
       canceling={state.canceling}
       cancelFailed={state.cancelFailed}

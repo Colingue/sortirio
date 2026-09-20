@@ -7,30 +7,34 @@ import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 
 export type AvailabilityNotedProps = {
+  canCancel: boolean;
   onConfirmCancel: () => void;
   canceling: boolean;
   cancelFailed: boolean;
 };
 
 export function AvailabilityNoted({
+  canCancel,
   onConfirmCancel,
   canceling,
   cancelFailed,
 }: AvailabilityNotedProps) {
   const [confirming, setConfirming] = useState(false);
 
-  if (!confirming) {
+  if (!confirming || !canCancel) {
     return (
       <ThemedView style={styles.container}>
         <ThemedText type="title" style={styles.centered}>
           C&apos;est noté, on te prévient jeudi 19 h.
         </ThemedText>
 
-        <Pressable accessibilityRole="button" onPress={() => setConfirming(true)}>
-          <ThemedText type="link" themeColor="textSecondary">
-            Annuler ma dispo
-          </ThemedText>
-        </Pressable>
+        {canCancel ? (
+          <Pressable accessibilityRole="button" onPress={() => setConfirming(true)}>
+            <ThemedText type="link" themeColor="textSecondary">
+              Annuler ma dispo
+            </ThemedText>
+          </Pressable>
+        ) : null}
       </ThemedView>
     );
   }
