@@ -1,6 +1,6 @@
 import { File } from 'expo-file-system';
 
-import { isoDay } from '@/features/signup/helpers/iso-day/iso-day';
+import { isoDay } from '@/features/signup/helpers/isoDay/isoDay';
 import type { CompleteDraft } from '@/features/signup/providers/signup-draft/signup-draft';
 import { supabase } from '@/lib/supabase';
 

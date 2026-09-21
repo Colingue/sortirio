@@ -1,4 +1,4 @@
-import { formatFridayLabel } from './format-friday-label';
+import { formatFridayLabel } from './formatFridayLabel';
 
 describe('formatFridayLabel', () => {
   it('reads a plain date', () => {

@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 
 import {
-  applyCancelAvailability,
-  applyDeclareAvailability,
-} from '@/features/availability/helpers/apply-availability-action/apply-availability-action';
-import {
+  cancelAvailability,
+  declareAvailability,
   fetchFridayState,
   type FridayState,
-} from '@/features/availability/helpers/friday-state/friday-state';
+} from '@/features/availability/helpers/availability/availability';
+import { askNotificationPermission } from '@/features/notifications/helpers/askNotificationPermission/askNotificationPermission';
 
 export type ScreenState =
   | { status: 'loading' }
@@ -21,7 +20,7 @@ export type ScreenState =
       cancelFailed: boolean;
     };
 
-export function useFridayAvailabilityState(userId: string | undefined) {
+export function useAvailabilityScreen(userId: string | undefined) {
   const [state, setState] = useState<ScreenState>({ status: 'loading' });
 
   useEffect(() => {
@@ -50,24 +49,31 @@ export function useFridayAvailabilityState(userId: string | undefined) {
     if (!userId || state.status !== 'ready') return;
 
     setState({ ...state, saving: true, saveFailed: false });
-    const fridayState = await applyDeclareAvailability(userId, state.fridayState);
-    setState(
-      fridayState
-        ? { ...state, saving: false, fridayState }
-        : { ...state, saving: false, saveFailed: true },
-    );
+    try {
+      const postedFriday = state.fridayState.nextOpenFriday;
+      await declareAvailability(userId);
+      void askNotificationPermission();
+      setState({ ...state, saving: false, fridayState: { ...state.fridayState, postedFriday } });
+    } catch {
+      setState({ ...state, saving: false, saveFailed: true });
+    }
   }
 
   async function handleCancelAvailability() {
-    if (state.status !== 'ready') return;
+    if (state.status !== 'ready' || state.fridayState.postedFriday === null) return;
 
+    const postedFriday = state.fridayState.postedFriday;
     setState({ ...state, canceling: true, cancelFailed: false });
-    const fridayState = await applyCancelAvailability(state.fridayState);
-    setState(
-      fridayState
-        ? { ...state, canceling: false, fridayState }
-        : { ...state, canceling: false, cancelFailed: true },
-    );
+    try {
+      await cancelAvailability(postedFriday);
+      setState({
+        ...state,
+        canceling: false,
+        fridayState: { ...state.fridayState, postedFriday: null },
+      });
+    } catch {
+      setState({ ...state, canceling: false, cancelFailed: true });
+    }
   }
 
   return { state, handleDeclareAvailability, handleCancelAvailability };

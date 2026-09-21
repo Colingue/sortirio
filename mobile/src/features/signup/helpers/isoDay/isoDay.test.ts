@@ -1,4 +1,4 @@
-import { isoDay } from './iso-day';
+import { isoDay } from './isoDay';
 
 describe('isoDay', () => {
   it('writes the date as YYYY-MM-DD', () => {

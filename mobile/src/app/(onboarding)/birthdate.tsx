@@ -8,7 +8,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import { getAgeOn, isAdult } from '@/features/signup/helpers/age/age';
-import { getDefaultBirthdate } from '@/features/signup/helpers/get-default-birthdate/get-default-birthdate';
+import { getDefaultBirthdate } from '@/features/signup/helpers/getDefaultBirthdate/getDefaultBirthdate';
 import { useSignupDraft } from '@/features/signup/providers/signup-draft/signup-draft';
 
 export default function BirthdateScreen() {

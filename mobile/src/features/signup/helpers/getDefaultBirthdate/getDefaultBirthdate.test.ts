@@ -1,4 +1,4 @@
-import { getDefaultBirthdate } from './get-default-birthdate';
+import { getDefaultBirthdate } from './getDefaultBirthdate';
 
 describe('getDefaultBirthdate', () => {
   it('lands 25 years before today', () => {

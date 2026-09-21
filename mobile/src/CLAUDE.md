@@ -11,9 +11,7 @@ src/
 ```
 
 - One folder per topic, in product vocabulary: `auth/`, `profile/`, `routing/`.
-- Inside a feature, the structure is fixed: `components/`, `helpers/`, `providers/`, one
-  folder per file. Read `src/features/CLAUDE.md` before adding a file there.
-- Name a file after its topic, in kebab-case. Multiple functions per file, one
+- Name a file after its topic. Multiple functions per file, one
   topic per file.
 - Rename when the content outgrows the name: `has-profile.ts` → `profile.ts`.
 - Never `utils.ts`, `helpers.ts`, an `index.ts` barrel, nor three unrelated functions

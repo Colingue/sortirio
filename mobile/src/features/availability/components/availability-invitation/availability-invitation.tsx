@@ -4,7 +4,7 @@ import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
-import { formatFridayLabel } from '@/features/availability/helpers/format-friday-label/format-friday-label';
+import { formatFridayLabel } from '@/features/availability/helpers/formatFridayLabel/formatFridayLabel';
 
 export type AvailabilityInvitationProps = {
   nextOpenFriday: string;

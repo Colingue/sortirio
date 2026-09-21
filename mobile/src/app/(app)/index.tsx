@@ -5,13 +5,13 @@ import { ThemedView } from '@/components/themed-view';
 import { useSessionState } from '@/features/auth/providers/session-provider/session-provider';
 import { AvailabilityInvitation } from '@/features/availability/components/availability-invitation/availability-invitation';
 import { AvailabilityNoted } from '@/features/availability/components/availability-noted/availability-noted';
-import { useFridayAvailabilityState } from '@/features/availability/helpers/friday-availability-state/friday-availability-state';
+import { useAvailabilityScreen } from '@/features/availability/hooks/use-availability-screen/use-availability-screen';
 
 export default function HomeScreen() {
   const session = useSessionState();
   const userId = session.status === 'ready' ? session.session?.user.id : undefined;
   const { state, handleDeclareAvailability, handleCancelAvailability } =
-    useFridayAvailabilityState(userId);
+    useAvailabilityScreen(userId);
 
   if (state.status !== 'ready') {
     return (

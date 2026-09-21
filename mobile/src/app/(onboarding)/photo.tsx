@@ -12,7 +12,7 @@ import {
 import { type PickedPhoto } from '@/features/profile/helpers/photo/photo';
 import { PhotoPreview } from '@/features/signup/components/photo-preview/photo-preview';
 import { PhotoSourceButtons } from '@/features/signup/components/photo-source-buttons/photo-source-buttons';
-import { createProfile } from '@/features/signup/helpers/create-profile/create-profile';
+import { createProfile } from '@/features/signup/helpers/createProfile/createProfile';
 import {
   completeDraft,
   useSignupDraft,
