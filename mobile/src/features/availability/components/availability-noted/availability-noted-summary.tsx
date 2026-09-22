@@ -22,19 +22,24 @@ export function AvailabilityNotedSummary({
     <ThemedView style={styles.container}>
       <ThemedView style={styles.words}>
         <ThemedText type="title" style={styles.centered}>
-          C&apos;est noté, on te prévient jeudi 19 h.
+          C&apos;est noté ✅, on te prévient jeudi 19 h.
         </ThemedText>
 
         {remaining ? (
-          <ThemedText themeColor="textSecondary" style={styles.centered}>
-            Plus que {formatTimeRemaining(remaining)}
-          </ThemedText>
+          <ThemedView style={styles.countdown}>
+            <ThemedText themeColor="textSecondary" style={styles.centered}>
+              ⏳ On forme ton groupe dans
+            </ThemedText>
+            <ThemedText type="subtitle" style={styles.centered}>
+              {formatTimeRemaining(remaining)}
+            </ThemedText>
+          </ThemedView>
         ) : null}
 
         {citySignupCount !== null ? (
           <ThemedText themeColor="textSecondary" style={styles.centered}>
-            {citySignupCount} {citySignupCount === 1 ? 'personne inscrite' : 'personnes inscrites'}{' '}
-            à Lyon
+            👥 {citySignupCount}{' '}
+            {citySignupCount === 1 ? 'personne inscrite' : 'personnes inscrites'} à Lyon
           </ThemedText>
         ) : null}
       </ThemedView>
@@ -63,5 +68,8 @@ const styles = StyleSheet.create({
   },
   words: {
     gap: Spacing.three,
+  },
+  countdown: {
+    gap: Spacing.one,
   },
 });
