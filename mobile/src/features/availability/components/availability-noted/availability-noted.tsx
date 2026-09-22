@@ -5,12 +5,17 @@ import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
+import { useCountdown } from '@/hooks/use-countdown';
+
+import { AvailabilityNotedSummary } from './availability-noted-summary';
 
 export type AvailabilityNotedProps = {
   canCancel: boolean;
   onConfirmCancel: () => void;
   canceling: boolean;
   cancelFailed: boolean;
+  groupFormationAt: string | null;
+  citySignupCount: number | null;
 };
 
 export function AvailabilityNoted({
@@ -18,24 +23,20 @@ export function AvailabilityNoted({
   onConfirmCancel,
   canceling,
   cancelFailed,
+  groupFormationAt,
+  citySignupCount,
 }: AvailabilityNotedProps) {
   const [confirming, setConfirming] = useState(false);
+  const remaining = useCountdown(groupFormationAt);
 
   if (!confirming || !canCancel) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText type="title" style={styles.centered}>
-          C&apos;est noté, on te prévient jeudi 19 h.
-        </ThemedText>
-
-        {canCancel ? (
-          <Pressable accessibilityRole="button" onPress={() => setConfirming(true)}>
-            <ThemedText type="link" themeColor="textSecondary">
-              Annuler ma dispo
-            </ThemedText>
-          </Pressable>
-        ) : null}
-      </ThemedView>
+      <AvailabilityNotedSummary
+        canCancel={canCancel}
+        onRequestCancel={() => setConfirming(true)}
+        remaining={remaining}
+        citySignupCount={citySignupCount}
+      />
     );
   }
 

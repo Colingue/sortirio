@@ -42,6 +42,8 @@ export default function HomeScreen() {
       onConfirmCancel={() => void handleCancelAvailability()}
       canceling={state.canceling}
       cancelFailed={state.cancelFailed}
+      groupFormationAt={state.fridayState.groupFormationAt}
+      citySignupCount={state.fridayState.citySignupCount}
     />
   );
 }
