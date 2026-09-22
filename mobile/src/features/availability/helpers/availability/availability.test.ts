@@ -23,15 +23,41 @@ beforeEach(() => {
 describe('fetchFridayState', () => {
   it('reads the next open Friday and the posted one from the RPC row', async () => {
     mockSingle.mockResolvedValue({
-      data: { next_open_friday: '2026-09-25', posted_friday: '2026-09-18' },
+      data: {
+        next_open_friday: '2026-09-25',
+        posted_friday: '2026-09-18',
+        group_formation_at: '2026-09-17T17:00:00Z',
+        city_signup_count: 12,
+      },
       error: null,
     });
 
     await expect(fetchFridayState()).resolves.toEqual({
       nextOpenFriday: '2026-09-25',
       postedFriday: '2026-09-18',
+      groupFormationAt: '2026-09-17T17:00:00Z',
+      citySignupCount: 12,
     });
     expect(mockRpc).toHaveBeenCalledWith('get_friday_availability_status');
+  });
+
+  it('reads nulls for the deadline and the count when nothing is posted', async () => {
+    mockSingle.mockResolvedValue({
+      data: {
+        next_open_friday: '2026-09-25',
+        posted_friday: null,
+        group_formation_at: null,
+        city_signup_count: null,
+      },
+      error: null,
+    });
+
+    await expect(fetchFridayState()).resolves.toEqual({
+      nextOpenFriday: '2026-09-25',
+      postedFriday: null,
+      groupFormationAt: null,
+      citySignupCount: null,
+    });
   });
 
   it('throws when the RPC fails', async () => {
