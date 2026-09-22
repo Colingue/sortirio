@@ -8,7 +8,7 @@ import {
   takePhoto,
   type PickedPhoto,
 } from '@/features/profile/helpers/photo/photo';
-import { useTheme } from '@/hooks/use-theme';
+import { useTheme } from '@/hooks/useTheme';
 
 type PhotoSourceButtonsProps = {
   busy: boolean;

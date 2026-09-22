@@ -5,7 +5,7 @@ import { ThemedView } from '@/components/themed-view';
 import { useSessionState } from '@/features/auth/providers/session-provider/session-provider';
 import { AvailabilityInvitation } from '@/features/availability/components/availability-invitation/availability-invitation';
 import { AvailabilityNoted } from '@/features/availability/components/availability-noted/availability-noted';
-import { useAvailabilityScreen } from '@/features/availability/hooks/use-availability-screen/use-availability-screen';
+import { useAvailabilityScreen } from '@/features/availability/hooks/useAvailabilityScreen/useAvailabilityScreen';
 
 export default function HomeScreen() {
   const session = useSessionState();

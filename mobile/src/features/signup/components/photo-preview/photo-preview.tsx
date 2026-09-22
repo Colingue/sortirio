@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
+import { useTheme } from '@/hooks/useTheme';
 
 export function PhotoPreview({ uri }: { uri?: string }) {
   const theme = useTheme();

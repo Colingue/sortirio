@@ -5,7 +5,7 @@ import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
-import { useCountdown } from '@/hooks/use-countdown';
+import { useCountdown } from '@/hooks/useCountdown';
 
 import { AvailabilityNotedSummary } from './availability-noted-summary';
 
