@@ -14,8 +14,6 @@ src/
 - Name a file after its topic. Multiple functions per file, one
   topic per file.
 - Rename when the content outgrows the name: `has-profile.ts` → `profile.ts`.
-- Never `utils.ts`, `helpers.ts`, an `index.ts` barrel, nor three unrelated functions
-  in a single file.
 - `app/` imports `features/`. `features/` never imports `app/`.
 - A feature importing another feature: ok once, suspect twice — extract
   the shared part into its own feature.
