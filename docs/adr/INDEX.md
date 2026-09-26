@@ -10,6 +10,7 @@ waiting for Colin: it settles nothing, and nothing is built on it until he says 
 
 | Record                                                                                   | Date       | Status     | What it settles                                                                                                                                                                              |
 | ---------------------------------------------------------------------------------------- | ---------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Mobile dev runs against the hosted Supabase project](2026-09-26-mobile-dev-against-hosted-supabase.md) | 2026-09-26 | proposed   | `mobile/.env.local` points at the hosted project, not the local stack — Google sign-in is only configured there. Local stack stays for migrations and SQL-only checks. En attente de Colin. |
 | [Jamais de groupe en dessous de trois personnes](2026-09-24-minimum-group-size-three.md) | 2026-09-24 | proposed   | En dessous de 3 utilisateurs dispo dans une ville, aucun groupe n'est formé ; un groupe de 2 est refusé dans tous les cas. En attente de Colin.                                              |
 | [The profile has no gender](2026-09-08-no-gender-in-profile.md)                          | 2026-09-08 | accepted   | The gender leaves the profile entirely: not asked at sign-up, not stored, not used. Sign-up drops to four screens.                                                                           |
 | [Testing platform — the iOS simulator](2026-09-06-testing-on-ios-simulator.md)           | 2026-09-06 | accepted   | Stories are built and verified in `npm run ios`; the web target is dropped and its `.web.ts` files deleted; Android is verified only at its first EAS build. Supersedes the Expo web record. |
@@ -35,6 +36,8 @@ waiting for Colin: it settles nothing, and nothing is built on it until he says 
 - **What the profile holds, what is asked at sign-up** → the profile has no gender
 - **Group size, what happens when too few people are available** → jamais de groupe en dessous
   de trois (proposed)
+- **Which Supabase project the app talks to during manual testing, local stack vs hosted**
+  → mobile dev runs against the hosted Supabase project (proposed)
 
 ## Keeping this file honest
 
