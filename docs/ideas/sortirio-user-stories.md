@@ -198,11 +198,12 @@ suite de la liste._
   - Given un groupe vient d'être formé, When le job attribue les lieux, Then le groupe a
     exactement un lieu avec un nom et une adresse, tiré de la table de lieux **de la
     ville du groupe**.
-  - Given plusieurs groupes sont formés le même vendredi, When les lieux sont attribués,
-    Then deux groupes du même soir n'ont jamais le même lieu.
+  - Given plusieurs groupes sont formés le même vendredi et qu'il y a au moins autant de
+    lieux que de groupes, When les lieux sont attribués, Then deux groupes du même soir
+    n'ont jamais le même lieu.
   - Given il y a moins de lieux disponibles que de groupes formés, When le job
-    s'exécute, Then les groupes en excès ne sont pas créés et l'erreur est tracée côté
-    backend.
+    s'exécute, Then tous les groupes sont quand même formés et les lieux sont réutilisés
+    en étalant au maximum (jamais deux fois le même lieu avant que tous aient servi).
 - **Priority:** High
 
 ### 3.3

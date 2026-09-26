@@ -1,6 +1,5 @@
 export type City = {
-  id: string;
-  label: string;
+  name: string;
 };
 
-export const cities: City[] = [{ id: 'lyon', label: 'Lyon' }];
+export const cities: City[] = [{ name: 'Lyon' }];

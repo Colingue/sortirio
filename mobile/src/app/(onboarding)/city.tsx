@@ -13,14 +13,14 @@ export default function CityScreen() {
   const [city] = cities;
 
   function confirmCity() {
-    update({ city: city.id });
+    update({ city: city.name });
     router.push('/first-name');
   }
 
   return (
     <ThemedView style={styles.container}>
       <ThemedView style={styles.words}>
-        <ThemedText type="title">Sortirio est à {city.label}.</ThemedText>
+        <ThemedText type="title">Sortirio est à {city.name}.</ThemedText>
         <ThemedText themeColor="textSecondary">
           C&apos;est la seule ville pour l&apos;instant : on préfère bien faire sortir les Lyonnais
           avant d&apos;aller ailleurs. Les autres viendront.

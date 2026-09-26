@@ -5,36 +5,36 @@ import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import { formatTimeRemaining, type TimeRemaining } from '@/features/availability/helpers/countdown';
 
-export type AvailabilityNotedSummaryProps = {
+export type AvailabilityWaitingSummaryProps = {
   canCancel: boolean;
   onRequestCancel: () => void;
   remaining: TimeRemaining | null;
   citySignupCount: number | null;
 };
 
-export function AvailabilityNotedSummary({
+export function AvailabilityWaitingSummary({
   canCancel,
   onRequestCancel,
   remaining,
   citySignupCount,
-}: AvailabilityNotedSummaryProps) {
+}: AvailabilityWaitingSummaryProps) {
   return (
     <ThemedView style={styles.container}>
       <ThemedView style={styles.words}>
-        <ThemedText type="title" style={styles.centered}>
-          C&apos;est noté ✅, on te prévient jeudi 19 h.
-        </ThemedText>
-
         {remaining ? (
           <ThemedView style={styles.countdown}>
-            <ThemedText themeColor="textSecondary" style={styles.centered}>
-              ⏳ On forme ton groupe dans
+            <ThemedText type="title" style={styles.centered}>
+              On forme les groupes dans :
             </ThemedText>
             <ThemedText type="subtitle" style={styles.centered}>
               {formatTimeRemaining(remaining)}
             </ThemedText>
           </ThemedView>
-        ) : null}
+        ) : (
+          <ThemedText type="title" style={styles.centered}>
+            On forme les groupes jeudi 19 h.
+          </ThemedText>
+        )}
 
         {citySignupCount !== null ? (
           <ThemedText themeColor="textSecondary" style={styles.centered}>

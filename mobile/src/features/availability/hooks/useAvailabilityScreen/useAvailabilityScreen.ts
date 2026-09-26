@@ -20,14 +20,53 @@ export type ScreenState =
       cancelFailed: boolean;
     };
 
+type SetScreen = (screen: ScreenState) => void;
+
+async function runDeclareAvailability(
+  userId: string | undefined,
+  screen: ScreenState,
+  setScreen: SetScreen,
+): Promise<boolean> {
+  if (!userId || screen.status !== 'ready') return false;
+
+  setScreen({ ...screen, saving: true, saveFailed: false });
+  try {
+    const postedFriday = screen.fridayState.nextOpenFriday;
+    await declareAvailability(userId);
+    void askNotificationPermission();
+    setScreen({ ...screen, saving: false, fridayState: { ...screen.fridayState, postedFriday } });
+    return true;
+  } catch {
+    setScreen({ ...screen, saving: false, saveFailed: true });
+    return false;
+  }
+}
+
+async function runCancelAvailability(screen: ScreenState, setScreen: SetScreen) {
+  if (screen.status !== 'ready' || screen.fridayState.postedFriday === null) return;
+
+  const postedFriday = screen.fridayState.postedFriday;
+  setScreen({ ...screen, canceling: true, cancelFailed: false });
+  try {
+    await cancelAvailability(postedFriday);
+    setScreen({
+      ...screen,
+      canceling: false,
+      fridayState: { ...screen.fridayState, postedFriday: null },
+    });
+  } catch {
+    setScreen({ ...screen, canceling: false, cancelFailed: true });
+  }
+}
+
 export function useAvailabilityScreen(userId: string | undefined) {
-  const [state, setState] = useState<ScreenState>({ status: 'loading' });
+  const [screen, setScreen] = useState<ScreenState>({ status: 'loading' });
 
   useEffect(() => {
     let cancelled = false;
     const ready = (fridayState: FridayState) =>
       !cancelled &&
-      setState({
+      setScreen({
         status: 'ready',
         fridayState,
         saving: false,
@@ -38,43 +77,16 @@ export function useAvailabilityScreen(userId: string | undefined) {
 
     fetchFridayState()
       .then(ready)
-      .catch(() => !cancelled && setState({ status: 'failed' }));
+      .catch(() => !cancelled && setScreen({ status: 'failed' }));
 
     return () => {
       cancelled = true;
     };
   }, []);
 
-  async function handleDeclareAvailability() {
-    if (!userId || state.status !== 'ready') return;
-
-    setState({ ...state, saving: true, saveFailed: false });
-    try {
-      const postedFriday = state.fridayState.nextOpenFriday;
-      await declareAvailability(userId);
-      void askNotificationPermission();
-      setState({ ...state, saving: false, fridayState: { ...state.fridayState, postedFriday } });
-    } catch {
-      setState({ ...state, saving: false, saveFailed: true });
-    }
-  }
-
-  async function handleCancelAvailability() {
-    if (state.status !== 'ready' || state.fridayState.postedFriday === null) return;
-
-    const postedFriday = state.fridayState.postedFriday;
-    setState({ ...state, canceling: true, cancelFailed: false });
-    try {
-      await cancelAvailability(postedFriday);
-      setState({
-        ...state,
-        canceling: false,
-        fridayState: { ...state.fridayState, postedFriday: null },
-      });
-    } catch {
-      setState({ ...state, canceling: false, cancelFailed: true });
-    }
-  }
-
-  return { state, handleDeclareAvailability, handleCancelAvailability };
+  return {
+    state: screen,
+    handleDeclareAvailability: () => runDeclareAvailability(userId, screen, setScreen),
+    handleCancelAvailability: () => runCancelAvailability(screen, setScreen),
+  };
 }

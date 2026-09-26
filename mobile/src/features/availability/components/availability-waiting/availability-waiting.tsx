@@ -7,9 +7,9 @@ import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import { useCountdown } from '@/hooks/useCountdown';
 
-import { AvailabilityNotedSummary } from './availability-noted-summary';
+import { AvailabilityWaitingSummary } from './availability-waiting-summary';
 
-export type AvailabilityNotedProps = {
+export type AvailabilityWaitingProps = {
   canCancel: boolean;
   onConfirmCancel: () => void;
   canceling: boolean;
@@ -18,20 +18,20 @@ export type AvailabilityNotedProps = {
   citySignupCount: number | null;
 };
 
-export function AvailabilityNoted({
+export function AvailabilityWaiting({
   canCancel,
   onConfirmCancel,
   canceling,
   cancelFailed,
   groupFormationAt,
   citySignupCount,
-}: AvailabilityNotedProps) {
+}: AvailabilityWaitingProps) {
   const [confirming, setConfirming] = useState(false);
   const remaining = useCountdown(groupFormationAt);
 
   if (!confirming || !canCancel) {
     return (
-      <AvailabilityNotedSummary
+      <AvailabilityWaitingSummary
         canCancel={canCancel}
         onRequestCancel={() => setConfirming(true)}
         remaining={remaining}

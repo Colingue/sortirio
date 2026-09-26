@@ -37,6 +37,7 @@ export function RootNavigator() {
 
         <Stack.Protected guard={destination === 'home'}>
           <Stack.Screen name="(app)/index" />
+          <Stack.Screen name="(app)/availability-confirmed" />
         </Stack.Protected>
       </Stack>
     </ThemeProvider>

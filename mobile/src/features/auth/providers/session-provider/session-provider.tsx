@@ -19,19 +19,17 @@ export function useProfileCreated(): () => void {
 }
 
 export function SessionProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<SessionState>({ status: 'loading' });
+  const [auth, setAuth] = useState<SessionState>({ status: 'loading' });
 
   const profileCreated = useCallback(() => {
-    setState((current) =>
-      current.status === 'ready' ? { ...current, hasProfile: true } : current,
-    );
+    setAuth((current) => (current.status === 'ready' ? { ...current, hasProfile: true } : current));
   }, []);
 
   useEffect(() => {
     let cancelled = false;
 
     const signedOut = () => {
-      if (!cancelled) setState({ status: 'ready', session: null, hasProfile: false });
+      if (!cancelled) setAuth({ status: 'ready', session: null, hasProfile: false });
     };
 
     const abandonSession = async () => {
@@ -47,7 +45,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
       try {
         const exists = await hasProfile(cached.user.id);
-        if (!cancelled) setState({ status: 'ready', session: cached, hasProfile: exists });
+        if (!cancelled) setAuth({ status: 'ready', session: cached, hasProfile: exists });
       } catch {
         return abandonSession();
       }
@@ -64,7 +62,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <SessionContext.Provider value={state}>
+    <SessionContext.Provider value={auth}>
       <ProfileCreatedContext.Provider value={profileCreated}>
         {children}
       </ProfileCreatedContext.Provider>
