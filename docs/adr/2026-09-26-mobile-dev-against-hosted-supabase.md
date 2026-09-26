@@ -1,6 +1,6 @@
 ---
 type: decision
-status: proposed
+status: accepted
 date: 2026-09-26
 tags: [mobile, backend, process]
 affects:
