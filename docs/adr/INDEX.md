@@ -10,6 +10,7 @@ waiting for Colin: it settles nothing, and nothing is built on it until he says 
 
 | Record                                                                                   | Date       | Status     | What it settles                                                                                                                                                                              |
 | ---------------------------------------------------------------------------------------- | ---------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Les appels HTTP sortants partent de Postgres, avec `pg_net`](2026-09-27-outbound-http-from-postgres.md) | 2026-09-27 | proposed   | Le backend joint le réseau depuis une fonction Postgres via `pg_net`, pas via une Edge Function ni un worker externe. En attente de Colin.                                                   |
 | [Mobile dev runs against the hosted Supabase project](2026-09-26-mobile-dev-against-hosted-supabase.md) | 2026-09-26 | proposed   | `mobile/.env.local` points at the hosted project, not the local stack — Google sign-in is only configured there. Local stack stays for migrations and SQL-only checks. En attente de Colin. |
 | [Jamais de groupe en dessous de trois personnes](2026-09-24-minimum-group-size-three.md) | 2026-09-24 | proposed   | En dessous de 3 utilisateurs dispo dans une ville, aucun groupe n'est formé ; un groupe de 2 est refusé dans tous les cas. En attente de Colin.                                              |
 | [The profile has no gender](2026-09-08-no-gender-in-profile.md)                          | 2026-09-08 | accepted   | The gender leaves the profile entirely: not asked at sign-up, not stored, not used. Sign-up drops to four screens.                                                                           |
@@ -38,6 +39,8 @@ waiting for Colin: it settles nothing, and nothing is built on it until he says 
   de trois (proposed)
 - **Which Supabase project the app talks to during manual testing, local stack vs hosted**
   → mobile dev runs against the hosted Supabase project (proposed)
+- **Comment le backend appelle un service extérieur, push et envois planifiés** → les
+  appels HTTP sortants partent de Postgres, avec `pg_net` (proposed)
 
 ## Keeping this file honest
 
