@@ -20,8 +20,7 @@ organiser, proposer ou voter pour un bar — c'est exactement l'effort que l'app
 Qu'un groupe formé sache où aller, sans intervention humaine le soir même.
 
 **Succès :** à l'issue du job, chaque groupe a exactement un lieu de sa ville, et au sein
-d'une même ville et d'un même vendredi, le nombre de groupes par lieu ne varie jamais de
-plus de 1.
+d'une même ville et d'un même vendredi
 
 ## Utilisateur et scénario
 
@@ -65,12 +64,4 @@ savoir où aller sans que personne n'ait à organiser quoi que ce soit.
 - Toute finesse sur le lieu : horaires d'ouverture, capacité, catégorie, distance aux
   membres, désactivation temporaire.
 
-## Risques / questions ouvertes
-
-- La règle « deux groupes du même soir, deux lieux différents » **ne peut pas** être une
-  contrainte d'unicité en base, puisque le partage devient légitime dès que la liste est
-  courte. Elle reste portée par le code du job, et donc par ses tests.
-- Le lien groupe → lieu étant obligatoire, un environnement local non seedé ne forme
-  plus aucun groupe. Le `seed.sql` devient une dépendance des tests de la story 3.1.
-- La liste de prod est vide aujourd'hui. Tant qu'elle l'est, le job ne produit rien :
-  c'est un point de vigilance avant le premier vendredi, pas un cas à coder.
+INFO : la base a la table venues qui représente les lieux. Il y a la structure suivante : id, created_at, name, address, city.

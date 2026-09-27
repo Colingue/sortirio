@@ -16,12 +16,6 @@ Backend choices are settled in `docs/adr/2026-08-31-backend-supabase.md`.
     `gender_preference`. This exception dies the day a tester installs the app.
 - Never change the schema by hand in the dashboard — environments drift.
 
-## Seed
-
-- `seed.sql` is a **local fixture only** — fake users, never played against the hosted
-  project (`db reset --linked`), and never sent by `db push` (which ships migrations,
-  not the seed).
-
 ## Secrets
 
 - The mobile app holds the publishable key and nothing else. A secret key never leaves
