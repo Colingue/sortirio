@@ -51,6 +51,12 @@ select pg_temp.seed_city_signups('Lyon', 12);
 -- not the prod list, that one Colin fills by hand (see docs/specs/us-3.2). Since
 -- groups.venue_id is not null, a city with no venue here forms no group at all: this
 -- block is a dependency of story 3.1's scenarios, not decoration.
+--
+-- To replay US 3.2's two edge cases, then `npx supabase db reset`:
+--   fewer venues than groups → seed 40 signups above and delete all but five venues
+--     below; 7 groups over 5 venues must land on 2,2,1,1,1
+--   city with no venue → add seed_city_signups('Marseille', 12) above; Marseille must
+--     form no group at all and log a warning
 insert into public.venues (city, name, address) values
   ('Lyon', 'L''Antiquaire', '20 Rue Hippolyte Flandrin, 69001 Lyon'),
   ('Lyon', 'Boston Tavern', '8 Place des Terreaux, 69001 Lyon'),
