@@ -7,12 +7,15 @@ import { useSessionState } from '@/features/auth/providers/session-provider/sess
 import { AvailabilityInvitation } from '@/features/availability/components/availability-invitation/availability-invitation';
 import { AvailabilityWaiting } from '@/features/availability/components/availability-waiting/availability-waiting';
 import { useAvailabilityScreen } from '@/features/availability/hooks/useAvailabilityScreen/useAvailabilityScreen';
+import { useRegisterPushToken } from '@/features/notifications/hooks/useRegisterPushToken/useRegisterPushToken';
 
 export default function HomeScreen() {
   const session = useSessionState();
   const userId = session.status === 'ready' ? session.session?.user.id : undefined;
   const { state, handleDeclareAvailability, handleCancelAvailability } =
     useAvailabilityScreen(userId);
+
+  useRegisterPushToken(userId);
 
   async function declareAndConfirm() {
     const posted = await handleDeclareAvailability();
