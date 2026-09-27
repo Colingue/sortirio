@@ -46,3 +46,19 @@ $$;
 -- Change the count below to replay a PRD scenario, then `npx supabase db reset`:
 -- 12 → 6+6 · 13 → 6+4+3 · 20 → 6+6+5+3 · 7 → 4+3 · 2 → no group.
 select pg_temp.seed_city_signups('Lyon', 12);
+
+-- Ten real, well-rated bars in central Lyon (1er/2e), plausible fixture for US 3.2 —
+-- not the prod list, that one Colin fills by hand (see docs/specs/us-3.2). Since
+-- groups.venue_id is not null, a city with no venue here forms no group at all: this
+-- block is a dependency of story 3.1's scenarios, not decoration.
+insert into public.venues (city, name, address) values
+  ('Lyon', 'L''Antiquaire', '20 Rue Hippolyte Flandrin, 69001 Lyon'),
+  ('Lyon', 'Boston Tavern', '8 Place des Terreaux, 69001 Lyon'),
+  ('Lyon', 'Le Wallace Bar', '2 Rue Octavio Mey, 69001 Lyon'),
+  ('Lyon', 'Hopstore', '27 Rue de la Martinière, 69001 Lyon'),
+  ('Lyon', 'Pépouze', '8 Place Saint-Vincent, 69001 Lyon'),
+  ('Lyon', 'La Serre', '4 Rue du Jardin des Plantes, 69001 Lyon'),
+  ('Lyon', 'Soif', '4 Rue Terme, 69001 Lyon'),
+  ('Lyon', 'Le Comptoir de la Bourse', '33 Rue de la Bourse, 69002 Lyon'),
+  ('Lyon', 'The Monkey Club', '19 Place Tolozan, 69001 Lyon'),
+  ('Lyon', 'Odessa', '14 Rue René Leynaud, 69001 Lyon');
