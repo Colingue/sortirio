@@ -1,12 +1,13 @@
 import { router } from 'expo-router';
-import { ActivityIndicator, StyleSheet } from 'react-native';
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { ScreenStatus } from '@/components/screen-status';
 import { useSessionState } from '@/features/auth/providers/session-provider/session-provider';
 import { AvailabilityInvitation } from '@/features/availability/components/availability-invitation/availability-invitation';
 import { AvailabilityWaiting } from '@/features/availability/components/availability-waiting/availability-waiting';
 import { useAvailabilityScreen } from '@/features/availability/hooks/useAvailabilityScreen/useAvailabilityScreen';
+import { GroupSummary } from '@/features/group/components/group-summary/group-summary';
+import { getOtherMembers } from '@/features/group/helpers/myGroup/myGroup';
+import { useMyGroup } from '@/features/group/hooks/useMyGroup/useMyGroup';
 import { useRegisterPushToken } from '@/features/notifications/hooks/useRegisterPushToken/useRegisterPushToken';
 
 export default function HomeScreen() {
@@ -14,6 +15,7 @@ export default function HomeScreen() {
   const userId = session.status === 'ready' ? session.session?.user.id : undefined;
   const { state, handleDeclareAvailability, handleCancelAvailability } =
     useAvailabilityScreen(userId);
+  const myGroup = useMyGroup();
 
   useRegisterPushToken(userId);
 
@@ -22,15 +24,17 @@ export default function HomeScreen() {
     if (posted) router.push('/availability-confirmed');
   }
 
-  if (state.status !== 'ready') {
+  if (state.status !== 'ready' || myGroup.status !== 'ready') {
+    return <ScreenStatus failed={state.status === 'failed' || myGroup.status === 'failed'} />;
+  }
+
+  if (myGroup.group) {
     return (
-      <ThemedView style={styles.centered}>
-        {state.status === 'loading' ? (
-          <ActivityIndicator />
-        ) : (
-          <ThemedText themeColor="textSecondary">Une erreur, réessaie plus tard.</ThemedText>
-        )}
-      </ThemedView>
+      <GroupSummary
+        venueName={myGroup.group.venueName}
+        otherMembers={getOtherMembers(myGroup.group, userId)}
+        onPress={() => router.push('/group')}
+      />
     );
   }
 
@@ -56,11 +60,3 @@ export default function HomeScreen() {
     />
   );
 }
-
-const styles = StyleSheet.create({
-  centered: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
