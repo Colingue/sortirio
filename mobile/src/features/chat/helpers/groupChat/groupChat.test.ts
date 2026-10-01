@@ -5,6 +5,7 @@ import {
   addReceivedMessage,
   buildLoadedChat,
   confirmPendingMessage,
+  findPendingMessage,
   setPendingMessageFailed,
   type GroupChatState,
 } from './groupChat';
@@ -138,5 +139,29 @@ describe('setPendingMessageFailed', () => {
     expect(setPendingMessageFailed(failed, 1, false)).toEqual(
       buildReadyChat({ pending: [{ localId: 1, body: 'Je suis en route', failed: false }] }),
     );
+  });
+});
+
+describe('findPendingMessage', () => {
+  it('finds the message a tap is retrying', () => {
+    const waiting = addPendingMessage(buildReadyChat(), 1, 'Je suis en route');
+
+    expect(findPendingMessage(waiting, 1)).toEqual({
+      localId: 1,
+      body: 'Je suis en route',
+      failed: false,
+    });
+  });
+
+  it('has nothing to retry once the server confirmed the message', () => {
+    const waiting = addPendingMessage(buildReadyChat(), 1, 'Je suis en route');
+
+    expect(
+      findPendingMessage(confirmPendingMessage(waiting, 1, buildMessage()), 1),
+    ).toBeUndefined();
+  });
+
+  it('has nothing to retry while the history is loading', () => {
+    expect(findPendingMessage({ status: 'loading' }, 1)).toBeUndefined();
   });
 });

@@ -5,6 +5,7 @@ import { FlatList, StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
+import { PendingMessages } from '@/features/chat/components/pending-messages/pending-messages';
 import {
   findMessageAuthor,
   formatMessageTime,
@@ -20,9 +21,10 @@ export type MessageListProps = {
   messages: GroupMessage[];
   pending: PendingMessage[];
   authorsById: Map<string, MessageAuthor>;
+  onRetry: (localId: number) => void;
 };
 
-export function MessageList({ messages, pending, authorsById }: MessageListProps) {
+export function MessageList({ messages, pending, authorsById, onRetry }: MessageListProps) {
   const theme = useTheme();
   const list = useRef<FlatList<GroupMessage>>(null);
 
@@ -33,15 +35,7 @@ export function MessageList({ messages, pending, authorsById }: MessageListProps
       keyExtractor={(message) => message.id}
       contentContainerStyle={styles.content}
       onContentSizeChange={() => list.current?.scrollToEnd({ animated: false })}
-      ListFooterComponent={
-        <ThemedView style={styles.waitingList}>
-          {pending.map((waiting) => (
-            <ThemedText key={waiting.localId} style={styles.waiting}>
-              {waiting.body}
-            </ThemedText>
-          ))}
-        </ThemedView>
-      }
+      ListFooterComponent={<PendingMessages pending={pending} onRetry={onRetry} />}
       renderItem={({ item: message }) => {
         const author = findMessageAuthor(authorsById, message.authorId);
 
@@ -93,11 +87,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'baseline',
     gap: Spacing.two,
-  },
-  waitingList: {
-    gap: Spacing.three,
-  },
-  waiting: {
-    opacity: 0.5,
   },
 });

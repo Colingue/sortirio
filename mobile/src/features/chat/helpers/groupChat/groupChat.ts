@@ -62,3 +62,12 @@ export function setPendingMessageFailed(
     ),
   };
 }
+
+export function findPendingMessage(
+  current: GroupChatState,
+  localId: number,
+): PendingMessage | undefined {
+  if (current.status !== 'ready') return undefined;
+
+  return current.pending.find((waiting) => waiting.localId === localId);
+}

@@ -5,6 +5,7 @@ import {
   addReceivedMessage,
   buildLoadedChat,
   confirmPendingMessage,
+  findPendingMessage,
   setPendingMessageFailed,
   type GroupChatState,
 } from '@/features/chat/helpers/groupChat/groupChat';
@@ -15,7 +16,10 @@ import {
 } from '@/features/chat/helpers/groupMessages/groupMessages';
 import { supabase } from '@/lib/supabase';
 
-export type GroupChat = GroupChatState & { createMessage: (body: string) => void };
+export type GroupChat = GroupChatState & {
+  createMessage: (body: string) => void;
+  saveFailedMessage: (localId: number) => void;
+};
 
 export function useGroupChat(groupId: string): GroupChat {
   const [chat, setChat] = useState<GroupChatState>({ status: 'loading' });
@@ -38,6 +42,12 @@ export function useGroupChat(groupId: string): GroupChat {
     };
   }, [groupId]);
 
+  function savePendingMessage(localId: number, body: string) {
+    createGroupMessage(groupId, body)
+      .then((sent) => setChat((current) => confirmPendingMessage(current, localId, sent)))
+      .catch(() => setChat((current) => setPendingMessageFailed(current, localId, true)));
+  }
+
   function createMessage(body: string) {
     const written = body.trim();
     if (!written) return;
@@ -46,11 +56,16 @@ export function useGroupChat(groupId: string): GroupChat {
     const localId = lastLocalId.current;
 
     setChat((current) => addPendingMessage(current, localId, written));
-
-    createGroupMessage(groupId, written)
-      .then((sent) => setChat((current) => confirmPendingMessage(current, localId, sent)))
-      .catch(() => setChat((current) => setPendingMessageFailed(current, localId, true)));
+    savePendingMessage(localId, written);
   }
 
-  return { ...chat, createMessage };
+  function saveFailedMessage(localId: number) {
+    const waiting = findPendingMessage(chat, localId);
+    if (!waiting?.failed) return;
+
+    setChat((current) => setPendingMessageFailed(current, localId, false));
+    savePendingMessage(localId, waiting.body);
+  }
+
+  return { ...chat, createMessage, saveFailedMessage };
 }

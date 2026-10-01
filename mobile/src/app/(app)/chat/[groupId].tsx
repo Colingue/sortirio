@@ -28,7 +28,12 @@ export default function ChatScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.screen} behavior="padding">
-      <MessageList messages={chat.messages} pending={chat.pending} authorsById={authorsById} />
+      <MessageList
+        messages={chat.messages}
+        pending={chat.pending}
+        authorsById={authorsById}
+        onRetry={chat.saveFailedMessage}
+      />
       <MessageComposer onSend={chat.createMessage} />
 
       <Pressable accessibilityRole="button" style={styles.back} onPress={() => router.back()}>
