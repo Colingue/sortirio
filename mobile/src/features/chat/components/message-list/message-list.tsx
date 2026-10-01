@@ -10,6 +10,7 @@ import {
   formatMessageTime,
   type GroupMessage,
   type MessageAuthor,
+  type PendingMessage,
 } from '@/features/chat/helpers/groupMessages/groupMessages';
 import { useTheme } from '@/hooks/useTheme';
 
@@ -17,10 +18,11 @@ const UNKNOWN_AUTHOR_LABEL = 'Un membre';
 
 export type MessageListProps = {
   messages: GroupMessage[];
+  pending: PendingMessage[];
   authorsById: Map<string, MessageAuthor>;
 };
 
-export function MessageList({ messages, authorsById }: MessageListProps) {
+export function MessageList({ messages, pending, authorsById }: MessageListProps) {
   const theme = useTheme();
   const list = useRef<FlatList<GroupMessage>>(null);
 
@@ -31,6 +33,15 @@ export function MessageList({ messages, authorsById }: MessageListProps) {
       keyExtractor={(message) => message.id}
       contentContainerStyle={styles.content}
       onContentSizeChange={() => list.current?.scrollToEnd({ animated: false })}
+      ListFooterComponent={
+        <ThemedView style={styles.waitingList}>
+          {pending.map((waiting) => (
+            <ThemedText key={waiting.localId} style={styles.waiting}>
+              {waiting.body}
+            </ThemedText>
+          ))}
+        </ThemedView>
+      }
       renderItem={({ item: message }) => {
         const author = findMessageAuthor(authorsById, message.authorId);
 
@@ -82,5 +93,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'baseline',
     gap: Spacing.two,
+  },
+  waitingList: {
+    gap: Spacing.three,
+  },
+  waiting: {
+    opacity: 0.5,
   },
 });

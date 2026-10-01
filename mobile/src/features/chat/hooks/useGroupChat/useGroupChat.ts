@@ -1,57 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import {
-  addNewMessages,
-  buildGroupMessage,
+  addPendingMessage,
+  addReceivedMessage,
+  buildLoadedChat,
+  confirmPendingMessage,
+  setPendingMessageFailed,
+  type GroupChatState,
+} from '@/features/chat/helpers/groupChat/groupChat';
+import {
+  createGroupMessage,
   fetchGroupMessages,
-  type GroupMessage,
-  type MessageRow,
+  watchGroupMessages,
 } from '@/features/chat/helpers/groupMessages/groupMessages';
 import { supabase } from '@/lib/supabase';
 
-export type GroupChatState =
-  { status: 'loading' } | { status: 'failed' } | { status: 'ready'; messages: GroupMessage[] };
+export type GroupChat = GroupChatState & { createMessage: (body: string) => void };
 
-export function useGroupChat(groupId: string): GroupChatState {
+export function useGroupChat(groupId: string): GroupChat {
   const [chat, setChat] = useState<GroupChatState>({ status: 'loading' });
+  const lastLocalId = useRef(0);
 
   useEffect(() => {
     let cancelled = false;
 
-    const channel = supabase
-      .channel(`group-messages:${groupId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'group_messages',
-          filter: `group_id=eq.${groupId}`,
-        },
-        (payload) => {
-          if (cancelled) return;
-
-          const received = buildGroupMessage(payload.new as MessageRow);
-
-          setChat((current) =>
-            current.status === 'ready'
-              ? { status: 'ready', messages: addNewMessages(current.messages, [received]) }
-              : current,
-          );
-        },
-      )
-      .subscribe();
+    const channel = watchGroupMessages(groupId, (received) => {
+      if (!cancelled) setChat((current) => addReceivedMessage(current, received));
+    });
 
     fetchGroupMessages(groupId)
-      .then((messages) => {
-        if (cancelled) return;
-
-        setChat((current) => ({
-          status: 'ready',
-          messages:
-            current.status === 'ready' ? addNewMessages(current.messages, messages) : messages,
-        }));
-      })
+      .then((messages) => !cancelled && setChat((current) => buildLoadedChat(current, messages)))
       .catch(() => !cancelled && setChat({ status: 'failed' }));
 
     return () => {
@@ -60,5 +38,19 @@ export function useGroupChat(groupId: string): GroupChatState {
     };
   }, [groupId]);
 
-  return chat;
+  function createMessage(body: string) {
+    const written = body.trim();
+    if (!written) return;
+
+    lastLocalId.current += 1;
+    const localId = lastLocalId.current;
+
+    setChat((current) => addPendingMessage(current, localId, written));
+
+    createGroupMessage(groupId, written)
+      .then((sent) => setChat((current) => confirmPendingMessage(current, localId, sent)))
+      .catch(() => setChat((current) => setPendingMessageFailed(current, localId, true)));
+  }
+
+  return { ...chat, createMessage };
 }

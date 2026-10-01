@@ -1,3 +1,5 @@
+import { type RealtimeChannel } from '@supabase/supabase-js';
+
 import { supabase } from '@/lib/supabase';
 
 const TABLE = 'group_messages';
@@ -61,6 +63,37 @@ export function findMessageAuthor(
   authorId: string,
 ): MessageAuthor | undefined {
   return authorsById.get(authorId);
+}
+
+export function watchGroupMessages(
+  groupId: string,
+  onInsert: (message: GroupMessage) => void,
+): RealtimeChannel {
+  return supabase
+    .channel(`group-messages:${groupId}`)
+    .on(
+      'postgres_changes',
+      { event: 'INSERT', schema: 'public', table: TABLE, filter: `group_id=eq.${groupId}` },
+      (payload) => onInsert(buildGroupMessage(payload.new as MessageRow)),
+    )
+    .subscribe();
+}
+
+export async function createGroupMessage(groupId: string, body: string): Promise<GroupMessage> {
+  const { data: session } = await supabase.auth.getSession();
+  const authorId = session.session?.user.id;
+
+  if (!authorId) throw new Error('No session to post a group message with.');
+
+  const { data, error } = await supabase
+    .from(TABLE)
+    .insert({ group_id: groupId, author_id: authorId, body: body.trim() })
+    .select('id, author_id, body, created_at')
+    .single();
+
+  if (error) throw error;
+
+  return buildGroupMessage(data as MessageRow);
 }
 
 export async function fetchGroupMessages(groupId: string): Promise<GroupMessage[]> {
