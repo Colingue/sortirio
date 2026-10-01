@@ -17,6 +17,8 @@ export function MessageComposer({ onSend }: MessageComposerProps) {
   const [draft, setDraft] = useState('');
 
   function createMessage() {
+    if (!draft.trim()) return;
+
     onSend(draft);
     setDraft('');
   }
@@ -31,6 +33,9 @@ export function MessageComposer({ onSend }: MessageComposerProps) {
         placeholderTextColor={theme.textSecondary}
         maxLength={MAX_MESSAGE_LENGTH}
         multiline
+        submitBehavior="submit"
+        returnKeyType="send"
+        onSubmitEditing={createMessage}
       />
       <PrimaryButton label="Envoyer" onPress={createMessage} disabled={!draft.trim()} />
     </ThemedView>
