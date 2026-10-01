@@ -14,6 +14,7 @@ import {
   fetchGroupMessages,
   watchGroupMessages,
 } from '@/features/chat/helpers/groupMessages/groupMessages';
+import { useRunOnForeground } from '@/hooks/useRunOnForeground';
 import { supabase } from '@/lib/supabase';
 
 export type GroupChat = GroupChatState & {
@@ -41,6 +42,12 @@ export function useGroupChat(groupId: string): GroupChat {
       void supabase.removeChannel(channel);
     };
   }, [groupId]);
+
+  useRunOnForeground(() => {
+    fetchGroupMessages(groupId)
+      .then((messages) => setChat((current) => buildLoadedChat(current, messages)))
+      .catch(() => undefined);
+  });
 
   function savePendingMessage(localId: number, body: string) {
     createGroupMessage(groupId, body)
