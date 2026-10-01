@@ -12,6 +12,7 @@ const mockCreateSignedUrls = jest.fn();
 
 function buildRow(overrides: Partial<GroupRow> = {}): GroupRow {
   return {
+    group_id: 'group-1',
     venue_name: 'Odessa',
     venue_address: '14 Rue René Leynaud, 69001 Lyon',
     member_user_id: 'user-1',
@@ -40,6 +41,7 @@ describe('buildMyGroup', () => {
     ];
 
     expect(buildMyGroup(rows, new Map())).toEqual({
+      groupId: 'group-1',
       venueName: 'Odessa',
       venueAddress: '14 Rue René Leynaud, 69001 Lyon',
       members: [

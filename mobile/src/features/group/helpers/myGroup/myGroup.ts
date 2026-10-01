@@ -13,12 +13,14 @@ export type GroupMember = {
 };
 
 export type MyGroup = {
+  groupId: string;
   venueName: string;
   venueAddress: string;
   members: GroupMember[];
 };
 
 export type GroupRow = {
+  group_id: string;
   venue_name: string;
   venue_address: string;
   member_user_id: string;
@@ -32,6 +34,7 @@ export function buildMyGroup(rows: GroupRow[], photoUrls: Map<string, string>): 
   if (!firstRow) return null;
 
   return {
+    groupId: firstRow.group_id,
     venueName: firstRow.venue_name,
     venueAddress: firstRow.venue_address,
     members: rows.map((row) => ({
