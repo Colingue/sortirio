@@ -39,6 +39,7 @@ export function RootNavigator() {
           <Stack.Screen name="(app)/index" />
           <Stack.Screen name="(app)/availability-confirmed" />
           <Stack.Screen name="(app)/group" />
+          <Stack.Screen name="(app)/chat/[groupId]" />
         </Stack.Protected>
       </Stack>
     </ThemeProvider>

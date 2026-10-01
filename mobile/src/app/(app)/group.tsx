@@ -20,6 +20,9 @@ export default function GroupScreen() {
       venueAddress={group.venueAddress}
       members={group.members}
       onOpenAddress={() => void openMapsForAddress(group.venueAddress)}
+      onOpenChat={() =>
+        router.push({ pathname: '/chat/[groupId]', params: { groupId: group.groupId } })
+      }
       onBack={() => router.back()}
     />
   );

@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import { Pressable, ScrollView, StyleSheet } from 'react-native';
 
+import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
@@ -12,6 +13,7 @@ export type GroupDetailsProps = {
   venueAddress: string;
   members: GroupMember[];
   onOpenAddress: () => void;
+  onOpenChat: () => void;
   onBack: () => void;
 };
 
@@ -20,6 +22,7 @@ export function GroupDetails({
   venueAddress,
   members,
   onOpenAddress,
+  onOpenChat,
   onBack,
 }: GroupDetailsProps) {
   const theme = useTheme();
@@ -49,6 +52,8 @@ export function GroupDetails({
         ))}
       </ScrollView>
 
+      <PrimaryButton label="Discuter" onPress={onOpenChat} />
+
       <Pressable accessibilityRole="button" onPress={onBack}>
         <ThemedText type="link" themeColor="textSecondary">
           Retour
@@ -61,6 +66,7 @@ export function GroupDetails({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    gap: Spacing.three,
     paddingHorizontal: Spacing.four,
     paddingVertical: Spacing.six,
   },
