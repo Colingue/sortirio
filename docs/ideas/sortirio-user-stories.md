@@ -287,8 +287,8 @@ suite de la liste._
   afin de réussir à les retrouver dans un bar bondé — c'est le seul mécanisme dont on
   dispose.
 - **Acceptance Criteria:**
-  - Given mon groupe est formé, When j'ouvre l'écran du groupe, Then le chat est déjà
-    ouvert et accessible.
+  - Given mon groupe est formé, When j'ouvre l'écran du groupe, Then le chat m'est
+    accessible sans aucune condition.
   - Given un autre membre envoie un message, When mon chat est ouvert, Then le message
     apparaît en moins de 2 secondes sans action de ma part.
   - Given j'envoie un message, When il est enregistré, Then il s'affiche avec ma photo,
