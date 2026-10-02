@@ -10,11 +10,13 @@ import { MessageList } from '@/features/chat/components/message-list/message-lis
 import { type MessageAuthor } from '@/features/chat/helpers/groupMessages/groupMessages';
 import { useGroupChat } from '@/features/chat/hooks/useGroupChat/useGroupChat';
 import { useMyGroup } from '@/features/group/hooks/useMyGroup/useMyGroup';
+import { useHideNotificationsOfChat } from '@/features/notifications/hooks/useHideNotificationsOfChat/useHideNotificationsOfChat';
 
 export default function ChatScreen() {
   const { groupId } = useLocalSearchParams<{ groupId: string }>();
   const myGroup = useMyGroup();
   const chat = useGroupChat(groupId);
+  useHideNotificationsOfChat(groupId);
 
   if (chat.status !== 'ready') return <ScreenStatus failed={chat.status === 'failed'} />;
 
