@@ -8,6 +8,7 @@ import { useAvailabilityScreen } from '@/features/availability/hooks/useAvailabi
 import { GroupSummary } from '@/features/group/components/group-summary/group-summary';
 import { getOtherMembers } from '@/features/group/helpers/myGroup/myGroup';
 import { useMyGroup } from '@/features/group/hooks/useMyGroup/useMyGroup';
+import { useOpenChatFromNotification } from '@/features/notifications/hooks/useOpenChatFromNotification/useOpenChatFromNotification';
 import { useRegisterPushToken } from '@/features/notifications/hooks/useRegisterPushToken/useRegisterPushToken';
 
 export default function HomeScreen() {
@@ -18,6 +19,7 @@ export default function HomeScreen() {
   const myGroup = useMyGroup();
 
   useRegisterPushToken(userId);
+  useOpenChatFromNotification();
 
   async function declareAndConfirm() {
     const posted = await handleDeclareAvailability();
