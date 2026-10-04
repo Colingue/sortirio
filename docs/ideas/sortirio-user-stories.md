@@ -242,7 +242,7 @@ suite de la liste._
     l'itinéraire dans l'application de cartes du téléphone.
 - **Priority:** High
 
-### 4.2
+### 4.2 ANNULE : raison, pas MVP. on a pas besoin de confirmer de toute facon ça ne changera rien au nombre de personne dans le groupe
 
 - **Title:** Confirmer ma présence avant vendredi 12 h
 - **Story:** En tant que membre d'un groupe, je veux confirmer que je viens, afin que
@@ -259,7 +259,7 @@ suite de la liste._
     affiché dans le groupe avec un statut « non confirmé » et n'est pas remplacé.
 - **Priority:** High
 
-### 4.3
+### 4.3 : raison, pas MVP. on a pas besoin de confirmer de toute facon ça ne changera rien au nombre de personne dans le groupe
 
 - **Title:** « Je ne viens plus » se dit tout seul dans le chat
 - **Story:** En tant que membre qui se désiste, je veux le signaler en un tap, afin que
@@ -309,7 +309,7 @@ suite de la liste._
   - Given je tape sur la notification, When l'app s'ouvre, Then j'arrive directement
     dans le chat du groupe concerné.
   - Given le chat est déjà ouvert à l'écran, When un message arrive, Then aucune
-    notification push n'est envoyée.
+    notification n'est affichée.
 - **Priority:** Medium
 
 ### 5.3
@@ -419,6 +419,51 @@ suite de la liste._
   « Je suis dispo », après l'écriture, une seule fois, et un refus ne bloque rien. Pas à
   la connexion : sans contexte, le refus est quasi certain, et sans push l'utilisateur
   ne saura jamais que son groupe est formé (story 3.3). Écrit dans la story 2.1.
+- **Où se retient « j'ai déjà vu l'annonce »** (story 9.1) : stockage local du
+  téléphone ou colonne en base. Le local ne survit pas à une réinstallation, la base
+  demande une migration. À trancher avant d'implémenter la 9.1.
 - **Ouverture depuis une notification** : la story 3.3 exige d'arriver directement sur
   l'écran du groupe. Ça n'est vrai que si le routage de démarrage de la story 1.1 ne
   s'interpose pas pendant qu'il vérifie la session.
+
+---
+
+## 9. L'annonce du groupe
+
+### 9.1
+
+_Ajoutée le 2026-09-29, après la 4.1 : l'écran existait, l'annonce manquait._
+
+- **Title:** Une modale annonce le groupe, une seule fois
+- **Story:** En tant que membre d'un groupe qui ouvre l'app, je veux être accueilli par
+  une annonce que mon groupe est là, afin de ne pas passer à côté de la seule nouvelle
+  de la semaine — sans qu'elle me soit répétée à chaque ouverture.
+- **Acceptance Criteria:**
+  - Given mon groupe est formé et je n'ai pas encore ouvert l'app depuis, When j'arrive
+    sur l'accueil, Then une modale m'annonce que mon groupe est prêt.
+  - Given la modale est affichée, When je la lis, Then elle est **purement
+    informative** : un seul bouton pour la fermer, aucune autre action — ni confirmer sa
+    présence, ni se désister, ni annuler sa dispo.
+  - Given j'ai fermé la modale, When je reviens sur l'accueil pendant la même fenêtre
+    (jusqu'au samedi 6 h), Then elle ne réapparaît pas.
+  - Given j'ai fermé la modale, When je tue l'app et la relance, Then elle ne réapparaît
+    pas : l'avoir vue survit au redémarrage.
+  - Given un nouveau groupe est formé le jeudi suivant, When j'ouvre l'app, Then la
+    modale réapparaît — c'est une fois **par groupe**, pas une fois pour toutes.
+  - Given je n'ai aucun groupe visible (pas assez de monde dans ma ville, ou samedi 6 h
+    passé), When j'ouvre l'accueil, Then aucune modale n'apparaît.
+  - Given le groupe se forme pendant que l'app est déjà ouverte sur l'accueil, When je
+    ne relance pas l'app, Then aucune modale n'apparaît avant la prochaine ouverture —
+    même limite que la 4.1, qui ne rafraîchit pas l'accueil tout seul.
+- **Notes:**
+  - **« Déjà vue » se retient par groupe**, pas par période : la clé est l'identité du
+    groupe. C'est ce qui fait réapparaître la modale le jeudi suivant sans code de date.
+  - **Où cette mémoire vit est le point de conception** : sur le téléphone, c'est une
+    ligne de stockage local et zéro migration, mais réinstaller l'app ou changer de
+    téléphone fait réapparaître la modale. En base, c'est exact sur tous les appareils
+    au prix d'une colonne ou d'une table. À trancher dans la spec.
+  - **Doublon assumé avec la notification de la 3.3** : celui qui a autorisé les
+    notifications apprend deux fois la même chose. La modale existe pour les autres —
+    un refus de notification ne bloque rien (story 2.1), et l'annonce ne doit pas
+    dépendre du push.
+- **Priority:** Low
