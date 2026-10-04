@@ -9,8 +9,8 @@ export type MyGroupsRowProps = {
   group: MyGroupsItem;
 };
 
-function openChat(groupId: string) {
-  router.push({ pathname: '/chat/[groupId]', params: { groupId } });
+function openGroup(groupId: string) {
+  router.push({ pathname: '/past-group/[groupId]', params: { groupId } });
 }
 
 export function MyGroupsRow({ group }: MyGroupsRowProps) {
@@ -18,7 +18,7 @@ export function MyGroupsRow({ group }: MyGroupsRowProps) {
     <Pressable
       accessibilityRole="button"
       style={styles.row}
-      onPress={() => openChat(group.groupId)}
+      onPress={() => openGroup(group.groupId)}
     >
       <ThemedText type="subtitle">{group.fridayLabel}</ThemedText>
       <ThemedText>{group.venueName}</ThemedText>

@@ -77,3 +77,13 @@ export async function fetchMyGroup(): Promise<MyGroup | null> {
 
   return buildMyGroup(rows, await signPhotoUrls(rows.map((row) => row.member_photo_path)));
 }
+
+export async function fetchGroupDetails(groupId: string): Promise<MyGroup | null> {
+  const { data, error } = await supabase.rpc('get_group_details', { target_group_id: groupId });
+  if (error) throw error;
+
+  const rows = (data ?? []) as GroupRow[];
+  if (rows.length === 0) return null;
+
+  return buildMyGroup(rows, await signPhotoUrls(rows.map((row) => row.member_photo_path)));
+}

@@ -1,6 +1,12 @@
 import { supabase } from '@/lib/supabase';
 
-import { buildMyGroup, fetchMyGroup, getOtherMembers, type GroupRow } from './myGroup';
+import {
+  buildMyGroup,
+  fetchGroupDetails,
+  fetchMyGroup,
+  getOtherMembers,
+  type GroupRow,
+} from './myGroup';
 
 jest.mock('@/lib/supabase', () => ({
   supabase: { rpc: jest.fn(), storage: { from: jest.fn() } },
@@ -121,5 +127,22 @@ describe('fetchMyGroup', () => {
     mockRpc.mockResolvedValue({ data: null, error: { message: 'boom' } });
 
     await expect(fetchMyGroup()).rejects.toEqual({ message: 'boom' });
+  });
+});
+
+describe('fetchGroupDetails', () => {
+  it('asks for the group by id', async () => {
+    mockRpc.mockResolvedValue({ data: [buildRow()], error: null });
+
+    const group = await fetchGroupDetails('group-1');
+
+    expect(mockRpc).toHaveBeenCalledWith('get_group_details', { target_group_id: 'group-1' });
+    expect(group?.venueName).toBe('Odessa');
+  });
+
+  it('has no group when I am not a member', async () => {
+    mockRpc.mockResolvedValue({ data: [], error: null });
+
+    await expect(fetchGroupDetails('group-9')).resolves.toBeNull();
   });
 });
