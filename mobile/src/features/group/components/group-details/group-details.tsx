@@ -5,6 +5,7 @@ import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
+import { ReportMemberButton } from '@/features/group/components/report-member-button/report-member-button';
 import { MEETING_TIME_LABEL, type GroupMember } from '@/features/group/helpers/myGroup/myGroup';
 import { useTheme } from '@/hooks/useTheme';
 
@@ -12,6 +13,9 @@ export type GroupDetailsProps = {
   venueName: string;
   venueAddress: string;
   members: GroupMember[];
+  myUserId: string | undefined;
+  reportedUserIds: Set<string>;
+  onReportMember: (userId: string) => Promise<void>;
   onOpenAddress: () => void;
   onOpenChat: () => void;
   onBack: () => void;
@@ -21,6 +25,9 @@ export function GroupDetails({
   venueName,
   venueAddress,
   members,
+  myUserId,
+  reportedUserIds,
+  onReportMember,
   onOpenAddress,
   onOpenChat,
   onBack,
@@ -45,9 +52,16 @@ export function GroupDetails({
               style={[styles.face, { backgroundColor: theme.backgroundElement }]}
               contentFit="cover"
             />
-            <ThemedText>
+            <ThemedText style={styles.name}>
               {member.firstName}, {member.age} ans
             </ThemedText>
+            {member.userId !== myUserId && (
+              <ReportMemberButton
+                firstName={member.firstName}
+                reported={reportedUserIds.has(member.userId)}
+                onReport={() => onReportMember(member.userId)}
+              />
+            )}
           </ThemedView>
         ))}
       </ScrollView>
@@ -78,6 +92,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.three,
+  },
+  name: {
+    flex: 1,
   },
   face: {
     width: 56,
