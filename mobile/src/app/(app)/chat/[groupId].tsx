@@ -7,26 +7,17 @@ import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { MessageComposer } from '@/features/chat/components/message-composer/message-composer';
 import { MessageList } from '@/features/chat/components/message-list/message-list';
-import { type MessageAuthor } from '@/features/chat/helpers/groupMessages/groupMessages';
 import { useGroupChat } from '@/features/chat/hooks/useGroupChat/useGroupChat';
-import { useMyGroup } from '@/features/group/hooks/useMyGroup/useMyGroup';
+import { useGroupMembers } from '@/features/group/hooks/useGroupMembers/useGroupMembers';
 import { useHideNotificationsOfChat } from '@/features/notifications/hooks/useHideNotificationsOfChat/useHideNotificationsOfChat';
 
 export default function ChatScreen() {
   const { groupId } = useLocalSearchParams<{ groupId: string }>();
-  const myGroup = useMyGroup();
+  const authorsById = useGroupMembers(groupId);
   const chat = useGroupChat(groupId);
   useHideNotificationsOfChat(groupId);
 
   if (chat.status !== 'ready') return <ScreenStatus failed={chat.status === 'failed'} />;
-
-  const members = myGroup.status === 'ready' ? (myGroup.group?.members ?? []) : [];
-  const authorsById = new Map<string, MessageAuthor>(
-    members.map((member) => [
-      member.userId,
-      { firstName: member.firstName, photoUrl: member.photoUrl },
-    ]),
-  );
 
   return (
     <KeyboardAvoidingView style={styles.screen} behavior="padding">

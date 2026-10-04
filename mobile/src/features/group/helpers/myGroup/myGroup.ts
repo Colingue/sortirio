@@ -50,7 +50,7 @@ export function getOtherMembers(group: MyGroup, myUserId: string | undefined): G
   return group.members.filter((member) => member.userId !== myUserId);
 }
 
-async function signPhotoUrls(paths: string[]): Promise<Map<string, string>> {
+export async function signPhotoUrls(paths: string[]): Promise<Map<string, string>> {
   const signed = new Map<string, string>();
 
   try {
