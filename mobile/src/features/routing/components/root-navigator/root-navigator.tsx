@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 
 import { useSessionState } from '@/features/auth/providers/session-provider/session-provider';
+import { GroupAnnouncement } from '@/features/group/components/group-announcement/group-announcement';
 import { resolveDestination } from '@/features/routing/helpers/destination/destination';
 
 SplashScreen.preventAutoHideAsync();
@@ -43,6 +44,7 @@ export function RootNavigator() {
           <Stack.Screen name="(app)/chat/[groupId]" />
         </Stack.Protected>
       </Stack>
+      {destination === 'home' && <GroupAnnouncement />}
     </ThemeProvider>
   );
 }
