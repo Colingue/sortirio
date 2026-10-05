@@ -34,7 +34,12 @@ async function runDeclareAvailability(
     const postedFriday = screen.fridayState.nextOpenFriday;
     await declareAvailability(userId);
     void askNotificationPermission();
-    setScreen({ ...screen, saving: false, fridayState: { ...screen.fridayState, postedFriday } });
+    // Countdown and signup count only come back once posted: re-read them.
+    const fridayState = await fetchFridayState().catch(() => ({
+      ...screen.fridayState,
+      postedFriday,
+    }));
+    setScreen({ ...screen, saving: false, fridayState });
     return true;
   } catch {
     setScreen({ ...screen, saving: false, saveFailed: true });

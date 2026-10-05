@@ -183,6 +183,10 @@ automatique et immédiate : les deux personnes ne seront **plus jamais placées
 dans le même groupe**. Aucune modération manuelle n'est requise pour ce
 mécanisme.
 
+Un compte signalé par **deux personnes différentes** est **banni**
+automatiquement : retiré tout de suite de son groupe en cours, et son email ne
+peut plus servir à se réinscrire.
+
 ## Stack technique
 
 - **Expo** (managed workflow) — SDK 57, React Native 0.86, React 19
