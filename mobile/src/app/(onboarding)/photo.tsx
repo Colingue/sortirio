@@ -9,7 +9,7 @@ import {
   useProfileCreated,
   useSessionState,
 } from '@/features/auth/providers/session-provider/session-provider';
-import { pickFromLibrary } from '@/features/profile/helpers/photo/photo';
+import { pickPhoto } from '@/features/profile/helpers/photo/photo';
 import { PhotoPicker } from '@/features/signup/components/photo-picker/photo-picker';
 import { SignupStepHeader } from '@/features/signup/components/signup-step-header/signup-step-header';
 import { createProfile } from '@/features/signup/helpers/createProfile/createProfile';
@@ -29,7 +29,7 @@ export default function PhotoScreen() {
   const userId = state.status === 'ready' ? state.session?.user.id : undefined;
 
   async function choosePhoto() {
-    const photo = await pickFromLibrary();
+    const photo = await pickPhoto();
     if (photo.type === 'picked') update({ photoUri: photo.uri });
   }
 
