@@ -32,6 +32,15 @@ export default function TabsLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profil',
+          tabBarIcon: ({ color }) => (
+            <SymbolView name={{ ios: 'person', android: 'person' }} tintColor={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

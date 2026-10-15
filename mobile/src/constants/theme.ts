@@ -19,6 +19,7 @@ export const Colors = {
   border: '#E4E0D7',
   borderStrong: '#D6D1C6',
   danger: '#A3261B',
+  dangerBorder: '#E2C2BC',
   onAccentDivider: 'rgba(255, 255, 255, 0.18)',
 } as const;
 
@@ -59,7 +60,9 @@ export const NavigationTheme: Theme = {
 export const Radius = {
   small: 10,
   medium: 12,
+  card: 14,
   large: 16,
+  extraLarge: 20,
   pill: 999,
 } as const;
 

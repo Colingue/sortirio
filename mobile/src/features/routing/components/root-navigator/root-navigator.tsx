@@ -46,6 +46,9 @@ export function RootNavigator() {
           <Stack.Screen name="(app)/group" />
           <Stack.Screen name="(app)/past-group/[groupId]" />
           <Stack.Screen name="(app)/chat/[groupId]" />
+          <Stack.Screen name="(app)/member/[groupId]/[userId]" />
+          <Stack.Screen name="(app)/report-member/[groupId]/[userId]" />
+          <Stack.Screen name="(app)/edit-profile" />
         </Stack.Protected>
       </Stack>
       {destination === 'home' && <GroupAnnouncement myUserId={state.session?.user.id} />}

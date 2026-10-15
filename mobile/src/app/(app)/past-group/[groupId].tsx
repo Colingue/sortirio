@@ -5,12 +5,10 @@ import { useSessionState } from '@/features/auth/providers/session-provider/sess
 import { GroupDetails } from '@/features/group/components/group-details/group-details';
 import { openMapsForAddress } from '@/features/group/helpers/maps/maps';
 import { useGroupDetails } from '@/features/group/hooks/useGroupDetails/useGroupDetails';
-import { useMemberReports } from '@/features/group/hooks/useMemberReports/useMemberReports';
 
 export default function PastGroupScreen() {
   const { groupId } = useLocalSearchParams<{ groupId: string }>();
   const groupDetails = useGroupDetails(groupId);
-  const memberReports = useMemberReports();
   const session = useSessionState();
   const myUserId = session.status === 'ready' ? session.session?.user.id : undefined;
 
@@ -27,8 +25,12 @@ export default function PastGroupScreen() {
       venueAddress={group.venueAddress}
       members={group.members}
       myUserId={myUserId}
-      reportedUserIds={memberReports.reportedUserIds}
-      onReportMember={memberReports.saveMemberReport}
+      onOpenMember={(userId) =>
+        router.push({
+          pathname: '/member/[groupId]/[userId]',
+          params: { groupId: group.groupId, userId },
+        })
+      }
       onOpenAddress={() => void openMapsForAddress(group.venueAddress)}
       onOpenChat={() =>
         router.push({ pathname: '/chat/[groupId]', params: { groupId: group.groupId } })

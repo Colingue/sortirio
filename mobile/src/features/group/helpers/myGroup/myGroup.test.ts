@@ -4,6 +4,7 @@ import {
   buildMyGroup,
   fetchGroupDetails,
   fetchMyGroup,
+  findGroupMemberProfile,
   formatMeetingLabel,
   formatMembersSentence,
   formatShortFridayLabel,
@@ -90,6 +91,28 @@ describe('getOtherMembers', () => {
     const group = buildMyGroup([buildRow()], new Map());
 
     expect(getOtherMembers(group!, undefined)).toHaveLength(1);
+  });
+});
+
+describe('findGroupMemberProfile', () => {
+  it('gives the member with its place in the group and the friday', () => {
+    const group = buildMyGroup(
+      [buildRow(), buildRow({ member_user_id: 'user-2', member_first_name: 'Bo' })],
+      new Map(),
+    );
+
+    expect(findGroupMemberProfile(group, 'user-2')).toEqual({
+      member: { userId: 'user-2', firstName: 'Bo', age: 31, photoUrl: null },
+      colorIndex: 1,
+      friday: '2026-10-16',
+    });
+  });
+
+  it('gives nothing when the user is not in the group', () => {
+    const group = buildMyGroup([buildRow()], new Map());
+
+    expect(findGroupMemberProfile(group, 'user-9')).toBeNull();
+    expect(findGroupMemberProfile(null, 'user-1')).toBeNull();
   });
 });
 

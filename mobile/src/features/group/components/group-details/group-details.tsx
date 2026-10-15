@@ -15,8 +15,7 @@ export type GroupDetailsProps = {
   venueAddress: string;
   members: GroupMember[];
   myUserId: string | undefined;
-  reportedUserIds: Set<string>;
-  onReportMember: (userId: string) => Promise<void>;
+  onOpenMember: (userId: string) => void;
   onOpenAddress: () => void;
   onOpenChat: () => void;
   onBack: () => void;
@@ -46,8 +45,7 @@ export function GroupDetails(props: GroupDetailsProps) {
             member={member}
             index={index}
             isMe={member.userId === props.myUserId}
-            reported={props.reportedUserIds.has(member.userId)}
-            onReport={() => props.onReportMember(member.userId)}
+            onOpenProfile={() => props.onOpenMember(member.userId)}
           />
         ))}
       </ScrollView>

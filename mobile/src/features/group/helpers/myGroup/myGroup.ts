@@ -30,6 +30,12 @@ export type GroupRow = {
   member_photo_path: string;
 };
 
+export type GroupMemberProfile = {
+  member: GroupMember;
+  colorIndex: number;
+  friday: string;
+};
+
 export function buildMyGroup(rows: GroupRow[], photoUrls: Map<string, string>): MyGroup | null {
   const [firstRow] = rows;
   if (!firstRow) return null;
@@ -71,6 +77,16 @@ export function formatMembersSentence(otherMembers: GroupMember[]): string {
 
 export function getOtherMembers(group: MyGroup, myUserId: string | undefined): GroupMember[] {
   return group.members.filter((member) => member.userId !== myUserId);
+}
+
+export function findGroupMemberProfile(
+  group: MyGroup | null,
+  userId: string,
+): GroupMemberProfile | null {
+  const colorIndex = group ? group.members.findIndex((member) => member.userId === userId) : -1;
+  if (!group || colorIndex < 0) return null;
+
+  return { member: group.members[colorIndex], colorIndex, friday: group.friday };
 }
 
 export async function signPhotoUrls(paths: string[]): Promise<Map<string, string>> {
