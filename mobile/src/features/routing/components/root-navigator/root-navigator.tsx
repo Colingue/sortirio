@@ -43,7 +43,7 @@ export function RootNavigator() {
           <Stack.Screen name="(app)/chat/[groupId]" />
         </Stack.Protected>
       </Stack>
-      {destination === 'home' && <GroupAnnouncement />}
+      {destination === 'home' && <GroupAnnouncement myUserId={state.session?.user.id} />}
     </ThemeProvider>
   );
 }

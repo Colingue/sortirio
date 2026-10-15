@@ -7,7 +7,6 @@ import { AvailabilityWaiting } from '@/features/availability/components/availabi
 import { useAvailabilityScreen } from '@/features/availability/hooks/useAvailabilityScreen/useAvailabilityScreen';
 import { cities } from '@/features/city/helpers/cities/cities';
 import { GroupSummary } from '@/features/group/components/group-summary/group-summary';
-import { getOtherMembers } from '@/features/group/helpers/myGroup/myGroup';
 import { useMyGroup } from '@/features/group/hooks/useMyGroup/useMyGroup';
 import { useOpenScreenFromNotification } from '@/features/notifications/hooks/useOpenScreenFromNotification/useOpenScreenFromNotification';
 import { useRegisterPushToken } from '@/features/notifications/hooks/useRegisterPushToken/useRegisterPushToken';
@@ -33,13 +32,7 @@ export default function HomeScreen() {
   }
 
   if (myGroup.group) {
-    return (
-      <GroupSummary
-        venueName={myGroup.group.venueName}
-        otherMembers={getOtherMembers(myGroup.group, userId)}
-        onPress={() => router.push('/group')}
-      />
-    );
+    return <GroupSummary city={city.name} group={myGroup.group} myUserId={userId} />;
   }
 
   if (state.fridayState.postedFriday === null) {

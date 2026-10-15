@@ -19,9 +19,14 @@ export const Colors = {
   border: '#E4E0D7',
   borderStrong: '#D6D1C6',
   danger: '#A3261B',
+  onAccentDivider: 'rgba(255, 255, 255, 0.18)',
 } as const;
 
 export const AvatarColors = ['#FCE9E0', '#F4A58A', '#F8C66A'] as const;
+
+export const MemberAvatarColors = ['#F4A58A', '#B9D3C6', '#F8C66A', '#C9C3E6', '#FCE9E0'] as const;
+
+export const MemberNameColors = ['#9E3412', '#2F5E48', '#7A5200', '#4A3F8C', '#9E3412'] as const;
 
 export type ThemeColor = keyof typeof Colors;
 

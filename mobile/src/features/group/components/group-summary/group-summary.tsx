@@ -1,64 +1,67 @@
-import { Image } from 'expo-image';
-import { StyleSheet } from 'react-native';
+import { router } from 'expo-router';
+import { ScrollView, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
-import { MEETING_TIME_LABEL, type GroupMember } from '@/features/group/helpers/myGroup/myGroup';
-import { useTheme } from '@/hooks/useTheme';
+import { Colors } from '@/constants/theme';
+import { CityHeader } from '@/features/availability/components/city-header/city-header';
+import { UpcomingFridays } from '@/features/availability/components/upcoming-fridays/upcoming-fridays';
+import { GroupSummaryCard } from '@/features/group/components/group-summary-card/group-summary-card';
+import { getOtherMembers, type MyGroup } from '@/features/group/helpers/myGroup/myGroup';
 
 export type GroupSummaryProps = {
-  venueName: string;
-  otherMembers: GroupMember[];
-  onPress: () => void;
+  city: string;
+  group: MyGroup;
+  myUserId: string | undefined;
 };
 
-export function GroupSummary({ venueName, otherMembers, onPress }: GroupSummaryProps) {
-  const theme = useTheme();
+export function GroupSummary({ city, group, myUserId }: GroupSummaryProps) {
+  const me = group.members.filter((member) => member.userId === myUserId);
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedView style={styles.words}>
-        <ThemedText type="title">{MEETING_TIME_LABEL}</ThemedText>
-        <ThemedText type="subtitle">{venueName}</ThemedText>
+    <SafeAreaView edges={['top']} style={styles.screen}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <CityHeader city={city} />
 
-        <ThemedView style={styles.faces}>
-          {otherMembers.map((member) => (
-            <Image
-              key={member.userId}
-              source={member.photoUrl ? { uri: member.photoUrl } : undefined}
-              style={[styles.face, { backgroundColor: theme.backgroundElement }]}
-              contentFit="cover"
-              accessibilityLabel={member.firstName}
-            />
-          ))}
-        </ThemedView>
-      </ThemedView>
+        <ThemedText type="title" style={styles.title}>
+          Ton groupe est prêt
+        </ThemedText>
 
-      <PrimaryButton label="Voir mon groupe" onPress={onPress} />
-    </ThemedView>
+        <GroupSummaryCard
+          group={group}
+          orderedMembers={[...getOtherMembers(group, myUserId), ...me]}
+          onOpenGroup={() => router.push('/group')}
+          onOpenChat={() =>
+            router.push({ pathname: '/chat/[groupId]', params: { groupId: group.groupId } })
+          }
+        />
+
+        <ThemedText type="subtitle" style={styles.section}>
+          Autres verres Dispo
+        </ThemedText>
+        <UpcomingFridays after={group.friday} city={city} />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.six,
+    backgroundColor: Colors.background,
   },
-  words: {
-    gap: Spacing.three,
+  content: {
+    paddingTop: 16,
+    paddingHorizontal: 20,
+    paddingBottom: 32,
   },
-  faces: {
-    flexDirection: 'row',
-    gap: Spacing.two,
-    marginTop: Spacing.two,
+  title: {
+    marginTop: 20,
+    fontSize: 28,
+    lineHeight: 34,
   },
-  face: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+  section: {
+    marginTop: 24,
+    marginBottom: 12,
   },
 });

@@ -1,65 +1,51 @@
+import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { Modal, StyleSheet, View } from 'react-native';
+import { Modal } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { PrimaryButton } from '@/components/primary-button';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { GroupReady } from '@/features/group/components/group-ready/group-ready';
 import {
   isGroupAnnouncementPending,
   saveGroupAnnouncementSeen,
 } from '@/features/group/helpers/groupAnnouncement/groupAnnouncement';
-import { fetchMyGroup } from '@/features/group/helpers/myGroup/myGroup';
+import { fetchMyGroup, type MyGroup } from '@/features/group/helpers/myGroup/myGroup';
 
-export function GroupAnnouncement() {
-  const [groupId, setGroupId] = useState<string | null>(null);
+export function GroupAnnouncement({ myUserId }: { myUserId: string | undefined }) {
+  const [pendingGroup, setPendingGroup] = useState<MyGroup | null>(null);
 
   useEffect(() => {
-    async function findPendingGroupId() {
+    async function findPendingGroup() {
       const group = await fetchMyGroup();
-      if (group && (await isGroupAnnouncementPending(group.groupId))) setGroupId(group.groupId);
+      if (group && (await isGroupAnnouncementPending(group.groupId))) setPendingGroup(group);
     }
 
-    findPendingGroupId().catch(() => {});
+    findPendingGroup().catch(() => {});
   }, []);
 
   function closeAnnouncement() {
-    if (groupId) void saveGroupAnnouncementSeen(groupId).catch(() => {});
-    setGroupId(null);
+    if (pendingGroup) void saveGroupAnnouncementSeen(pendingGroup.groupId).catch(() => {});
+    setPendingGroup(null);
   }
 
+  function openGroup() {
+    closeAnnouncement();
+    router.push('/group');
+  }
+
+  if (!pendingGroup) return null;
+
   return (
-    <Modal
-      visible={groupId !== null}
-      transparent
-      animationType="fade"
-      onRequestClose={closeAnnouncement}
-    >
-      <View style={styles.backdrop}>
-        <ThemedView style={styles.card}>
-          <ThemedText type="subtitle" style={styles.text}>
-            Ton groupe est là
-          </ThemedText>
-          <PrimaryButton label="OK" onPress={closeAnnouncement} />
-        </ThemedView>
-      </View>
+    <Modal visible animationType="fade" onRequestClose={closeAnnouncement}>
+      <SafeAreaProvider>
+        <StatusBar style="light" />
+        <GroupReady
+          group={pendingGroup}
+          myUserId={myUserId}
+          onOpenGroup={openGroup}
+          onClose={closeAnnouncement}
+        />
+      </SafeAreaProvider>
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  backdrop: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: Spacing.four,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  card: {
-    gap: Spacing.four,
-    padding: Spacing.four,
-    borderRadius: Spacing.four,
-  },
-  text: {
-    textAlign: 'center',
-  },
-});

@@ -22,6 +22,7 @@ export default function PastGroupScreen() {
 
   return (
     <GroupDetails
+      friday={group.friday}
       venueName={group.venueName}
       venueAddress={group.venueAddress}
       members={group.members}

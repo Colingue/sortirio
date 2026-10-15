@@ -1,9 +1,8 @@
+import { formatFridayLabel } from '@/features/availability/helpers/formatFridayLabel/formatFridayLabel';
 import { supabase } from '@/lib/supabase';
 
 const BUCKET = 'profile-photos';
 const PHOTO_URL_TTL_SECONDS = 3600;
-
-export const MEETING_TIME_LABEL = 'Vendredi 20h';
 
 export type GroupMember = {
   userId: string;
@@ -14,6 +13,7 @@ export type GroupMember = {
 
 export type MyGroup = {
   groupId: string;
+  friday: string;
   venueName: string;
   venueAddress: string;
   members: GroupMember[];
@@ -21,6 +21,7 @@ export type MyGroup = {
 
 export type GroupRow = {
   group_id: string;
+  friday: string;
   venue_name: string;
   venue_address: string;
   member_user_id: string;
@@ -35,6 +36,7 @@ export function buildMyGroup(rows: GroupRow[], photoUrls: Map<string, string>): 
 
   return {
     groupId: firstRow.group_id,
+    friday: firstRow.friday,
     venueName: firstRow.venue_name,
     venueAddress: firstRow.venue_address,
     members: rows.map((row) => ({
@@ -44,6 +46,27 @@ export function buildMyGroup(rows: GroupRow[], photoUrls: Map<string, string>): 
       photoUrl: photoUrls.get(row.member_photo_path) ?? null,
     })),
   };
+}
+
+export function formatMeetingLabel(friday: string): string {
+  return `${formatFridayLabel(friday)} · 20 h`;
+}
+
+export function formatShortFridayLabel(friday: string): string {
+  const [year, month, day] = friday.split('-').map(Number);
+  return new Date(year, month - 1, day).toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'short',
+  });
+}
+
+export function formatMembersCount(members: GroupMember[]): string {
+  return `${members.length} personnes, toi compris`;
+}
+
+export function formatMembersSentence(otherMembers: GroupMember[]): string {
+  const firstNames = otherMembers.map((member) => member.firstName);
+  return firstNames.length === 0 ? 'Toi.' : `${firstNames.join(', ')} et toi.`;
 }
 
 export function getOtherMembers(group: MyGroup, myUserId: string | undefined): GroupMember[] {

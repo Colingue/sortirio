@@ -4,6 +4,9 @@ import {
   buildMyGroup,
   fetchGroupDetails,
   fetchMyGroup,
+  formatMeetingLabel,
+  formatMembersSentence,
+  formatShortFridayLabel,
   getOtherMembers,
   type GroupRow,
 } from './myGroup';
@@ -19,6 +22,7 @@ const mockCreateSignedUrls = jest.fn();
 function buildRow(overrides: Partial<GroupRow> = {}): GroupRow {
   return {
     group_id: 'group-1',
+    friday: '2026-10-16',
     venue_name: 'Odessa',
     venue_address: '14 Rue René Leynaud, 69001 Lyon',
     member_user_id: 'user-1',
@@ -48,6 +52,7 @@ describe('buildMyGroup', () => {
 
     expect(buildMyGroup(rows, new Map())).toEqual({
       groupId: 'group-1',
+      friday: '2026-10-16',
       venueName: 'Odessa',
       venueAddress: '14 Rue René Leynaud, 69001 Lyon',
       members: [
@@ -85,6 +90,32 @@ describe('getOtherMembers', () => {
     const group = buildMyGroup([buildRow()], new Map());
 
     expect(getOtherMembers(group!, undefined)).toHaveLength(1);
+  });
+});
+
+describe('formatMeetingLabel', () => {
+  it('gives the day, the date and the hour', () => {
+    expect(formatMeetingLabel('2026-10-16')).toBe('Vendredi 16 octobre · 20 h');
+  });
+});
+
+describe('formatShortFridayLabel', () => {
+  it('gives the day and the short month', () => {
+    expect(formatShortFridayLabel('2026-10-16')).toBe('16 oct.');
+  });
+});
+
+describe('formatMembersSentence', () => {
+  it('lists the others, then me', () => {
+    const group = buildMyGroup(
+      [
+        buildRow({ member_first_name: 'Léa' }),
+        buildRow({ member_user_id: 'user-2', member_first_name: 'Hugo' }),
+      ],
+      new Map(),
+    );
+
+    expect(formatMembersSentence(group!.members)).toBe('Léa, Hugo et toi.');
   });
 });
 
