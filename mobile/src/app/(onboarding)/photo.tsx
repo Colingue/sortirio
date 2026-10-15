@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { Colors } from '@/constants/theme';
 import {
   useProfileCreated,
   useSessionState,
 } from '@/features/auth/providers/session-provider/session-provider';
-import { type PickedPhoto } from '@/features/profile/helpers/photo/photo';
-import { PhotoPreview } from '@/features/signup/components/photo-preview/photo-preview';
-import { PhotoSourceButtons } from '@/features/signup/components/photo-source-buttons/photo-source-buttons';
+import { pickFromLibrary } from '@/features/profile/helpers/photo/photo';
+import { PhotoPicker } from '@/features/signup/components/photo-picker/photo-picker';
+import { SignupStepHeader } from '@/features/signup/components/signup-step-header/signup-step-header';
 import { createProfile } from '@/features/signup/helpers/createProfile/createProfile';
 import {
   completeDraft,
@@ -28,8 +28,8 @@ export default function PhotoScreen() {
   const complete = completeDraft(draft);
   const userId = state.status === 'ready' ? state.session?.user.id : undefined;
 
-  async function choosePhoto(pick: () => Promise<PickedPhoto>) {
-    const photo = await pick();
+  async function choosePhoto() {
+    const photo = await pickFromLibrary();
     if (photo.type === 'picked') update({ photoUri: photo.uri });
   }
 
@@ -48,43 +48,54 @@ export default function PhotoScreen() {
   }
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedView style={styles.words}>
-        <ThemedText type="title">Une photo de toi.</ThemedText>
-        <ThemedText themeColor="textSecondary">
-          C&apos;est elle qui te rend reconnaissable au bar. Une seule suffit.
+    <SafeAreaView style={styles.screen}>
+      <SignupStepHeader step={4} />
+
+      <ThemedText type="title" style={styles.title}>
+        Ajoute ta photo principale
+      </ThemedText>
+      <ThemedText themeColor="textSecondary" style={styles.lead}>
+        Choisis une photo où l&apos;on voit bien ton visage, sans lunettes de soleil.
+      </ThemedText>
+
+      <PhotoPicker uri={draft.photoUri} busy={saving} onPress={() => void choosePhoto()} />
+
+      <View style={styles.spacer} />
+
+      {failed ? (
+        <ThemedText type="small" themeColor="danger" style={styles.error}>
+          L&apos;inscription n&apos;a pas abouti. Réessaie.
         </ThemedText>
-
-        <PhotoPreview uri={draft.photoUri} />
-        <PhotoSourceButtons busy={saving} onPick={choosePhoto} />
-
-        {failed ? (
-          <ThemedText type="small" themeColor="textSecondary" style={styles.centered}>
-            L&apos;inscription n&apos;a pas abouti. Réessayer.
-          </ThemedText>
-        ) : null}
-      </ThemedView>
+      ) : null}
 
       <PrimaryButton
         label={saving ? 'Un instant…' : 'Terminer'}
         onPress={() => void saveProfile()}
         disabled={!complete || !userId || saving}
       />
-    </ThemedView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.six,
+    paddingTop: 24,
+    paddingHorizontal: 20,
+    paddingBottom: 32,
+    backgroundColor: Colors.background,
   },
-  words: {
-    gap: Spacing.three,
+  title: {
+    marginTop: 40,
   },
-  centered: {
+  lead: {
+    marginTop: 10,
+  },
+  spacer: {
+    flex: 1,
+  },
+  error: {
+    marginBottom: 16,
     textAlign: 'center',
   },
 });

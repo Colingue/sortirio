@@ -1,68 +1,83 @@
-import { DateTimePicker } from '@expo/ui/community/datetime-picker';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { Colors } from '@/constants/theme';
+import { BirthdateInputs } from '@/features/signup/components/birthdate-inputs/birthdate-inputs';
+import { SignupStepHeader } from '@/features/signup/components/signup-step-header/signup-step-header';
 import { getAgeOn, isAdult } from '@/features/signup/helpers/age/age';
-import { getDefaultBirthdate } from '@/features/signup/helpers/getDefaultBirthdate/getDefaultBirthdate';
+import { parseBirthdate, toBirthdateFields } from '@/features/signup/helpers/birthdate/birthdate';
 import { useSignupDraft } from '@/features/signup/providers/signup-draft/signup-draft';
 
 export default function BirthdateScreen() {
   const { draft, update } = useSignupDraft();
   const today = new Date();
-  const [birthdate, setBirthdate] = useState(draft.birthdate ?? getDefaultBirthdate(today));
-  const adult = isAdult(birthdate, today);
+  const [fields, setFields] = useState(() => toBirthdateFields(draft.birthdate));
+
+  const birthdate = parseBirthdate(fields);
+  const adult = birthdate !== undefined && isAdult(birthdate, today);
+  const impossible = birthdate === undefined && fields.year.length === 4;
 
   function confirmBirthdate() {
+    if (!birthdate) return;
+
     update({ birthdate });
     router.push('/photo');
   }
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedView style={styles.words}>
-        <ThemedText type="title">Quand es-tu né ?</ThemedText>
+    <SafeAreaView style={styles.screen}>
+      <SignupStepHeader step={3} />
 
-        <DateTimePicker
-          value={birthdate}
-          onValueChange={(_event, date) => setBirthdate(date)}
-          mode="date"
-          display="spinner"
-          locale="fr_FR"
-          maximumDate={today}
-        />
+      <ThemedText type="title" style={styles.title}>
+        Ta date de naissance ?
+      </ThemedText>
+      <ThemedText themeColor="textSecondary" style={styles.lead}>
+        Elle sert à former des groupes d&apos;âges proches. Seul ton âge est affiché, jamais ta
+        date.
+      </ThemedText>
 
-        <ThemedText themeColor="textSecondary" style={styles.age}>
-          {getAgeOn(birthdate, today)} ans
+      <BirthdateInputs fields={fields} onChange={setFields} />
+
+      {birthdate ? (
+        <ThemedText themeColor={adult ? 'textSecondary' : 'danger'} style={styles.message}>
+          {adult ? `${getAgeOn(birthdate, today)} ans` : 'Dispo est réservé aux plus de 18 ans.'}
         </ThemedText>
+      ) : null}
+      {impossible ? (
+        <ThemedText themeColor="danger" style={styles.message}>
+          Cette date n&apos;existe pas.
+        </ThemedText>
+      ) : null}
 
-        {adult ? null : (
-          <ThemedText themeColor="textSecondary" style={styles.age}>
-            Dispo est réservé aux plus de 18 ans.
-          </ThemedText>
-        )}
-      </ThemedView>
+      <View style={styles.spacer} />
 
       <PrimaryButton label="Continuer" onPress={confirmBirthdate} disabled={!adult} />
-    </ThemedView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.six,
+    paddingTop: 24,
+    paddingHorizontal: 20,
+    paddingBottom: 32,
+    backgroundColor: Colors.background,
   },
-  words: {
-    gap: Spacing.three,
+  title: {
+    marginTop: 40,
   },
-  age: {
-    textAlign: 'center',
+  lead: {
+    marginTop: 10,
+  },
+  message: {
+    marginTop: 12,
+  },
+  spacer: {
+    flex: 1,
   },
 });
