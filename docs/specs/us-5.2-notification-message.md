@@ -99,7 +99,7 @@ bar.
 
 ## Risques / questions ouvertes
 
-- **Le critère 3 de la story est à reformuler.** `docs/ideas/sortirio-user-stories.md` dit
+- **Le critère 3 de la story est à reformuler.** `docs/ideas/dispo-user-stories.md` dit
   « aucune notification push n'est **envoyée** ». Avec l'exigence 9, ce qui est garanti,
   c'est qu'aucune notification n'est **affichée**.
 - **L'ADR `pg_net` est toujours `proposed`.**

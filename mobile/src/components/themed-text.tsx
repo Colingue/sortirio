@@ -1,10 +1,10 @@
-import { Platform, StyleSheet, Text, type TextProps } from 'react-native';
+import { StyleSheet, Text, type TextProps } from 'react-native';
 
-import { Fonts, ThemeColor } from '@/constants/theme';
+import { Colors, Fonts, ThemeColor } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
 
 export type ThemedTextProps = TextProps & {
-  type?: 'default' | 'title' | 'small' | 'smallBold' | 'subtitle' | 'link' | 'linkPrimary' | 'code';
+  type?: 'default' | 'title' | 'small' | 'smallBold' | 'subtitle' | 'link' | 'linkPrimary';
   themeColor?: ThemeColor;
 };
 
@@ -16,42 +16,40 @@ export function ThemedText({ style, type = 'default', themeColor, ...rest }: The
 
 const styles = StyleSheet.create({
   small: {
-    fontSize: 14,
+    fontFamily: Fonts.regular,
+    fontSize: 13,
     lineHeight: 20,
-    fontWeight: 500,
   },
   smallBold: {
-    fontSize: 14,
+    fontFamily: Fonts.semiBold,
+    fontSize: 13,
     lineHeight: 20,
-    fontWeight: 700,
   },
   default: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontWeight: 500,
+    fontFamily: Fonts.regular,
+    fontSize: 15,
+    lineHeight: 22,
   },
   title: {
-    fontSize: 48,
-    fontWeight: 600,
-    lineHeight: 52,
+    fontFamily: Fonts.boldItalic,
+    fontStyle: 'italic',
+    fontSize: 30,
+    lineHeight: 36,
   },
   subtitle: {
-    fontSize: 32,
-    lineHeight: 44,
-    fontWeight: 600,
+    fontFamily: Fonts.medium,
+    fontSize: 19,
+    lineHeight: 26,
   },
   link: {
-    lineHeight: 30,
+    fontFamily: Fonts.medium,
     fontSize: 14,
+    lineHeight: 30,
   },
   linkPrimary: {
-    lineHeight: 30,
+    fontFamily: Fonts.medium,
     fontSize: 14,
-    color: '#3c87f7',
-  },
-  code: {
-    fontFamily: Fonts.mono,
-    fontWeight: Platform.select({ android: 700 }) ?? 500,
-    fontSize: 12,
+    lineHeight: 20,
+    color: Colors.accent,
   },
 });

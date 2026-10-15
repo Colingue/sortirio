@@ -4,7 +4,7 @@ status: accepted
 date: 2026-09-06
 tags: [product, mobile]
 supersedes: [[2026-08-31-matching-by-city]]
-affects: [[docs/SPEC.md]], [[docs/specs/us-1.2-inscription.md]], [[docs/ideas/sortirio-user-stories.md]]
+affects: [[docs/SPEC.md]], [[docs/specs/us-1.2-inscription.md]], [[docs/ideas/dispo-user-stories.md]]
 ---
 
 # City screen — first, and Lyon alone
@@ -59,7 +59,7 @@ editable from it, and the Thursday job groups within a city.
 - ⚠️ **The demand signal is gone.** Choosing the second city will need something else —
   asking testers, or a waiting list on a landing page. Nothing in the app answers it any
   more.
-- ⚠️ A one-option screen is a confirmation, not a choice. It needs to read as "Sortirio
+- ⚠️ A one-option screen is a confirmation, not a choice. It needs to read as "Dispo
   is in Lyon for now", not as a list with one row.
 - → Generates: the city screen becomes the first route of the `(onboarding)` group;
   `docs/SPEC.md` needs its city paragraph and its "hors périmètre" line rewritten —

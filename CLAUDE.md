@@ -1,6 +1,6 @@
 # Project description
 
-Sortirio: a mobile app (iOS + Android, Expo / React Native) for making **friends**
+Dispo: a mobile app (iOS + Android, Expo / React Native) for making **friends**
 in a new city. Not a dating app.
 
 # Communication

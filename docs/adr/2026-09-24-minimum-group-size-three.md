@@ -37,4 +37,4 @@ forme aucun groupe ; ces utilisateurs attendent la semaine suivante.
   groupe de 3 à 2 (story 4.3), et rien ne le recompose.
 - → Génère l'état « personne n'a pu être groupé cette semaine » sur l'écran de dispo
   notée, et clôt le point « moins de 6 inscrits un jeudi » laissé « à confirmer » dans
-  `docs/ideas/sortirio-user-stories.md`.
+  `docs/ideas/dispo-user-stories.md`.

@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
-import { Spacing } from '@/constants/theme';
+import { Fonts, Radius } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
 
 export type PrimaryButtonProps = {
@@ -19,9 +19,15 @@ export function PrimaryButton({ label, onPress, disabled = false }: PrimaryButto
       accessibilityState={{ disabled }}
       onPress={onPress}
       disabled={disabled}
-      style={[styles.button, { backgroundColor: theme.backgroundElement }, disabled && styles.off]}
+      style={({ pressed }) => [
+        styles.button,
+        { backgroundColor: pressed ? theme.accentDark : theme.accent },
+        disabled && styles.off,
+      ]}
     >
-      <ThemedText type="subtitle">{label}</ThemedText>
+      <ThemedText themeColor="onAccent" style={styles.label}>
+        {label}
+      </ThemedText>
     </Pressable>
   );
 }
@@ -29,8 +35,13 @@ export function PrimaryButton({ label, onPress, disabled = false }: PrimaryButto
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    paddingVertical: Spacing.three,
-    borderRadius: Spacing.four,
+    justifyContent: 'center',
+    height: 54,
+    borderRadius: Radius.medium,
+  },
+  label: {
+    fontFamily: Fonts.semiBold,
+    fontSize: 17,
   },
   off: {
     opacity: 0.4,

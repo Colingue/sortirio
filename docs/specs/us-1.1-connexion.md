@@ -1,6 +1,6 @@
 # Spec — US 1.1 : Connexion en un tap avec Google
 
-_Écrit le 2026-09-02. Source : `docs/ideas/sortirio-user-stories.md` (story 1.1),
+_Écrit le 2026-09-02. Source : `docs/ideas/dispo-user-stories.md` (story 1.1),
 `docs/SPEC.md`, et les records `2026-08-31-backend-supabase`,
 `2026-08-30-mobile-stack-expo`._
 

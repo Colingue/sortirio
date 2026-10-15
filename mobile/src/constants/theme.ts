@@ -1,46 +1,59 @@
 import '@/global.css';
 
+import { DefaultTheme, type Theme } from 'expo-router';
 import { Platform } from 'react-native';
 
 export const Colors = {
-  light: {
-    text: '#000000',
-    background: '#ffffff',
-    backgroundElement: '#F0F0F3',
-    backgroundSelected: '#E0E1E6',
-    textSecondary: '#60646C',
-  },
-  dark: {
-    text: '#ffffff',
-    background: '#000000',
-    backgroundElement: '#212225',
-    backgroundSelected: '#2E3135',
-    textSecondary: '#B0B4BA',
-  },
+  text: '#1C1B18',
+  textSecondary: '#57524A',
+  textMuted: '#6B665D',
+  background: '#FDFBF6',
+  backgroundElement: '#F2EFE8',
+  backgroundSelected: '#FBEDE6',
+  accent: '#C9461B',
+  accentDark: '#9E3412',
+  onAccent: '#FFFFFF',
+  border: '#E4E0D7',
+  borderStrong: '#D6D1C6',
+  danger: '#A3261B',
 } as const;
 
-export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
+export const AvatarColors = ['#FCE9E0', '#F4A58A', '#F8C66A'] as const;
 
-export const Fonts = Platform.select({
-  ios: {
-    sans: 'system-ui',
-    serif: 'ui-serif',
-    rounded: 'ui-rounded',
-    mono: 'ui-monospace',
+export type ThemeColor = keyof typeof Colors;
+
+export const Fonts = {
+  regular: 'Poppins-Regular',
+  medium: 'Poppins-Medium',
+  semiBold: 'Poppins-SemiBold',
+  bold: 'Poppins-Bold',
+  boldItalic: 'Poppins-BoldItalic',
+} as const;
+
+export const NavigationTheme: Theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: Colors.accent,
+    background: Colors.background,
+    card: Colors.background,
+    text: Colors.text,
+    border: Colors.border,
   },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
+  fonts: {
+    regular: { fontFamily: Fonts.regular, fontWeight: 'normal' },
+    medium: { fontFamily: Fonts.medium, fontWeight: 'normal' },
+    bold: { fontFamily: Fonts.semiBold, fontWeight: 'normal' },
+    heavy: { fontFamily: Fonts.bold, fontWeight: 'normal' },
   },
-  web: {
-    sans: 'var(--font-display)',
-    serif: 'var(--font-serif)',
-    rounded: 'var(--font-rounded)',
-    mono: 'var(--font-mono)',
-  },
-});
+};
+
+export const Radius = {
+  small: 10,
+  medium: 12,
+  large: 16,
+  pill: 999,
+} as const;
 
 export const Spacing = {
   half: 2,

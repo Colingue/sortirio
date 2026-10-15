@@ -25,7 +25,7 @@ begin
     fake_id := gen_random_uuid();
 
     insert into auth.users (id, email)
-      values (fake_id, format('seed-%s-%s@sortirio.test', lower(city_name), i));
+      values (fake_id, format('seed-%s-%s@dispo.test', lower(city_name), i));
 
     insert into public.profiles (id, first_name, birthdate, photo_path, city)
       values (

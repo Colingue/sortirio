@@ -20,7 +20,7 @@ export default function CityScreen() {
   return (
     <ThemedView style={styles.container}>
       <ThemedView style={styles.words}>
-        <ThemedText type="title">Sortirio est à {city.name}.</ThemedText>
+        <ThemedText type="title">Dispo est à {city.name}.</ThemedText>
         <ThemedText themeColor="textSecondary">
           C&apos;est la seule ville pour l&apos;instant : on préfère bien faire sortir les Lyonnais
           avant d&apos;aller ailleurs. Les autres viendront.

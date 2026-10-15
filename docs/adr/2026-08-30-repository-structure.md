@@ -11,7 +11,7 @@ affects: [[2026-08-31-backend-supabase]]
 
 ## Context
 
-Sortirio needs a mobile app (Expo / React Native) and a backend (group matching, user
+Dispo needs a mobile app (Expo / React Native) and a backend (group matching, user
 accounts, venue list). We had to decide whether these two parts live in a single
 repository or in two separate ones, and how the root directory is organized.
 

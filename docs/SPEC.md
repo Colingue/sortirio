@@ -1,4 +1,4 @@
-# Sortirio — Spec produit (MVP)
+# Dispo — Spec produit (MVP)
 
 ## Concept
 
@@ -121,15 +121,15 @@ de langue, pas de personnalité.
 
 ## Déroulé d'une semaine
 
-| Moment                     | Ce qui se passe                                                                   |
-| -------------------------- | --------------------------------------------------------------------------------- |
-| Samedi → jeudi 19 h        | Les utilisateurs se déclarent disponibles pour le vendredi                        |
-| **Jeudi 19 h**             | Les groupes sont formés et annoncés : chacun découvre son groupe et son lieu      |
-| Jeudi 19 h → vendredi 12 h | Chat de groupe ouvert, chacun confirme sa présence                                |
-| Vendredi 18 h              | Rappel push : « c'est ce soir, [lieu], 20 h »                                     |
-| **Vendredi 20 h**          | La rencontre a lieu                                                                |
-| Samedi matin               | Une question à un tap : « tu y es allé ? »                                        |
-| Après                      | Le chat du groupe **reste ouvert**                                                |
+| Moment                     | Ce qui se passe                                                              |
+| -------------------------- | ---------------------------------------------------------------------------- |
+| Samedi → jeudi 19 h        | Les utilisateurs se déclarent disponibles pour le vendredi                   |
+| **Jeudi 19 h**             | Les groupes sont formés et annoncés : chacun découvre son groupe et son lieu |
+| Jeudi 19 h → vendredi 12 h | Chat de groupe ouvert, chacun confirme sa présence                           |
+| Vendredi 18 h              | Rappel push : « c'est ce soir, [lieu], 20 h »                                |
+| **Vendredi 20 h**          | La rencontre a lieu                                                          |
+| Samedi matin               | Une question à un tap : « tu y es allé ? »                                   |
+| Après                      | Le chat du groupe **reste ouvert**                                           |
 
 Entre le samedi et le jeudi, l'écran d'accueil n'est pas vide : il affiche un
 compte à rebours jusqu'au prochain vendredi et le nombre de personnes déjà
@@ -227,4 +227,4 @@ peut plus servir à se réinscrire.
   des groupes (recrutement des 12 à 30 premiers testeurs). **C'est le seul point
   qui peut rendre l'app intestable :** en dessous de 6 inscrits, elle ne peut rien
   afficher
-- Nom définitif de l'app (actuellement "Sortirio", provisoire)
+- ~~Nom définitif de l'app~~ **Tranché le 2026-10-15 : Dispo**

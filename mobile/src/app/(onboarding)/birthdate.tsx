@@ -42,7 +42,7 @@ export default function BirthdateScreen() {
 
         {adult ? null : (
           <ThemedText themeColor="textSecondary" style={styles.age}>
-            Sortirio est réservé aux plus de 18 ans.
+            Dispo est réservé aux plus de 18 ans.
           </ThemedText>
         )}
       </ThemedView>

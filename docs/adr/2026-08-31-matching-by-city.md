@@ -4,7 +4,7 @@ status: accepted
 date: 2026-08-31
 tags: [product, matching]
 supersedes:
-affects: [[docs/SPEC.md]], [[docs/ideas/sortirio-user-stories.md]]
+affects: [[docs/SPEC.md]], [[docs/ideas/dispo-user-stories.md]]
 ---
 
 # Grouping key — declared city, not GPS radius

@@ -146,7 +146,7 @@ réussir à les retrouver dans un bar bondé — c'est le seul mécanisme dont o
 
 ## Risques / questions ouvertes
 
-- **L'AC 1 de la story ne tient plus.** `docs/ideas/sortirio-user-stories.md` dit « quand
+- **L'AC 1 de la story ne tient plus.** `docs/ideas/dispo-user-stories.md` dit « quand
   j'ouvre l'écran du groupe, le chat est déjà ouvert et accessible ». Le choix d'une page
   séparée (exigence 1) la contredit : ce qui est garanti, c'est un **accès inconditionnel**
   depuis l'écran du groupe (exigence 2), pas un chat déjà à l'écran. La story est à

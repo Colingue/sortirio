@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "sortirio",
+    "name": "Dispo",
     "slug": "sortirio",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "sortirio",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "ios": {
       "icon": "./assets/expo.icon",
       "bundleIdentifier": "com.sortirio.app"
@@ -31,6 +31,18 @@
     "plugins": [
       "expo-router",
       [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Poppins-Regular.ttf",
+            "./assets/fonts/Poppins-Medium.ttf",
+            "./assets/fonts/Poppins-SemiBold.ttf",
+            "./assets/fonts/Poppins-Bold.ttf",
+            "./assets/fonts/Poppins-BoldItalic.ttf"
+          ]
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "backgroundColor": "#208AEF",
@@ -48,8 +60,8 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Sortirio utilise vos photos pour votre photo de profil, celle qui vous rend reconnaissable au bar.",
-          "cameraPermission": "Sortirio utilise l'appareil photo pour prendre votre photo de profil, celle qui vous rend reconnaissable au bar."
+          "photosPermission": "Dispo utilise vos photos pour votre photo de profil, celle qui vous rend reconnaissable au bar.",
+          "cameraPermission": "Dispo utilise l'appareil photo pour prendre votre photo de profil, celle qui vous rend reconnaissable au bar."
         }
       ]
     ],

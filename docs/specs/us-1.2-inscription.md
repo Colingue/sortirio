@@ -56,11 +56,11 @@ l'écran vide de la 1.1) · toute gestion sérieuse des coupures réseau.
 | Sujet             | Choix                                                                                                                                               |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Ville             | **Lyon seule affichée** ; l'écran annonce la couverture, il ne propose pas un choix                                                                 |
-| Pourquoi l'écran  | il reste le premier écran même sans choix : il pose que Sortirio marche par ville, et il servira tel quel le jour où une deuxième ouvre             |
+| Pourquoi l'écran  | il reste le premier écran même sans choix : il pose que Dispo marche par ville, et il servira tel quel le jour où une deuxième ouvre             |
 | Où vit la liste   | `features/city/cities.ts` — `{ id, label }`, pas de table SQL                                                                                       |
 | Prénom            | « Comment veux-tu qu'on t'appelle ? » · 30 caractères max, espaces coupés, vide = bouton désactivé                                                  |
 | Date de naissance | `@expo/ui/community/datetime-picker`, `mode="date"`, `maximumDate` = aujourd'hui · l'âge s'affiche dessous                                          |
-| 18 ans            | refusé sur l'écran de la date : « Sortirio est réservé aux plus de 18 ans. », impossible d'avancer                                                  |
+| 18 ans            | refusé sur l'écran de la date : « Dispo est réservé aux plus de 18 ans. », impossible d'avancer                                                  |
 | Genre             | **supprimé** — pas d'écran, pas de colonne                                                                                                          |
 | Photo             | **une seule**, obligatoire — c'est elle qui rend reconnaissable au bar                                                                              |
 | Photo, technique  | `expo-image-picker` · `launchImageLibraryAsync` / `launchCameraAsync` · `allowsEditing`, `aspect: [1, 1]`, `quality: 0.7`, `mediaTypes: ['images']` |
@@ -188,7 +188,7 @@ demander la localisation · demander le genre.
 
 ## Questions ouvertes
 
-1. **Le texte de l'écran ville.** Il doit se lire « Sortirio est à Lyon pour
+1. **Le texte de l'écran ville.** Il doit se lire « Dispo est à Lyon pour
    l'instant », pas comme une liste à une entrée. Formulation à trancher en
    codant.
 2. Le record `2026-09-08-no-gender-in-profile` est `proposed` : la suppression de

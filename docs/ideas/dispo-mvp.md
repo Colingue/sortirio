@@ -1,4 +1,4 @@
-# Sortirio — MVP
+# Dispo — MVP
 
 _Issu de la session d'idéation du 2026-08-31. Ce document fige la direction et les
 paris ; la spec produit détaillée vit dans `docs/SPEC.md`._

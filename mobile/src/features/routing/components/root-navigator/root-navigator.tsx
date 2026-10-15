@@ -1,8 +1,8 @@
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import { Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
 
+import { NavigationTheme } from '@/constants/theme';
 import { useSessionState } from '@/features/auth/providers/session-provider/session-provider';
 import { GroupAnnouncement } from '@/features/group/components/group-announcement/group-announcement';
 import { resolveDestination } from '@/features/routing/helpers/destination/destination';
@@ -11,7 +11,6 @@ SplashScreen.preventAutoHideAsync();
 
 export function RootNavigator() {
   const state = useSessionState();
-  const colorScheme = useColorScheme();
   const ready = state.status === 'ready';
 
   useEffect(() => {
@@ -26,7 +25,7 @@ export function RootNavigator() {
   });
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={NavigationTheme}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Protected guard={destination === 'login'}>
           <Stack.Screen name="(auth)/login" />

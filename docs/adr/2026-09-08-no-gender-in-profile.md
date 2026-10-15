@@ -17,7 +17,7 @@ asked on its own sign-up screen, stored `not null` on `profiles`, and shown to n
 
 That left one column and one full screen whose only justification was a use nobody had
 scheduled. The sign-up is meant to be short, and every screen in it is a place to drop
-out. Sortirio is also not a dating app: a gender collected "for later" on a profile that
+out. Dispo is also not a dating app: a gender collected "for later" on a profile that
 strangers see is exactly the signal the product does not want to send.
 
 ## Decision

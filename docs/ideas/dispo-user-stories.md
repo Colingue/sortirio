@@ -1,6 +1,6 @@
-# Sortirio — User stories du MVP
+# Dispo — User stories du MVP
 
-_Dérivé de `docs/ideas/sortirio-mvp.md` et `docs/SPEC.md` (2026-08-31)._
+_Dérivé de `docs/ideas/dispo-mvp.md` et `docs/SPEC.md` (2026-08-31)._
 
 Priorités : **High** = sans elle le pilote du premier vendredi n'a pas lieu ·
 **Medium** = le pilote a lieu mais dégradé · **Low** = confort.
