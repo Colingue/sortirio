@@ -18,14 +18,27 @@ const signedInSession: Session = {
 
 describe('resolveDestination', () => {
   it('sends a visitor without a session to the login screen', () => {
-    expect(resolveDestination({ session: null, hasProfile: false })).toBe('login');
+    expect(resolveDestination({ session: null, banned: false, hasProfile: false })).toBe('login');
   });
 
   it('sends a signed-in user without a profile to onboarding', () => {
-    expect(resolveDestination({ session: signedInSession, hasProfile: false })).toBe('onboarding');
+    expect(resolveDestination({ session: signedInSession, banned: false, hasProfile: false })).toBe(
+      'onboarding',
+    );
   });
 
   it('sends a signed-in user with a profile home', () => {
-    expect(resolveDestination({ session: signedInSession, hasProfile: true })).toBe('home');
+    expect(resolveDestination({ session: signedInSession, banned: false, hasProfile: true })).toBe(
+      'home',
+    );
+  });
+
+  it('sends a banned user to the banned screen, profile or not', () => {
+    expect(resolveDestination({ session: signedInSession, banned: true, hasProfile: true })).toBe(
+      'banned',
+    );
+    expect(resolveDestination({ session: signedInSession, banned: true, hasProfile: false })).toBe(
+      'banned',
+    );
   });
 });

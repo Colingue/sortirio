@@ -1,11 +1,13 @@
 import type { Session } from '@supabase/supabase-js';
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 
+import { isAccountBanned } from '@/features/auth/helpers/isAccountBanned/isAccountBanned';
 import { hasProfile } from '@/features/profile/helpers/hasProfile/hasProfile';
 import { supabase } from '@/lib/supabase';
 
 export type SessionState =
-  { status: 'loading' } | { status: 'ready'; session: Session | null; hasProfile: boolean };
+  | { status: 'loading' }
+  | { status: 'ready'; session: Session | null; banned: boolean; hasProfile: boolean };
 
 const SessionContext = createContext<SessionState>({ status: 'loading' });
 const ProfileCreatedContext = createContext<() => void>(() => {});
@@ -29,7 +31,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
 
     const signedOut = () => {
-      if (!cancelled) setAuth({ status: 'ready', session: null, hasProfile: false });
+      if (!cancelled) setAuth({ status: 'ready', session: null, banned: false, hasProfile: false });
     };
 
     const abandonSession = async () => {
@@ -44,8 +46,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       if (error) return abandonSession();
 
       try {
-        const exists = await hasProfile(cached.user.id);
-        if (!cancelled) setAuth({ status: 'ready', session: cached, hasProfile: exists });
+        const [banned, exists] = await Promise.all([isAccountBanned(), hasProfile(cached.user.id)]);
+        if (!cancelled) setAuth({ status: 'ready', session: cached, banned, hasProfile: exists });
       } catch {
         return abandonSession();
       }

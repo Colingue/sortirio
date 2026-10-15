@@ -21,6 +21,7 @@ export function RootNavigator() {
 
   const destination = resolveDestination({
     session: state.session,
+    banned: state.banned,
     hasProfile: state.hasProfile,
   });
 
@@ -29,6 +30,10 @@ export function RootNavigator() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Protected guard={destination === 'login'}>
           <Stack.Screen name="(auth)/login" />
+        </Stack.Protected>
+
+        <Stack.Protected guard={destination === 'banned'}>
+          <Stack.Screen name="banned" />
         </Stack.Protected>
 
         <Stack.Protected guard={destination === 'onboarding'}>
