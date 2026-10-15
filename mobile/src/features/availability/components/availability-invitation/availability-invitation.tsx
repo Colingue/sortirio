@@ -1,3 +1,4 @@
+import { type ReactNode } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -9,6 +10,7 @@ import { UpcomingFridays } from '@/features/availability/components/upcoming-fri
 
 export type AvailabilityInvitationProps = {
   city: string;
+  topCard?: ReactNode;
   nextOpenFriday: string;
   citySignupCount: number | null;
   onPress: () => void;
@@ -18,6 +20,7 @@ export type AvailabilityInvitationProps = {
 
 export function AvailabilityInvitation({
   city,
+  topCard,
   nextOpenFriday,
   citySignupCount,
   onPress,
@@ -28,6 +31,7 @@ export function AvailabilityInvitation({
     <SafeAreaView edges={['top']} style={styles.screen}>
       <ScrollView contentContainerStyle={styles.content}>
         <CityHeader city={city} />
+        {topCard}
 
         <ThemedText type="title" style={styles.title}>
           Participe au prochain verre Dispo

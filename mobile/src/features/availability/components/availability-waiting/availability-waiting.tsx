@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -11,6 +11,7 @@ import { AvailabilityWaitingSummary } from './availability-waiting-summary';
 
 export type AvailabilityWaitingProps = {
   city: string;
+  topCard?: ReactNode;
   postedFriday: string;
   canCancel: boolean;
   onConfirmCancel: () => void;
@@ -22,6 +23,7 @@ export type AvailabilityWaitingProps = {
 
 export function AvailabilityWaiting({
   city,
+  topCard,
   postedFriday,
   canCancel,
   onConfirmCancel,
@@ -37,6 +39,7 @@ export function AvailabilityWaiting({
     return (
       <AvailabilityWaitingSummary
         city={city}
+        topCard={topCard}
         postedFriday={postedFriday}
         canCancel={canCancel}
         onRequestCancel={() => setConfirming(true)}

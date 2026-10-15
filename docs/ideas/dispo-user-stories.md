@@ -382,8 +382,10 @@ suite de la liste._
   - Given je réponds, When la réponse est enregistrée, Then la question disparaît
     définitivement pour cette soirée et rien d'autre ne m'est demandé (pas de note, pas
     de commentaire).
-  - Given je ne réponds pas, When j'ouvre l'app le dimanche, Then la question n'est plus
-    posée et la réponse est comptée comme absente de la mesure.
+  - Given je ne réponds pas samedi, When j'ouvre l'app avant jeudi 19 h, Then la
+    question est toujours là (« Tu y es allé vendredi soir ? »).
+  - Given je n'ai pas répondu, When jeudi 19 h passe, Then la question n'est plus posée
+    et la réponse est comptée comme absente de la mesure.
 - **Priority:** High
 
 ### 8.2

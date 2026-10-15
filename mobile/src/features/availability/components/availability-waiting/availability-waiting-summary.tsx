@@ -1,3 +1,4 @@
+import { type ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -10,6 +11,7 @@ import { type TimeRemaining } from '@/features/availability/helpers/countdown';
 
 export type AvailabilityWaitingSummaryProps = {
   city: string;
+  topCard?: ReactNode;
   postedFriday: string;
   canCancel: boolean;
   onRequestCancel: () => void;
@@ -19,6 +21,7 @@ export type AvailabilityWaitingSummaryProps = {
 
 export function AvailabilityWaitingSummary({
   city,
+  topCard,
   postedFriday,
   canCancel,
   onRequestCancel,
@@ -29,6 +32,7 @@ export function AvailabilityWaitingSummary({
     <SafeAreaView edges={['top']} style={styles.screen}>
       <ScrollView contentContainerStyle={styles.content}>
         <CityHeader city={city} />
+        {topCard}
 
         <ThemedText type="title" style={styles.title}>
           C&apos;est noté, tu es dispo vendredi !

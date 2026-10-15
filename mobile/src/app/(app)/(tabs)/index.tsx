@@ -1,6 +1,8 @@
 import { router } from 'expo-router';
 
 import { ScreenStatus } from '@/components/screen-status';
+import { AttendanceQuestionCard } from '@/features/attendance/components/attendance-question-card/attendance-question-card';
+import { useAttendanceQuestion } from '@/features/attendance/hooks/useAttendanceQuestion/useAttendanceQuestion';
 import { useSessionState } from '@/features/auth/providers/session-provider/session-provider';
 import { AvailabilityInvitation } from '@/features/availability/components/availability-invitation/availability-invitation';
 import { AvailabilityWaiting } from '@/features/availability/components/availability-waiting/availability-waiting';
@@ -17,6 +19,8 @@ export default function HomeScreen() {
   const { state, handleDeclareAvailability, handleCancelAvailability } =
     useAvailabilityScreen(userId);
   const myGroup = useMyGroup();
+  const attendance = useAttendanceQuestion();
+  const attendanceCard = <AttendanceQuestionCard attendance={attendance} />;
   const [city] = cities;
 
   useRegisterPushToken(userId);
@@ -39,6 +43,7 @@ export default function HomeScreen() {
     return (
       <AvailabilityInvitation
         city={city.name}
+        topCard={attendanceCard}
         nextOpenFriday={state.fridayState.nextOpenFriday}
         citySignupCount={state.fridayState.citySignupCount}
         onPress={() => void declareAndConfirm(state.fridayState.nextOpenFriday)}
@@ -51,6 +56,7 @@ export default function HomeScreen() {
   return (
     <AvailabilityWaiting
       city={city.name}
+      topCard={attendanceCard}
       postedFriday={state.fridayState.postedFriday}
       canCancel={state.fridayState.postedFriday === state.fridayState.nextOpenFriday}
       onConfirmCancel={() => void handleCancelAvailability()}
