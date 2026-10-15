@@ -5,6 +5,7 @@ import { useSessionState } from '@/features/auth/providers/session-provider/sess
 import { AvailabilityInvitation } from '@/features/availability/components/availability-invitation/availability-invitation';
 import { AvailabilityWaiting } from '@/features/availability/components/availability-waiting/availability-waiting';
 import { useAvailabilityScreen } from '@/features/availability/hooks/useAvailabilityScreen/useAvailabilityScreen';
+import { cities } from '@/features/city/helpers/cities/cities';
 import { GroupSummary } from '@/features/group/components/group-summary/group-summary';
 import { getOtherMembers } from '@/features/group/helpers/myGroup/myGroup';
 import { useMyGroup } from '@/features/group/hooks/useMyGroup/useMyGroup';
@@ -17,13 +18,14 @@ export default function HomeScreen() {
   const { state, handleDeclareAvailability, handleCancelAvailability } =
     useAvailabilityScreen(userId);
   const myGroup = useMyGroup();
+  const [city] = cities;
 
   useRegisterPushToken(userId);
   useOpenScreenFromNotification();
 
-  async function declareAndConfirm() {
+  async function declareAndConfirm(friday: string) {
     const posted = await handleDeclareAvailability();
-    if (posted) router.push('/availability-confirmed');
+    if (posted) router.push({ pathname: '/availability-confirmed', params: { friday } });
   }
 
   if (state.status !== 'ready' || myGroup.status !== 'ready') {
@@ -43,8 +45,10 @@ export default function HomeScreen() {
   if (state.fridayState.postedFriday === null) {
     return (
       <AvailabilityInvitation
+        city={city.name}
         nextOpenFriday={state.fridayState.nextOpenFriday}
-        onPress={() => void declareAndConfirm()}
+        citySignupCount={state.fridayState.citySignupCount}
+        onPress={() => void declareAndConfirm(state.fridayState.nextOpenFriday)}
         saving={state.saving}
         failed={state.saveFailed}
       />
@@ -53,6 +57,8 @@ export default function HomeScreen() {
 
   return (
     <AvailabilityWaiting
+      city={city.name}
+      postedFriday={state.fridayState.postedFriday}
       canCancel={state.fridayState.postedFriday === state.fridayState.nextOpenFriday}
       onConfirmCancel={() => void handleCancelAvailability()}
       canceling={state.canceling}

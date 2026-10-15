@@ -20,6 +20,10 @@ export type ScreenState =
       cancelFailed: boolean;
     };
 
+function getCountWithoutMe(count: number | null): number | null {
+  return count === null ? null : Math.max(0, count - 1);
+}
+
 type SetScreen = (screen: ScreenState) => void;
 
 async function runDeclareAvailability(
@@ -33,7 +37,7 @@ async function runDeclareAvailability(
   try {
     const postedFriday = screen.fridayState.nextOpenFriday;
     await declareAvailability(userId);
-    void askNotificationPermission();
+    await askNotificationPermission();
     // Countdown and signup count only come back once posted: re-read them.
     const fridayState = await fetchFridayState().catch(() => ({
       ...screen.fridayState,
@@ -57,7 +61,11 @@ async function runCancelAvailability(screen: ScreenState, setScreen: SetScreen) 
     setScreen({
       ...screen,
       canceling: false,
-      fridayState: { ...screen.fridayState, postedFriday: null },
+      fridayState: {
+        ...screen.fridayState,
+        postedFriday: null,
+        citySignupCount: getCountWithoutMe(screen.fridayState.citySignupCount),
+      },
     });
   } catch {
     setScreen({ ...screen, canceling: false, cancelFailed: true });

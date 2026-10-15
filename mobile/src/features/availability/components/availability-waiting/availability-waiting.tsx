@@ -1,15 +1,17 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { Colors } from '@/constants/theme';
 import { useCountdown } from '@/hooks/useCountdown';
 
 import { AvailabilityWaitingSummary } from './availability-waiting-summary';
 
 export type AvailabilityWaitingProps = {
+  city: string;
+  postedFriday: string;
   canCancel: boolean;
   onConfirmCancel: () => void;
   canceling: boolean;
@@ -19,6 +21,8 @@ export type AvailabilityWaitingProps = {
 };
 
 export function AvailabilityWaiting({
+  city,
+  postedFriday,
   canCancel,
   onConfirmCancel,
   canceling,
@@ -32,6 +36,8 @@ export function AvailabilityWaiting({
   if (!confirming || !canCancel) {
     return (
       <AvailabilityWaitingSummary
+        city={city}
+        postedFriday={postedFriday}
         canCancel={canCancel}
         onRequestCancel={() => setConfirming(true)}
         remaining={remaining}
@@ -41,20 +47,20 @@ export function AvailabilityWaiting({
   }
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedView style={styles.words}>
+    <SafeAreaView edges={['top']} style={styles.screen}>
+      <View style={styles.words}>
         <ThemedText type="title" style={styles.centered}>
-          Tu annules ta dispo pour ce vendredi ?
+          Tu retires ta dispo pour ce vendredi ?
         </ThemedText>
 
         {cancelFailed ? (
-          <ThemedText themeColor="textSecondary" style={styles.centered}>
-            L&apos;annulation n&apos;a pas abouti. Réessaie.
+          <ThemedText type="small" themeColor="danger" style={styles.centered}>
+            Le retrait n&apos;a pas abouti. Réessaie.
           </ThemedText>
         ) : null}
-      </ThemedView>
+      </View>
 
-      <ThemedView style={styles.buttons}>
+      <View style={styles.buttons}>
         <PrimaryButton label="Je confirme" onPress={onConfirmCancel} disabled={canceling} />
 
         <Pressable accessibilityRole="button" onPress={() => setConfirming(false)}>
@@ -62,28 +68,28 @@ export function AvailabilityWaiting({
             Annuler
           </ThemedText>
         </Pressable>
-      </ThemedView>
-    </ThemedView>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    gap: 32,
+    paddingHorizontal: 20,
+    backgroundColor: Colors.background,
   },
   centered: {
     textAlign: 'center',
   },
   words: {
-    gap: Spacing.three,
+    gap: 16,
   },
   buttons: {
     alignItems: 'center',
-    gap: Spacing.three,
+    gap: 16,
     alignSelf: 'stretch',
   },
 });

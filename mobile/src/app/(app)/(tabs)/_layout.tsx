@@ -1,9 +1,19 @@
 import { Tabs } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 
+import { Colors, Fonts } from '@/constants/theme';
+
 export default function TabsLayout() {
   return (
-    <Tabs screenOptions={{ headerShown: false }}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: Colors.accent,
+        tabBarInactiveTintColor: Colors.textSecondary,
+        tabBarStyle: { backgroundColor: Colors.background, borderTopColor: Colors.border },
+        tabBarLabelStyle: { fontFamily: Fonts.medium, fontSize: 12 },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{

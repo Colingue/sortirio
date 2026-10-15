@@ -1,11 +1,16 @@
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, ScrollView, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
-import { formatTimeRemaining, type TimeRemaining } from '@/features/availability/helpers/countdown';
+import { Colors, Fonts, Radius } from '@/constants/theme';
+import { CityHeader } from '@/features/availability/components/city-header/city-header';
+import { NextSteps } from '@/features/availability/components/next-steps/next-steps';
+import { WaitingCard } from '@/features/availability/components/waiting-card/waiting-card';
+import { type TimeRemaining } from '@/features/availability/helpers/countdown';
 
 export type AvailabilityWaitingSummaryProps = {
+  city: string;
+  postedFriday: string;
   canCancel: boolean;
   onRequestCancel: () => void;
   remaining: TimeRemaining | null;
@@ -13,63 +18,84 @@ export type AvailabilityWaitingSummaryProps = {
 };
 
 export function AvailabilityWaitingSummary({
+  city,
+  postedFriday,
   canCancel,
   onRequestCancel,
   remaining,
   citySignupCount,
 }: AvailabilityWaitingSummaryProps) {
   return (
-    <ThemedView style={styles.container}>
-      <ThemedView style={styles.words}>
-        {remaining ? (
-          <ThemedView style={styles.countdown}>
-            <ThemedText type="title" style={styles.centered}>
-              On forme les groupes dans :
-            </ThemedText>
-            <ThemedText type="subtitle" style={styles.centered}>
-              {formatTimeRemaining(remaining)}
-            </ThemedText>
-          </ThemedView>
-        ) : (
-          <ThemedText type="title" style={styles.centered}>
-            On forme les groupes jeudi 19 h.
-          </ThemedText>
-        )}
+    <SafeAreaView edges={['top']} style={styles.screen}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <CityHeader city={city} />
 
-        {citySignupCount !== null ? (
-          <ThemedText themeColor="textSecondary" style={styles.centered}>
-            👥 {citySignupCount}{' '}
-            {citySignupCount === 1 ? 'personne inscrite' : 'personnes inscrites'} à Lyon
-          </ThemedText>
+        <ThemedText type="title" style={styles.title}>
+          C&apos;est noté, tu es dispo vendredi !
+        </ThemedText>
+
+        <ThemedText type="subtitle" style={styles.section}>
+          Prochain verre
+        </ThemedText>
+        <WaitingCard
+          friday={postedFriday}
+          remaining={remaining}
+          citySignupCount={citySignupCount}
+        />
+
+        {canCancel ? (
+          <Pressable
+            accessibilityRole="button"
+            onPress={onRequestCancel}
+            style={({ pressed }) => [styles.cancel, pressed && styles.pressed]}
+          >
+            <ThemedText themeColor="textSecondary" style={styles.cancelLabel}>
+              Retirer ma disponibilité
+            </ThemedText>
+          </Pressable>
         ) : null}
-      </ThemedView>
 
-      {canCancel ? (
-        <Pressable accessibilityRole="button" onPress={onRequestCancel}>
-          <ThemedText type="link" themeColor="textSecondary">
-            Annuler ma dispo
-          </ThemedText>
-        </Pressable>
-      ) : null}
-    </ThemedView>
+        <ThemedText type="subtitle" style={styles.section}>
+          Et ensuite ?
+        </ThemedText>
+        <NextSteps />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
+    backgroundColor: Colors.background,
+  },
+  content: {
+    paddingTop: 16,
+    paddingHorizontal: 20,
+    paddingBottom: 32,
+  },
+  title: {
+    marginTop: 24,
+    fontSize: 28,
+    lineHeight: 34,
+  },
+  section: {
+    marginTop: 26,
+    marginBottom: 12,
+  },
+  cancel: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    height: 48,
+    marginTop: 12,
+    borderRadius: Radius.small,
+    borderWidth: 1.5,
+    borderColor: Colors.borderStrong,
   },
-  centered: {
-    textAlign: 'center',
+  pressed: {
+    backgroundColor: Colors.backgroundElement,
   },
-  words: {
-    gap: Spacing.three,
-  },
-  countdown: {
-    gap: Spacing.one,
+  cancelLabel: {
+    fontFamily: Fonts.medium,
   },
 });
