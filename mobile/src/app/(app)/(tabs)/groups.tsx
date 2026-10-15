@@ -1,50 +1,63 @@
 import { FlatList, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ScreenStatus } from '@/components/screen-status';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { Colors } from '@/constants/theme';
+import { useSessionState } from '@/features/auth/providers/session-provider/session-provider';
 import { MyGroupsRow } from '@/features/group/components/my-groups-row/my-groups-row';
 import { useMyGroups } from '@/features/group/hooks/useMyGroups/useMyGroups';
 
 export default function MyGroupsScreen() {
-  const myGroups = useMyGroups();
+  const session = useSessionState();
+  const myUserId = session.status === 'ready' ? session.session?.user.id : undefined;
+  const myGroups = useMyGroups(myUserId);
 
   if (myGroups.status !== 'ready') return <ScreenStatus failed={myGroups.status === 'failed'} />;
 
-  if (myGroups.groups.length === 0) {
-    return (
-      <ThemedView style={styles.centered}>
-        <ThemedText themeColor="textSecondary" style={styles.empty}>
-          Tes groupes apparaîtront ici après ton premier vendredi.
-        </ThemedText>
-      </ThemedView>
-    );
-  }
-
   return (
-    <ThemedView style={styles.screen}>
+    <SafeAreaView edges={['top']} style={styles.screen}>
       <FlatList
         data={myGroups.groups}
         keyExtractor={(group) => group.groupId}
+        contentContainerStyle={styles.content}
+        ListHeaderComponent={
+          <>
+            <ThemedText type="title" style={styles.title}>
+              Mes groupes
+            </ThemedText>
+            <ThemedText themeColor="textMuted" style={styles.lead}>
+              {myGroups.groups.length === 0
+                ? 'Tes groupes apparaîtront ici après ton premier vendredi.'
+                : 'Les chats restent ouverts après la soirée.'}
+            </ThemedText>
+          </>
+        }
         renderItem={(entry) => <MyGroupsRow group={entry.item} />}
       />
-    </ThemedView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    paddingTop: Spacing.six,
+    backgroundColor: Colors.background,
   },
-  centered: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: Spacing.four,
+  content: {
+    gap: 10,
+    paddingTop: 28,
+    paddingHorizontal: 20,
+    paddingBottom: 32,
   },
-  empty: {
-    textAlign: 'center',
+  title: {
+    fontSize: 28,
+    lineHeight: 34,
+  },
+  lead: {
+    marginTop: 6,
+    marginBottom: 12,
+    fontSize: 14,
+    lineHeight: 21,
   },
 });
