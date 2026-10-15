@@ -1,10 +1,8 @@
+import { SymbolView } from 'expo-symbols';
 import { useState } from 'react';
-import { StyleSheet, TextInput } from 'react-native';
+import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
-import { PrimaryButton } from '@/components/primary-button';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/useTheme';
+import { Colors, Fonts } from '@/constants/theme';
 
 const MAX_MESSAGE_LENGTH = 2000;
 
@@ -13,47 +11,85 @@ export type MessageComposerProps = {
 };
 
 export function MessageComposer({ onSend }: MessageComposerProps) {
-  const theme = useTheme();
   const [draft, setDraft] = useState('');
+  const empty = !draft.trim();
 
   function createMessage() {
-    if (!draft.trim()) return;
+    if (empty) return;
 
     onSend(draft);
     setDraft('');
   }
 
   return (
-    <ThemedView style={styles.composer}>
+    <View style={styles.composer}>
       <TextInput
-        style={[styles.input, { color: theme.text, backgroundColor: theme.backgroundElement }]}
+        style={styles.input}
         value={draft}
         onChangeText={setDraft}
-        placeholder="Écris au groupe"
-        placeholderTextColor={theme.textSecondary}
+        placeholder="Écris un message…"
+        placeholderTextColor={Colors.placeholder}
+        accessibilityLabel="Message"
         maxLength={MAX_MESSAGE_LENGTH}
         multiline
         submitBehavior="submit"
         returnKeyType="send"
         onSubmitEditing={createMessage}
       />
-      <PrimaryButton label="Envoyer" onPress={createMessage} disabled={!draft.trim()} />
-    </ThemedView>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Envoyer"
+        accessibilityState={{ disabled: empty }}
+        disabled={empty}
+        onPress={createMessage}
+        style={({ pressed }) => [styles.send, (pressed || empty) && styles.dimmed]}
+      >
+        <SymbolView
+          name={{ ios: 'paperplane', android: 'send', web: 'send' }}
+          size={20}
+          tintColor={Colors.onAccent}
+        />
+      </Pressable>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   composer: {
-    gap: Spacing.two,
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.three,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 10,
+    paddingTop: 10,
+    paddingHorizontal: 16,
+    paddingBottom: 28,
+    borderTopWidth: 1,
+    borderTopColor: Colors.border,
+    backgroundColor: Colors.background,
   },
   input: {
+    flex: 1,
+    minHeight: 46,
     maxHeight: 120,
-    fontSize: 16,
-    lineHeight: 24,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.two,
-    borderRadius: Spacing.three,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 12,
+    borderRadius: 23,
+    borderWidth: 1.5,
+    borderColor: Colors.borderStrong,
+    backgroundColor: Colors.surface,
+    fontFamily: Fonts.regular,
+    fontSize: 15,
+    color: Colors.text,
+  },
+  send: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    backgroundColor: Colors.accent,
+  },
+  dimmed: {
+    opacity: 0.5,
   },
 });

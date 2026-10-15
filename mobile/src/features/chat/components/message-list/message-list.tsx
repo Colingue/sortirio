@@ -1,32 +1,37 @@
-import { Image } from 'expo-image';
 import { useRef } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { Fonts } from '@/constants/theme';
+import { MessageBubble } from '@/features/chat/components/message-bubble/message-bubble';
 import { PendingMessages } from '@/features/chat/components/pending-messages/pending-messages';
 import {
   findMessageAuthor,
+  formatMessageDay,
   formatMessageTime,
+  isNewMessageDay,
   type GroupMessage,
   type MessageAuthor,
   type PendingMessage,
 } from '@/features/chat/helpers/groupMessages/groupMessages';
-import { useTheme } from '@/hooks/useTheme';
-
-const UNKNOWN_AUTHOR_LABEL = 'Un membre';
 
 export type MessageListProps = {
   messages: GroupMessage[];
   pending: PendingMessage[];
   authorsById: Map<string, MessageAuthor>;
+  myUserId: string | undefined;
   onRetry: (localId: number) => void;
 };
 
-export function MessageList({ messages, pending, authorsById, onRetry }: MessageListProps) {
-  const theme = useTheme();
+export function MessageList({
+  messages,
+  pending,
+  authorsById,
+  myUserId,
+  onRetry,
+}: MessageListProps) {
   const list = useRef<FlatList<GroupMessage>>(null);
+  const authorIds = [...authorsById.keys()];
 
   return (
     <FlatList
@@ -36,56 +41,40 @@ export function MessageList({ messages, pending, authorsById, onRetry }: Message
       contentContainerStyle={styles.content}
       onContentSizeChange={() => list.current?.scrollToEnd({ animated: false })}
       ListFooterComponent={<PendingMessages pending={pending} onRetry={onRetry} />}
-      renderItem={({ item: message }) => {
-        const author = findMessageAuthor(authorsById, message.authorId);
-
-        return (
-          <ThemedView style={styles.message}>
-            <Image
-              source={author?.photoUrl ? { uri: author.photoUrl } : undefined}
-              style={[styles.face, { backgroundColor: theme.backgroundElement }]}
-              contentFit="cover"
-            />
-            <ThemedView style={styles.said}>
-              <ThemedView style={styles.who}>
-                <ThemedText type="smallBold">
-                  {author?.firstName ?? UNKNOWN_AUTHOR_LABEL}
-                </ThemedText>
-                <ThemedText type="small" themeColor="textSecondary">
-                  {formatMessageTime(message.createdAt)}
-                </ThemedText>
-              </ThemedView>
-              <ThemedText>{message.body}</ThemedText>
-            </ThemedView>
-          </ThemedView>
-        );
-      }}
+      renderItem={({ item: message, index }) => (
+        <View style={styles.message}>
+          {isNewMessageDay(messages, index) ? (
+            <ThemedText themeColor="textMuted" style={styles.day}>
+              {formatMessageDay(message.createdAt)}
+            </ThemedText>
+          ) : null}
+          <MessageBubble
+            body={message.body}
+            time={formatMessageTime(message.createdAt)}
+            author={findMessageAuthor(authorsById, message.authorId)}
+            colorIndex={Math.max(authorIds.indexOf(message.authorId), 0)}
+            mine={message.authorId === myUserId}
+          />
+        </View>
+      )}
     />
   );
 }
 
 const styles = StyleSheet.create({
   content: {
-    gap: Spacing.three,
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.three,
+    gap: 10,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
   },
   message: {
-    flexDirection: 'row',
-    gap: Spacing.three,
+    gap: 10,
   },
-  face: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  said: {
-    flex: 1,
-    gap: Spacing.half,
-  },
-  who: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    gap: Spacing.two,
+  day: {
+    alignSelf: 'center',
+    marginTop: 6,
+    fontFamily: Fonts.medium,
+    fontSize: 12,
+    lineHeight: 18,
   },
 });

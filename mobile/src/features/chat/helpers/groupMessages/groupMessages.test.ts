@@ -4,7 +4,9 @@ import {
   addNewMessages,
   fetchGroupMessages,
   findMessageAuthor,
+  formatMessageDay,
   formatMessageTime,
+  isNewMessageDay,
   type GroupMessage,
   type MessageAuthor,
 } from './groupMessages';
@@ -114,5 +116,27 @@ describe('fetchGroupMessages', () => {
     mockOrder.mockResolvedValue({ data: null, error: { message: 'boom' } });
 
     await expect(fetchGroupMessages('group-1')).rejects.toEqual({ message: 'boom' });
+  });
+});
+
+describe('formatMessageDay', () => {
+  it('gives the weekday, the day and the month, capitalised', () => {
+    expect(formatMessageDay('2026-10-15T10:00:00')).toBe('Jeudi 15 octobre');
+  });
+});
+
+describe('isNewMessageDay', () => {
+  it('opens a day on the first message, and on the first one of each new day', () => {
+    const messages = [
+      buildMessage({ createdAt: '2026-10-15T10:00:00' }),
+      buildMessage({ createdAt: '2026-10-15T22:00:00' }),
+      buildMessage({ createdAt: '2026-10-16T08:00:00' }),
+    ];
+
+    expect(messages.map((_, index) => isNewMessageDay(messages, index))).toEqual([
+      true,
+      false,
+      true,
+    ]);
   });
 });

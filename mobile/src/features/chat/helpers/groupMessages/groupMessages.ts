@@ -58,6 +58,25 @@ export function formatMessageTime(createdAt: string): string {
   return `${hours}:${minutes}`;
 }
 
+export function formatMessageDay(createdAt: string): string {
+  const day = new Date(createdAt).toLocaleDateString('fr-FR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  });
+
+  return day.charAt(0).toUpperCase() + day.slice(1);
+}
+
+export function isNewMessageDay(messages: GroupMessage[], index: number): boolean {
+  if (index === 0) return true;
+
+  return (
+    new Date(messages[index - 1].createdAt).toDateString() !==
+    new Date(messages[index].createdAt).toDateString()
+  );
+}
+
 export function findMessageAuthor(
   authorsById: Map<string, MessageAuthor>,
   authorId: string,

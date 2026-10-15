@@ -1,8 +1,7 @@
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { Colors } from '@/constants/theme';
 import { type PendingMessage } from '@/features/chat/helpers/groupMessages/groupMessages';
 
 const SENDING_LABEL = 'Envoi…';
@@ -15,7 +14,7 @@ export type PendingMessagesProps = {
 
 export function PendingMessages({ pending, onRetry }: PendingMessagesProps) {
   return (
-    <ThemedView style={styles.pending}>
+    <View style={styles.pending}>
       {pending.map((waiting) => (
         <Pressable
           key={waiting.localId}
@@ -24,22 +23,40 @@ export function PendingMessages({ pending, onRetry }: PendingMessagesProps) {
           onPress={() => onRetry(waiting.localId)}
           style={styles.waiting}
         >
-          <ThemedText>{waiting.body}</ThemedText>
-          <ThemedText type="small" themeColor="textSecondary">
+          <View style={styles.bubble}>
+            <ThemedText themeColor="onAccent" style={styles.body}>
+              {waiting.body}
+            </ThemedText>
+          </View>
+          <ThemedText type="small" themeColor={waiting.failed ? 'danger' : 'textMuted'}>
             {waiting.failed ? FAILED_LABEL : SENDING_LABEL}
           </ThemedText>
         </Pressable>
       ))}
-    </ThemedView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   pending: {
-    gap: Spacing.three,
+    gap: 10,
+    marginTop: 10,
   },
   waiting: {
-    gap: Spacing.half,
+    alignItems: 'flex-end',
+    gap: 2,
+  },
+  bubble: {
+    maxWidth: 260,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 14,
+    borderBottomRightRadius: 4,
+    backgroundColor: Colors.accent,
     opacity: 0.6,
+  },
+  body: {
+    fontSize: 14,
+    lineHeight: 20,
   },
 });
