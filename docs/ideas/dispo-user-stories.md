@@ -53,6 +53,7 @@ Priorités : **High** = sans elle le pilote du premier vendredi n'a pas lieu ·
     ne passe pas par une redirection web (le téléphone obtient un jeton que l'app remet à
     Supabase), donc pas d'URL de retour « localhost » à déclarer. L'empreinte de signature
     peut en revanche différer entre le build de dev et l'APK distribué aux testeurs.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `v2-01-Connexion`
 - **Priority:** High
 
 ### 1.2
@@ -96,6 +97,7 @@ Lyon seule affichée, écran genre supprimé._
     ménage côté serveur dans cette story.
   - **Modifier son profil est une autre story** (1.4, qui touche déjà le même écran pour
     la ville) : ici on ne fait que créer.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `v2-02-Ville` · `v2-03-Prenom` · `v2-04-DateNaissance` · `v2-05-Photo`
 - **Priority:** High
 
 ### 1.3
@@ -133,9 +135,14 @@ suite de la liste._
   - **Il n'y a pas de creux entre jeudi 19 h et samedi** : le critère qui rendait le
     bouton indisponible après jeudi 19 h a été retiré le 2026-09-15. Voir
     `docs/specs/us-2.1-se-declarer-dispo.md`.
+  - **Remplacé en partie par la 10.1** (2026-10-17) : entre jeudi 19 h et vendredi
+    18 h, le bouton vise le vendredi **de cette semaine** (inscription tardive), plus
+    le suivant. Le critère « jeudi 19 h 01 → vendredi suivant » ne vaut plus qu'après
+    vendredi 18 h.
   - **Le bouton ne revient qu'à qui n'a rien posé** (précisé le 2026-09-16). Celui qui a
     coché son vendredi garde « on te prévient jeudi 19 h » jusqu'au samedi : on ne lui
     propose pas le vendredi suivant pendant que le sien arrive.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `05-Accueil` · `v2-06-Accueil-Notifs` · `v2-07-ConfirmationDispo`
 - **Priority:** High
 
 ### 2.2
@@ -151,7 +158,9 @@ suite de la liste._
   - Given j'ai annulé, When la formation des groupes tourne le jeudi 19 h, Then je ne
     suis placé dans aucun groupe et je ne reçois aucune notification.
   - Given il est jeudi 19 h passé, When j'ouvre mon groupe, Then aucune option
-    d'annulation de dispo n'est proposée — seul « Je ne viens plus » existe.
+    d'annulation de dispo n'est proposée. Pas de « Je ne viens plus » (4.3
+    annulée) : on prévient le groupe dans le chat.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `06-Disponibilite`
 - **Priority:** High
 
 ### 2.3
@@ -167,6 +176,7 @@ suite de la liste._
     rebours décrémente sans que je doive quitter et rouvrir l'écran.
   - Given le nombre d'inscrits change, When je reviens sur l'accueil, Then le compteur
     affiché correspond au nombre réel de dispos posées pour ce vendredi.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `06-Disponibilite`
 - **Priority:** Medium
 
 ---
@@ -185,8 +195,13 @@ suite de la liste._
   - Given deux utilisateurs n'ont pas la même ville, ou ont des âges incompatibles,
     When les groupes sont formés, Then ils ne sont pas placés dans le même groupe.
   - Given il reste moins de 3 personnes non groupées, When le job se termine, Then
-    aucun groupe partiel n'est créé et ces utilisateurs voient sur l'accueil qu'il n'y
-    avait pas assez de monde cette semaine.
+    aucun groupe partiel n'est créé et ces utilisateurs deviennent des retardataires
+    sans place : la formation au fil de l'eau de la 10.3 les compte (tranché le
+    2026-10-17).
+- **Notes:**
+  - **« Âges incompatibles » n'exclut personne** (précisé le 2026-10-18) : l'âge
+    répartit les gens entre les groupes, voir la 3.4.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — aucun écran (côté serveur)
 - **Priority:** High
 
 ### 3.2
@@ -204,6 +219,7 @@ suite de la liste._
   - Given il y a moins de lieux disponibles que de groupes formés, When le job
     s'exécute, Then tous les groupes sont quand même formés et les lieux sont réutilisés
     en étalant au maximum (jamais deux fois le même lieu avant que tous aient servi).
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `v2-10-MonGroupe`
 - **Priority:** High
 
 ### 3.3
@@ -221,7 +237,42 @@ suite de la liste._
     Then mon groupe est quand même visible depuis l'accueil.
   - Given je n'ai été placé dans aucun groupe, When le job se termine, Then je ne reçois
     aucune notification.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `v2-08-GroupePret` · `v2-10-MonGroupe`
 - **Priority:** High
+
+### 3.4
+
+_Ajoutée le 2026-10-18. L'âge répartit, il n'exclut jamais._
+
+- **Title:** Répartir les groupes par âge
+- **Story:** En tant qu'utilisateur, je veux sortir avec des gens d'un âge proche du
+  mien, afin que la conversation accroche, sans pour autant rester sans groupe à cause
+  de mon âge.
+- **Acceptance Criteria:**
+  - Given 12 dispos de 22 à 28 ans aux âges continus, When le job du jeudi 19 h
+    s'exécute, Then il forme deux groupes de 6, les plus jeunes ensemble.
+  - Given 8 dispos de 22 à 26 ans et 4 de 40 à 45 ans, When le job s'exécute, Then il
+    forme 3 groupes, et les 4 de 40 à 45 ans sont ensemble, sans personne de 22 à 26 ans.
+  - Given 3 à 5 dispos dans une ville, When le job s'exécute, Then tout le monde est dans
+    le même groupe, quel que soit l'écart d'âge.
+  - Given n'importe quel nombre de dispos ≥ 3, When le job s'exécute, Then tout le monde
+    est placé dans un groupe de 3 à 6.
+  - Given plusieurs groupes ont de la place, When un retardataire s'inscrit, Then il
+    rejoint celui dont l'âge moyen est le plus proche du sien ; à égalité, le moins
+    rempli.
+  - Given le groupe le plus proche en âge compte déjà 6 membres, When un retardataire
+    s'inscrit, Then il n'y est pas ajouté.
+- **Notes:**
+  - **Tri par date de naissance, puis découpage en groupes de 3 à 6** qui minimise
+    « somme des écarts d'âge + X × nombre de groupes », X = 5 ans au départ. Un groupe
+    de plus seulement s'il fait gagner plus de X ans d'écart. Pas d'écart max, pas de
+    tranches.
+  - **X se règle** après les premiers vendredis, selon le taux d'absence (8.1) : un
+    groupe de 3 avec un absent devient un tête-à-tête.
+  - **Le groupe de retardataires (10.3) ignore l'âge.**
+  - Voir `docs/specs/us-3.4-repartition-par-age.md`.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — aucun écran (côté serveur)
+- **Priority:** Medium
 
 ---
 
@@ -240,6 +291,7 @@ suite de la liste._
     photo, son prénom et son âge — aucune autre donnée de profil.
   - Given je tape sur l'adresse, When l'action se déclenche, Then l'app ouvre
     l'itinéraire dans l'application de cartes du téléphone.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `v2-10-MonGroupe`
 - **Priority:** High
 
 ### 4.2 ANNULE : raison, pas MVP. on a pas besoin de confirmer de toute facon ça ne changera rien au nombre de personne dans le groupe
@@ -295,6 +347,7 @@ suite de la liste._
     mon prénom et son horodatage pour tous les membres.
   - Given je ne suis pas membre de ce groupe, When j'essaie d'accéder à ses messages,
     Then la requête est refusée par les règles RLS.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `10-Chat`
 - **Priority:** High
 
 ### 5.2
@@ -310,6 +363,7 @@ suite de la liste._
     dans le chat du groupe concerné.
   - Given le chat est déjà ouvert à l'écran, When un message arrive, Then aucune
     notification n'est affichée.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `10-Chat`
 - **Priority:** Medium
 
 ### 5.3
@@ -324,6 +378,7 @@ suite de la liste._
     Then tous mes chats passés sont listés du plus récent au plus ancien.
   - Given un nouveau groupe est formé le jeudi suivant, When il apparaît, Then il
     s'ajoute à la liste sans fermer ni masquer les précédents.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `11-Groupes`
 - **Priority:** Medium
 
 ---
@@ -342,6 +397,7 @@ suite de la liste._
     l'heure du rendez-vous.
   - Given je me suis désisté ou je n'ai aucun groupe cette semaine, When les rappels
     partent, Then je n'en reçois aucun.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — aucun écran (côté serveur)
 - **Priority:** Medium
 
 ---
@@ -364,6 +420,7 @@ suite de la liste._
     les groupes futurs) et l'app me le dit explicitement.
   - Given la personne signalée ouvre l'app, When elle consulte son groupe, Then rien ne
     lui indique qu'elle a été signalée.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `12-ProfilMembre` · `13-Signalement` · `16-CompteBanni`
 - **Priority:** High
 
 ---
@@ -386,6 +443,7 @@ suite de la liste._
     question est toujours là (« Tu y es allé vendredi soir ? »).
   - Given je n'ai pas répondu, When jeudi 19 h passe, Then la question n'est plus posée
     et la réponse est comptée comme absente de la mesure.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `09-QuestionSamedi`
 - **Priority:** High
 
 ### 8.2
@@ -401,6 +459,7 @@ suite de la liste._
     requête SQL suffit à dire s'il a reposé une dispo dans les 21 jours suivants.
   - Given le pilote tourne depuis 3 semaines, When on lance la requête, Then elle rend
     un taux par cohorte de première soirée, sans traitement manuel.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — aucun écran (côté serveur)
 - **Priority:** Medium
 
 ---
@@ -468,4 +527,140 @@ _Ajoutée le 2026-09-29, après la 4.1 : l'écran existait, l'annonce manquait._
     notifications apprend deux fois la même chose. La modale existe pour les autres —
     un refus de notification ne bloque rien (story 2.1), et l'annonce ne doit pas
     dépendre du push.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `v2-08-GroupePret` · `v2-09-Accueil-GroupePret`
 - **Priority:** Low
+
+---
+
+## 10. Inscription tardive — « sors ce soir, sans prévoir »
+
+_Ajoutée le 2026-10-17. Décidé : groupes formés jeudi soir comme avant (3 à 6), chat
+ouvert dès la formation, inscription possible jusqu'au vendredi 18 h._
+
+### 10.1
+
+- **Title:** M'inscrire pour ce soir, jusqu'au vendredi 18 h
+- **Story:** En tant qu'utilisateur qui se décide au dernier moment, je veux pouvoir me
+  déclarer dispo après la formation des groupes, afin de sortir ce soir sans avoir
+  prévu.
+- **Acceptance Criteria:**
+  - Given il est entre jeudi 19 h et vendredi 18 h et je n'ai pas de dispo pour ce
+    vendredi, When j'ouvre l'accueil, Then le bouton « Je suis dispo » vise **ce
+    vendredi**, avec « Inscriptions jusqu'à 18 h » et le temps restant.
+  - Given il est vendredi 18 h 01, When j'ouvre l'accueil, Then le bouton vise le
+    vendredi suivant.
+  - Given je me suis inscrit en retard, When l'inscription réussit, Then la story 10.2
+    s'applique immédiatement. Tant que la 10.2 n'existe pas, je vois l'état d'attente
+    « On te cherche un groupe », recherche jusqu'à 18 h.
+  - Given il est jeudi 19 h passé et j'avais posé ma dispo avant, When j'ouvre
+    l'accueil, Then rien ne change pour moi : pas d'annulation (2.2), pas de second
+    bouton.
+- **Notes:**
+  - **Précisé le 2026-10-18** : la maquette `v3-01` est abandonnée au profit de
+    `v3-01b`. Son alerte « places libres » relève de la 10.4, pas de la 10.1.
+  - **La formation du jeudi 19 h ne change pas** : elle forme toujours le vendredi qui
+    vient, même si la fenêtre d'inscription court désormais jusqu'au vendredi 18 h.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `v3-01b-Accueil-Places` (sans l'alerte) · `v3-06-Attente`
+- **Priority:** High
+
+### 10.2
+
+- **Title:** Rejoindre un groupe pas plein
+- **Story:** En tant que retardataire, je veux être placé tout de suite dans un groupe
+  qui a de la place, afin de rejoindre la soirée et son chat sans attendre.
+- **Acceptance Criteria:**
+  - Given je me suis inscrit en retard, When j'ouvre l'accueil, Then aucune option
+    d'annulation ne m'est proposée, groupe ou pas (tranché le 2026-10-17). Pour prévenir
+    le groupe, j'écris dans le chat.
+  - Given il existe un groupe de ma ville, d'âge compatible, de moins de 6 membres, et
+    sans personne que j'ai signalé ou qui m'a signalé, When je m'inscris, Then j'y suis
+    ajouté.
+  - Given j'ai rejoint un groupe, When j'ouvre l'app, Then je vois l'écran du groupe
+    (lieu, heure, membres) et j'ai accès au chat, historique compris.
+  - Given je rejoins un groupe, When l'ajout est fait, Then je reçois la notification
+    « ton groupe est prêt » (story 3.3) et les membres voient un nouveau membre.
+  - Given j'ai rejoint un groupe en retard, When j'ouvre le chat ou l'écran du groupe,
+    Then je vois « Tu as rejoint le groupe à 15 h 13 » et les autres voient un badge
+    « Nouveau » sur ma vignette.
+  - Given plusieurs groupes ont de la place, When je m'inscris, Then je rejoins le
+    moins rempli.
+  - Given je fais partie des moins de 3 restés sans groupe à la formation du jeudi,
+    When elle se termine, Then je suis traité comme un retardataire sans place : je
+    vois l'état d'attente et la 10.3 me compte avec les autres.
+  - Given aucun groupe compatible n'a de place, When je m'inscris, Then je vois un état
+    d'attente jusqu'à vendredi 18 h (story 10.3).
+- **Notes:**
+  - **Chat : tout l'historique.** Les règles RLS des messages se basent sur
+    l'appartenance au groupe, sans filtre sur la date d'arrivée.
+  - **`joined_at` sur l'appartenance au groupe** : nécessaire pour « Tu as rejoint à… »
+    et le badge « Nouveau ».
+  - **« Retardataire » se déduit** : dispo créée après jeudi 19 h. Pas de colonne.
+  - **« Le moins rempli » devient le départage** (2026-10-18) : la 3.4 place d'abord
+    selon l'âge moyen le plus proche.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `v3-03-GroupeRejoint` · `v3-04-MonGroupe-Tardif` · `v3-05-Chat-NouveauMembre` · `v3-06-Attente`
+- **Priority:** High
+
+### 10.3
+
+_Réécrite le 2026-10-18 : plus de job à 18 h, plus de « prioritaire »._
+
+- **Title:** Un groupe de retardataires se forme dès 3 personnes
+- **Story:** En tant que retardataire sans place, je veux qu'un groupe se forme dès
+  qu'on est assez, afin de sortir ce soir sans attendre une heure fixe.
+- **Acceptance Criteria:**
+  - Given une inscription tardive ne trouve aucun groupe avec de la place, When au
+    moins 3 personnes compatibles (ville, âge, signalements) sont sans groupe pour ce
+    vendredi, Then un groupe se forme **tout de suite**, avec un lieu (3.2), et ses
+    membres sont notifiés (3.3).
+  - Given ce groupe compte moins de 6 membres, When un autre retardataire compatible
+    s'inscrit, Then il le rejoint via la 10.2, sans règle de plus.
+  - Given deux retardataires s'inscrivent à la même seconde, When la formation tourne,
+    Then un seul groupe est créé et personne n'est placé deux fois.
+  - Given il est vendredi 18 h passé et je n'ai aucun groupe, When j'ouvre l'accueil,
+    Then je vois « Pas de groupe ce soir ». La recherche s'arrête à 18 h dans tous les
+    cas.
+- **Notes:**
+  - **Formation au fil de l'eau** : une fonction appelée à chaque dispo tardive, en plus
+    du job du jeudi.
+  - **Concurrence** : un verrou par ville et par vendredi (advisory lock) ou une
+    transaction sérialisée.
+  - **Attribution du lieu (3.2) en fonction réutilisable**, appelable à tout moment le
+    vendredi, qui évite les lieux déjà pris ce soir-là.
+  - **« Sans groupe ce soir » se déduit** : dispo pour ce vendredi, aucune appartenance
+    à un groupe, heure > 18 h. Pas de colonne.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `v3-06-Attente` · `v3-07-GroupeRetardataires` · `v3-08-PasDeGroupe`
+- **Priority:** High
+
+### 10.4
+
+_Ajoutée le 2026-10-18._
+
+- **Title:** « Des groupes ont encore de la place ce soir »
+- **Story:** En tant qu'utilisateur sans dispo ce vendredi, je veux savoir qu'un groupe
+  peut encore m'accueillir, afin de me décider à sortir ce soir.
+- **Acceptance Criteria:**
+  - Given il est entre jeudi 19 h et vendredi 18 h et je n'ai pas de dispo, When un
+    groupe a une place **pour moi** (ma ville, âge compatible, aucun signalement
+    croisé), Then l'accueil affiche « Des groupes ont encore de la place ce soir ».
+  - Given aucun groupe n'a de place pour moi, When j'ouvre l'accueil, Then l'alerte
+    n'apparaît pas — on ne promet pas une place pour me mettre ensuite en attente.
+  - Given l'alerte s'affiche, When je regarde l'écran, Then aucun nombre de places ni
+    de groupes n'est affiché.
+- **Notes:**
+  - **RPC `security definer` qui renvoie un booléen** : la RLS empêche de lire les
+    autres groupes, et aucune donnée de comptage n'est exposée au client.
+  - **Une seule fonction SQL de compatibilité** (ville, âge, signalements), utilisée
+    par le job du jeudi, l'ajout tardif (10.2 / 10.3) et cette alerte.
+- **Écrans:** [maquettes](https://claude.ai/artifact/RVTYr6ZV3F1rN49sSpK3zk#page-dcb81aee8d83) — `v3-01b-Accueil-Places`
+- **Priority:** Medium
+
+### Points ouverts de la section 10
+
+- **Notification à 18 h « pas de groupe ce soir »** : si oui, un petit job à 18 h qui
+  ne sert plus qu'à notifier.
+- **Message système dans le chat** (« X a rejoint le groupe ») : si on le garde, la
+  table des messages a besoin d'un type (système / utilisateur).
+- **Rappel de 18 h (6.1)** pour un groupe formé juste avant (ex. 17 h 59) : rappel en
+  plus de la notification « ton groupe est prêt », ou pas ?
+- **`docs/SPEC.md`** contredit ces décisions (dispos jusqu'au jeudi 19 h) : à mettre à
+  jour avec ton accord.

@@ -16,6 +16,9 @@ suis chaud ». Tout le reste est fait par le système. L'utilisateur ne choisit 
 gens, ni le lieu, ni l'heure — c'est précisément ce qui supprime l'effort et la
 comparaison.
 
+**Promesse : « sors ce soir, sans prévoir. »** _(décidé le 2026-10-17)_ On peut
+s'inscrire jusqu'au vendredi 18 h et sortir le soir même.
+
 Deux choses portent l'expérience et méritent le meilleur du mois de développement :
 **le chat de groupe**, parce que c'est lui qui fait que 5 inconnus se retrouvent
 réellement dans le bar (on n'a rien d'autre : pas de réservation, pas d'hôte), et **la
@@ -30,8 +33,8 @@ l'âge seul, lieux gérés en SQL à la main.
 | -------------------------- | ---------------------------------------------------------------------------- |
 | Samedi → jeudi 19 h        | On se déclare dispo. L'accueil montre un compte à rebours et le nombre d'inscrits |
 | **Jeudi 19 h**             | L'algo forme les groupes, attribue un lieu à chacun, envoie une notification  |
-| Jeudi 19 h → vendredi 12 h | Chacun confirme sa présence. Le chat est ouvert                               |
-| Vendredi 18 h              | Rappel push : « c'est ce soir, [lieu], 20 h »                                 |
+| Jeudi 19 h → vendredi 18 h | Le chat est ouvert dès la formation : une journée pour se parler. Les retardataires s'inscrivent encore, rejoignent un groupe pas plein (< 6) ou en forment un dès qu'ils sont 3 |
+| Vendredi 18 h              | Fin des inscriptions et de la recherche. Sans groupe : « pas de groupe ce soir ». Rappel push : « c'est ce soir, [lieu], 20 h » |
 | **Vendredi 20 h**          | La rencontre. Le groupe se retrouve via le chat                               |
 | Samedi matin               | Une question, un tap : « tu y es allé ? »                                     |
 | Après                      | Le chat reste ouvert                                                          |
@@ -45,15 +48,23 @@ profil. Pas de géolocalisation : la question utile est « où veux-tu sortir »
 « où es-tu maintenant ».
 
 **Se déclarer dispo** — un écran, un bouton pour le prochain vendredi · annulable
-jusqu'au jeudi 19 h · écran d'attente avec compte à rebours et nombre d'inscrits.
+jusqu'au jeudi 19 h · écran d'attente avec compte à rebours et nombre d'inscrits ·
+**inscription tardive jusqu'au vendredi 18 h** (voir ci-dessous).
 
 **Formation des groupes** — tâche planifiée le jeudi à 19 h (aucun écran) · groupes de
 3 à 6 par ville et âge · exclusion des paires signalées · un lieu
 distinct par groupe, tiré d'une table remplie à la main · notification push.
 
 **Le groupe** — écran avec lieu, adresse, heure et membres (photo, prénom, âge) ·
-bouton « je confirme » · bouton « je ne viens plus » qui poste automatiquement dans le
-chat · chat temps réel · rappels push le vendredi matin et à 18 h.
+chat temps réel (pas de « je confirme » ni de « je ne viens plus » : on prévient le
+groupe dans le chat) · rappels push le vendredi matin et à 18 h.
+
+**Inscription tardive** _(décidé le 2026-10-17)_ — après jeudi 19 h, une inscription
+place directement dans un groupe pas plein (< 6) de la ville et de l'âge compatibles ·
+sinon un nouveau groupe se forme dès que 3 retardataires compatibles sont sans
+groupe (lieu + notification) · à 18 h, la recherche s'arrête : « pas de groupe ce
+soir » · l'accueil signale « des groupes ont encore de la place ce soir » quand une
+place existe pour cet utilisateur _(2026-10-18)_.
 
 **Sécurité** — signaler un membre : les deux ne seront plus jamais placés dans le même
 groupe. Automatique, sans modération manuelle.
