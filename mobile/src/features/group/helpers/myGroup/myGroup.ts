@@ -17,6 +17,7 @@ export type MyGroup = {
   friday: string;
   venueName: string;
   venueAddress: string;
+  formedLate: boolean;
   members: GroupMember[];
 };
 
@@ -30,6 +31,7 @@ export type GroupRow = {
   member_age: number;
   member_photo_path: string;
   member_joined_late: boolean;
+  group_formed_late?: boolean;
 };
 
 export type GroupMemberProfile = {
@@ -47,6 +49,7 @@ export function buildMyGroup(rows: GroupRow[], photoUrls: Map<string, string>): 
     friday: firstRow.friday,
     venueName: firstRow.venue_name,
     venueAddress: firstRow.venue_address,
+    formedLate: firstRow.group_formed_late ?? false,
     members: rows.map((row) => ({
       userId: row.member_user_id,
       firstName: row.member_first_name,

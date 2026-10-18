@@ -5,6 +5,7 @@ import {
   isTonightSignupOpen,
   getFridayStateAfterPosting,
   isTonightSignupShown,
+  isNoGroupTonightShown,
 } from './fridays';
 
 describe('getFollowingFridays', () => {
@@ -118,5 +119,43 @@ describe('isTonightSignupShown', () => {
 
   it('hides it outside the tonight window', () => {
     expect(isTonightSignupShown({ ...tonight, nextOpenFriday: '2026-10-23' })).toBe(false);
+  });
+});
+
+describe('isNoGroupTonightShown', () => {
+  const afterSix = {
+    nextOpenFriday: '2026-10-30',
+    postedFriday: '2026-10-23',
+    groupFormationAt: '2026-10-22T17:00:00Z',
+    citySignupCount: 2,
+    signupFriday: '2026-10-30',
+    signupClosesAt: '2026-10-23T16:00:00Z',
+    postedLate: true,
+  };
+
+  it('shows it after Friday 18 h to someone posted for tonight', () => {
+    expect(isNoGroupTonightShown(afterSix)).toBe(true);
+  });
+
+  it('shows it to someone left out on Thursday too', () => {
+    expect(isNoGroupTonightShown({ ...afterSix, postedLate: false })).toBe(true);
+  });
+
+  it('does not show it before 18 h, while signup is still for tonight', () => {
+    expect(
+      isNoGroupTonightShown({
+        ...afterSix,
+        nextOpenFriday: '2026-10-30',
+        signupFriday: '2026-10-23',
+      }),
+    ).toBe(false);
+  });
+
+  it('does not show it to someone already posted for next Friday', () => {
+    expect(isNoGroupTonightShown({ ...afterSix, postedFriday: '2026-10-30' })).toBe(false);
+  });
+
+  it('does not show it with nothing posted', () => {
+    expect(isNoGroupTonightShown({ ...afterSix, postedFriday: null })).toBe(false);
   });
 });

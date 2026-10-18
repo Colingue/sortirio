@@ -1,8 +1,9 @@
+import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
-import { Colors, Fonts } from '@/constants/theme';
+import { Colors, Fonts, Radius } from '@/constants/theme';
 import { GroupAnnouncementDetails } from '@/features/group/components/group-announcement-details/group-announcement-details';
 import { MemberAvatars } from '@/features/group/components/member-avatars/member-avatars';
 import { OnAccentButton } from '@/features/group/components/on-accent-button/on-accent-button';
@@ -31,12 +32,25 @@ export function GroupReady({ group, myUserId, onOpenGroup, onClose }: GroupReady
       </ThemedText>
 
       <View style={styles.body}>
+        {group.formedLate ? (
+          <View style={styles.badge}>
+            <SymbolView
+              name={{ ios: 'clock', android: 'schedule', web: 'schedule' }}
+              size={14}
+              tintColor={Colors.onAccent}
+            />
+            <ThemedText themeColor="onAccent" style={styles.badgeLabel}>
+              Groupe de dernière minute
+            </ThemedText>
+          </View>
+        ) : null}
         <MemberAvatars members={[...otherMembers, ...me]} size={64} />
         <ThemedText themeColor="onAccent" style={styles.title}>
           Ton groupe est prêt !
         </ThemedText>
         <ThemedText themeColor="onAccent" style={styles.members}>
           {formatMembersSentence(otherMembers)}
+          {group.formedLate ? ' Vous vous êtes tous décidés au dernier moment.' : null}
         </ThemedText>
         <GroupAnnouncementDetails
           meetingLabel={formatMeetingLabel(group.friday)}
@@ -74,6 +88,22 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     justifyContent: 'center',
+  },
+  badge: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 24,
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+    borderRadius: Radius.pill,
+    backgroundColor: Colors.accentDark,
+  },
+  badgeLabel: {
+    fontFamily: Fonts.semiBold,
+    fontSize: 13,
+    lineHeight: 18,
   },
   title: {
     marginTop: 28,

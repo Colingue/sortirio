@@ -40,3 +40,7 @@ export function isTonightSignupShown(fridayState: FridayState): boolean {
   if (fridayState.postedFriday === null) return isTonightSignupOpen(fridayState);
   return fridayState.postedFriday !== fridayState.nextOpenFriday;
 }
+
+export function isNoGroupTonightShown(fridayState: FridayState): boolean {
+  return fridayState.postedFriday !== null && fridayState.postedFriday !== fridayState.signupFriday;
+}

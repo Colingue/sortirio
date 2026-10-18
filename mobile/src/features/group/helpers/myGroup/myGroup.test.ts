@@ -32,6 +32,7 @@ function buildRow(overrides: Partial<GroupRow> = {}): GroupRow {
     member_age: 31,
     member_photo_path: 'user-1/photo.jpg',
     member_joined_late: false,
+    group_formed_late: false,
     ...overrides,
   };
 }
@@ -58,6 +59,7 @@ describe('buildMyGroup', () => {
       friday: '2026-10-16',
       venueName: 'Odessa',
       venueAddress: '14 Rue René Leynaud, 69001 Lyon',
+      formedLate: false,
       members: [
         { userId: 'user-1', firstName: 'Alix', age: 31, photoUrl: null, joinedLate: false },
         { userId: 'user-2', firstName: 'Bo', age: 24, photoUrl: null, joinedLate: false },
@@ -72,6 +74,11 @@ describe('buildMyGroup', () => {
       false,
       true,
     ]);
+  });
+
+  it('tells whether the group was formed after the Thursday formation', () => {
+    expect(buildMyGroup([buildRow()], new Map())?.formedLate).toBe(false);
+    expect(buildMyGroup([buildRow({ group_formed_late: true })], new Map())?.formedLate).toBe(true);
   });
 
   it('attaches the signed url matching each photo path', () => {

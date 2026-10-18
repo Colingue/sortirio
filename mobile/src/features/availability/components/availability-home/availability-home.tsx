@@ -3,8 +3,12 @@ import { type ReactNode } from 'react';
 
 import { AvailabilityInvitation } from '@/features/availability/components/availability-invitation/availability-invitation';
 import { AvailabilityWaiting } from '@/features/availability/components/availability-waiting/availability-waiting';
+import { NoGroupTonight } from '@/features/availability/components/no-group-tonight/no-group-tonight';
 import { TonightSignup } from '@/features/availability/components/tonight-signup/tonight-signup';
-import { isTonightSignupShown } from '@/features/availability/helpers/fridays/fridays';
+import {
+  isNoGroupTonightShown,
+  isTonightSignupShown,
+} from '@/features/availability/helpers/fridays/fridays';
 import { type ScreenState } from '@/features/availability/hooks/useAvailabilityScreen/useAvailabilityScreen';
 
 type AvailabilityHomeProps = {
@@ -29,6 +33,10 @@ export function AvailabilityHome({
   async function declareAndConfirm(friday: string) {
     const posted = await onDeclare();
     if (posted) router.push({ pathname: '/availability-confirmed', params: { friday } });
+  }
+
+  if (isNoGroupTonightShown(fridayState)) {
+    return <NoGroupTonight city={city} screen={screen} onDeclare={onDeclare} />;
   }
 
   if (isTonightSignupShown(fridayState)) {
