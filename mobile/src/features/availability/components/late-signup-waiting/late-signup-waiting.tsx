@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { type ReactNode, type ReactElement } from 'react';
+import { ScrollView, StyleSheet, View, type RefreshControlProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
@@ -13,6 +13,7 @@ const STEPS = [
 ];
 
 export type LateSignupWaitingProps = {
+  refreshControl?: ReactElement<RefreshControlProps>;
   city: string;
   topCard?: ReactNode;
   postedFriday: string;
@@ -24,10 +25,11 @@ export function LateSignupWaiting({
   topCard,
   postedFriday,
   signupClosesAt,
+  refreshControl,
 }: LateSignupWaitingProps) {
   return (
     <SafeAreaView edges={['top']} style={styles.screen}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={styles.content} refreshControl={refreshControl}>
         <CityHeader city={city} />
         {topCard}
 

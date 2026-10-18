@@ -1,5 +1,5 @@
-import { useState, type ReactNode } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { useState, type ReactNode, type ReactElement } from 'react';
+import { Pressable, StyleSheet, View, type RefreshControlProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PrimaryButton } from '@/components/primary-button';
@@ -10,6 +10,7 @@ import { useCountdown } from '@/hooks/useCountdown';
 import { AvailabilityWaitingSummary } from './availability-waiting-summary';
 
 export type AvailabilityWaitingProps = {
+  refreshControl?: ReactElement<RefreshControlProps>;
   city: string;
   topCard?: ReactNode;
   postedFriday: string;
@@ -22,15 +23,12 @@ export type AvailabilityWaitingProps = {
 };
 
 export function AvailabilityWaiting({
-  city,
-  topCard,
-  postedFriday,
   canCancel,
   onConfirmCancel,
   canceling,
   cancelFailed,
   groupFormationAt,
-  citySignupCount,
+  ...summary
 }: AvailabilityWaitingProps) {
   const [confirming, setConfirming] = useState(false);
   const remaining = useCountdown(groupFormationAt);
@@ -38,13 +36,10 @@ export function AvailabilityWaiting({
   if (!confirming || !canCancel) {
     return (
       <AvailabilityWaitingSummary
-        city={city}
-        topCard={topCard}
-        postedFriday={postedFriday}
+        {...summary}
         canCancel={canCancel}
         onRequestCancel={() => setConfirming(true)}
         remaining={remaining}
-        citySignupCount={citySignupCount}
       />
     );
   }

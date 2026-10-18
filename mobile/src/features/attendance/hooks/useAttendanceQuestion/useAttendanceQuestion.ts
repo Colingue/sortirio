@@ -11,6 +11,7 @@ export type AttendanceQuestionState = {
   saving: boolean;
   saveFailed: boolean;
   handleAnswer: (went: boolean) => Promise<void>;
+  loadAttendanceQuestion: () => Promise<void>;
 };
 
 export function useAttendanceQuestion(): AttendanceQuestionState {
@@ -30,6 +31,11 @@ export function useAttendanceQuestion(): AttendanceQuestionState {
     };
   }, []);
 
+  async function loadAttendanceQuestion() {
+    const pending = await fetchPendingAttendanceQuestion().catch(() => undefined);
+    if (pending !== undefined) setQuestion(pending);
+  }
+
   async function handleAnswer(went: boolean) {
     if (!question) return;
     setSaving(true);
@@ -44,5 +50,5 @@ export function useAttendanceQuestion(): AttendanceQuestionState {
     }
   }
 
-  return { question, saving, saveFailed, handleAnswer };
+  return { question, saving, saveFailed, handleAnswer, loadAttendanceQuestion };
 }

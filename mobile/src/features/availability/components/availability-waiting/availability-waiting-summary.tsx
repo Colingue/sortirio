@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react';
-import { Pressable, ScrollView, StyleSheet } from 'react-native';
+import { type ReactNode, type ReactElement } from 'react';
+import { Pressable, ScrollView, StyleSheet, type RefreshControlProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
@@ -10,6 +10,7 @@ import { WaitingCard } from '@/features/availability/components/waiting-card/wai
 import { type TimeRemaining } from '@/features/availability/helpers/countdown';
 
 export type AvailabilityWaitingSummaryProps = {
+  refreshControl?: ReactElement<RefreshControlProps>;
   city: string;
   topCard?: ReactNode;
   postedFriday: string;
@@ -27,10 +28,11 @@ export function AvailabilityWaitingSummary({
   onRequestCancel,
   remaining,
   citySignupCount,
+  refreshControl,
 }: AvailabilityWaitingSummaryProps) {
   return (
     <SafeAreaView edges={['top']} style={styles.screen}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={styles.content} refreshControl={refreshControl}>
         <CityHeader city={city} />
         {topCard}
 

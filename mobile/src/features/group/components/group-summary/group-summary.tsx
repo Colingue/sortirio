@@ -1,5 +1,6 @@
+import { type ReactElement } from 'react';
 import { router } from 'expo-router';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, type RefreshControlProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
@@ -10,17 +11,18 @@ import { GroupSummaryCard } from '@/features/group/components/group-summary-card
 import { getOtherMembers, type MyGroup } from '@/features/group/helpers/myGroup/myGroup';
 
 export type GroupSummaryProps = {
+  refreshControl?: ReactElement<RefreshControlProps>;
   city: string;
   group: MyGroup;
   myUserId: string | undefined;
 };
 
-export function GroupSummary({ city, group, myUserId }: GroupSummaryProps) {
+export function GroupSummary({ city, group, myUserId, refreshControl }: GroupSummaryProps) {
   const me = group.members.filter((member) => member.userId === myUserId);
 
   return (
     <SafeAreaView edges={['top']} style={styles.screen}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={styles.content} refreshControl={refreshControl}>
         <CityHeader city={city} />
 
         <ThemedText type="title" style={styles.title}>

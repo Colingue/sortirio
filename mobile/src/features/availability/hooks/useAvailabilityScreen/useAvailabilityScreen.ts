@@ -96,9 +96,27 @@ export function useAvailabilityScreen(userId: string | undefined) {
     };
   }, []);
 
+  async function loadFridayState() {
+    const fridayState = await fetchFridayState().catch(() => undefined);
+    if (!fridayState) return;
+    setScreen((current) =>
+      current.status === 'ready'
+        ? { ...current, fridayState }
+        : {
+            status: 'ready',
+            fridayState,
+            saving: false,
+            saveFailed: false,
+            canceling: false,
+            cancelFailed: false,
+          },
+    );
+  }
+
   return {
     state: screen,
     handleDeclareAvailability: () => runDeclareAvailability(userId, screen, setScreen),
     handleCancelAvailability: () => runCancelAvailability(screen, setScreen),
+    loadFridayState,
   };
 }

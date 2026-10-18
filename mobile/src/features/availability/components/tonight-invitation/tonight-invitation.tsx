@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { type ReactNode, type ReactElement } from 'react';
+import { ScrollView, StyleSheet, type RefreshControlProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
@@ -10,6 +10,7 @@ import { TonightCard } from '@/features/availability/components/tonight-card/ton
 import { UpcomingFridays } from '@/features/availability/components/upcoming-fridays/upcoming-fridays';
 
 export type TonightInvitationProps = {
+  refreshControl?: ReactElement<RefreshControlProps>;
   city: string;
   topCard?: ReactNode;
   signupFriday: string;
@@ -27,10 +28,11 @@ export function TonightInvitation({
   onPress,
   saving,
   failed,
+  refreshControl,
 }: TonightInvitationProps) {
   return (
     <SafeAreaView edges={['top']} style={styles.screen}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={styles.content} refreshControl={refreshControl}>
         <CityHeader city={city} />
         {topCard}
 

@@ -5,7 +5,7 @@ import { fetchMyGroup, type MyGroup } from '@/features/group/helpers/myGroup/myG
 export type MyGroupState =
   { status: 'loading' } | { status: 'failed' } | { status: 'ready'; group: MyGroup | null };
 
-export function useMyGroup(): MyGroupState {
+export function useMyGroup() {
   const [myGroup, setMyGroup] = useState<MyGroupState>({ status: 'loading' });
 
   useEffect(() => {
@@ -20,5 +20,10 @@ export function useMyGroup(): MyGroupState {
     };
   }, []);
 
-  return myGroup;
+  async function loadMyGroup() {
+    const group = await fetchMyGroup().catch(() => undefined);
+    if (group !== undefined) setMyGroup({ status: 'ready', group });
+  }
+
+  return { ...myGroup, loadMyGroup };
 }
