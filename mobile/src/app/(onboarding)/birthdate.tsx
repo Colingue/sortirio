@@ -1,7 +1,8 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Keyboard, Pressable, StyleSheet, View } from 'react-native';
+import { KeyboardStickyView } from 'react-native-keyboard-controller';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { PrimaryButton } from '@/components/primary-button';
 import { ThemedText } from '@/components/themed-text';
@@ -14,6 +15,7 @@ import { useSignupDraft } from '@/features/signup/providers/signup-draft/signup-
 
 export default function BirthdateScreen() {
   const { draft, update } = useSignupDraft();
+  const insets = useSafeAreaInsets();
   const today = new Date();
   const [fields, setFields] = useState(() => toBirthdateFields(draft.birthdate));
 
@@ -30,32 +32,36 @@ export default function BirthdateScreen() {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <SignupStepHeader step={3} />
+      <Pressable style={styles.content} onPress={Keyboard.dismiss} accessible={false}>
+        <SignupStepHeader step={3} />
 
-      <ThemedText type="title" style={styles.title}>
-        Ta date de naissance ?
-      </ThemedText>
-      <ThemedText themeColor="textSecondary" style={styles.lead}>
-        Elle sert à former des groupes d&apos;âges proches. Seul ton âge est affiché, jamais ta
-        date.
-      </ThemedText>
-
-      <BirthdateInputs fields={fields} onChange={setFields} />
-
-      {birthdate ? (
-        <ThemedText themeColor={adult ? 'textSecondary' : 'danger'} style={styles.message}>
-          {adult ? `${getAgeOn(birthdate, today)} ans` : 'Dispo est réservé aux plus de 18 ans.'}
+        <ThemedText type="title" style={styles.title}>
+          Ta date de naissance ?
         </ThemedText>
-      ) : null}
-      {impossible ? (
-        <ThemedText themeColor="danger" style={styles.message}>
-          Cette date n&apos;existe pas.
+        <ThemedText themeColor="textSecondary" style={styles.lead}>
+          Elle sert à former des groupes d&apos;âges proches. Seul ton âge est affiché, jamais ta
+          date.
         </ThemedText>
-      ) : null}
 
-      <View style={styles.spacer} />
+        <BirthdateInputs fields={fields} onChange={setFields} />
 
-      <PrimaryButton label="Continuer" onPress={confirmBirthdate} disabled={!adult} />
+        {birthdate ? (
+          <ThemedText themeColor={adult ? 'textSecondary' : 'danger'} style={styles.message}>
+            {adult ? `${getAgeOn(birthdate, today)} ans` : 'Dispo est réservé aux plus de 18 ans.'}
+          </ThemedText>
+        ) : null}
+        {impossible ? (
+          <ThemedText themeColor="danger" style={styles.message}>
+            Cette date n&apos;existe pas.
+          </ThemedText>
+        ) : null}
+
+        <View style={styles.spacer} />
+
+        <KeyboardStickyView offset={{ opened: insets.bottom + 16 }}>
+          <PrimaryButton label="Continuer" onPress={confirmBirthdate} disabled={!adult} />
+        </KeyboardStickyView>
+      </Pressable>
     </SafeAreaView>
   );
 }
@@ -67,6 +73,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 32,
     backgroundColor: Colors.background,
+  },
+  content: {
+    flex: 1,
   },
   title: {
     marginTop: 40,
