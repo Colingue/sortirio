@@ -1,18 +1,18 @@
 {
   "expo": {
     "name": "Dispo",
-    "slug": "sortirio",
+    "slug": "dispo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "sortirio",
+    "scheme": "dispo",
     "userInterfaceStyle": "light",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.sortirio.app"
+      "bundleIdentifier": "com.dispo.app"
     },
     "android": {
-      "package": "com.sortirio.app",
+      "package": "com.dispo.app",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

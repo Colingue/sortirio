@@ -60,7 +60,7 @@ passe pas tuerait le pilote ; c'est pour ça qu'elle est en tête.
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Bibliothèque Google | `@react-native-google-signin/google-signin` — jeton d'identité natif, pas de redirection web                                                                                                      |
 | Remise à Supabase   | `supabase.auth.signInWithIdToken({ provider: 'google', token })`                                                                                                                                  |
-| Identifiants Google | un client **Web** (Supabase, et `webClientId` sur toutes les plateformes) + un client **iOS** (bundle `com.sortirio.app`, pas d'empreinte) + un client **Android** par empreinte SHA-1, plus tard |
+| Identifiants Google | un client **Web** (Supabase, et `webClientId` sur toutes les plateformes) + un client **iOS** (bundle `com.dispo.app`, pas d'empreinte) + un client **Android** par empreinte SHA-1, plus tard |
 | Session             | déjà en place : `expo-sqlite/kv-store` + `autoRefreshToken` dans `src/lib/supabase.ts`                                                                                                            |
 | Routage             | `Stack.Protected guard={…}` d'expo-router, dans le layout racine — pas de `router.replace` impératif                                                                                              |
 | Écran de démarrage  | `SplashScreen.preventAutoHideAsync()` puis `hideAsync()` quand la destination est connue ; la splash animée du template est supprimée                                                             |
@@ -251,7 +251,8 @@ La story est finie quand, sur le simulateur iOS :
 ## Questions ouvertes
 
 1. ~~**Nom de package Android.**~~ **Tranché le 2026-09-02 : `com.sortirio.app`**,
-   écrit dans `mobile/app.json`. Il est figé dans l'empreinte de signature Google :
+   renommé `com.dispo.app` le 2026-10-18, avant toute publication. Écrit dans
+   `mobile/app.json`. Il est figé dans l'empreinte de signature Google :
    le changer plus tard oblige à reconfigurer le client Android.
 2. **`jest-expo`** ajoute une dépendance de développement et un fichier de
    configuration. Je le recommande pour les trois tests ci-dessus ; si tu préfères
