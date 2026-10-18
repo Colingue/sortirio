@@ -7,6 +7,9 @@ export type FridayState = {
   postedFriday: string | null;
   groupFormationAt: string | null;
   citySignupCount: number | null;
+  signupFriday: string;
+  signupClosesAt: string;
+  postedLate: boolean;
 };
 
 type FridayStateRow = {
@@ -14,6 +17,9 @@ type FridayStateRow = {
   posted_friday: string | null;
   group_formation_at: string | null;
   city_signup_count: number | null;
+  signup_friday: string;
+  signup_closes_at: string;
+  posted_late: boolean;
 };
 
 export async function fetchFridayState(): Promise<FridayState> {
@@ -26,6 +32,9 @@ export async function fetchFridayState(): Promise<FridayState> {
     postedFriday: row.posted_friday,
     groupFormationAt: row.group_formation_at,
     citySignupCount: row.city_signup_count,
+    signupFriday: row.signup_friday,
+    signupClosesAt: row.signup_closes_at,
+    postedLate: row.posted_late,
   };
 }
 

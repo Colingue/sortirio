@@ -6,6 +6,7 @@ import {
   fetchFridayState,
   type FridayState,
 } from '@/features/availability/helpers/availability/availability';
+import { getFridayStateAfterPosting } from '@/features/availability/helpers/fridays/fridays';
 import { askNotificationPermission } from '@/features/notifications/helpers/askNotificationPermission/askNotificationPermission';
 
 export type ScreenState =
@@ -35,14 +36,12 @@ async function runDeclareAvailability(
 
   setScreen({ ...screen, saving: true, saveFailed: false });
   try {
-    const postedFriday = screen.fridayState.nextOpenFriday;
     await declareAvailability(userId);
     await askNotificationPermission();
-    // Countdown and signup count only come back once posted: re-read them.
-    const fridayState = await fetchFridayState().catch(() => ({
-      ...screen.fridayState,
-      postedFriday,
-    }));
+
+    const fridayState = await fetchFridayState().catch(() =>
+      getFridayStateAfterPosting(screen.fridayState),
+    );
     setScreen({ ...screen, saving: false, fridayState });
     return true;
   } catch {

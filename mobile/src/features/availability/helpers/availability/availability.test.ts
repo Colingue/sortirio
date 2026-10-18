@@ -28,6 +28,9 @@ describe('fetchFridayState', () => {
         posted_friday: '2026-09-18',
         group_formation_at: '2026-09-17T17:00:00Z',
         city_signup_count: 12,
+        signup_friday: '2026-09-18',
+        signup_closes_at: '2026-09-18T16:00:00Z',
+        posted_late: true,
       },
       error: null,
     });
@@ -37,6 +40,9 @@ describe('fetchFridayState', () => {
       postedFriday: '2026-09-18',
       groupFormationAt: '2026-09-17T17:00:00Z',
       citySignupCount: 12,
+      signupFriday: '2026-09-18',
+      signupClosesAt: '2026-09-18T16:00:00Z',
+      postedLate: true,
     });
     expect(mockRpc).toHaveBeenCalledWith('get_friday_availability_status');
   });
@@ -48,6 +54,9 @@ describe('fetchFridayState', () => {
         posted_friday: null,
         group_formation_at: null,
         city_signup_count: null,
+        signup_friday: '2026-09-25',
+        signup_closes_at: '2026-09-25T16:00:00Z',
+        posted_late: false,
       },
       error: null,
     });
@@ -57,6 +66,9 @@ describe('fetchFridayState', () => {
       postedFriday: null,
       groupFormationAt: null,
       citySignupCount: null,
+      signupFriday: '2026-09-25',
+      signupClosesAt: '2026-09-25T16:00:00Z',
+      postedLate: false,
     });
   });
 

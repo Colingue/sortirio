@@ -1,11 +1,8 @@
-import { router } from 'expo-router';
-
 import { ScreenStatus } from '@/components/screen-status';
 import { AttendanceQuestionCard } from '@/features/attendance/components/attendance-question-card/attendance-question-card';
 import { useAttendanceQuestion } from '@/features/attendance/hooks/useAttendanceQuestion/useAttendanceQuestion';
 import { useSessionState } from '@/features/auth/providers/session-provider/session-provider';
-import { AvailabilityInvitation } from '@/features/availability/components/availability-invitation/availability-invitation';
-import { AvailabilityWaiting } from '@/features/availability/components/availability-waiting/availability-waiting';
+import { AvailabilityHome } from '@/features/availability/components/availability-home/availability-home';
 import { useAvailabilityScreen } from '@/features/availability/hooks/useAvailabilityScreen/useAvailabilityScreen';
 import { cities } from '@/features/city/helpers/cities/cities';
 import { GroupSummary } from '@/features/group/components/group-summary/group-summary';
@@ -26,11 +23,6 @@ export default function HomeScreen() {
   useRegisterPushToken(userId);
   useOpenScreenFromNotification();
 
-  async function declareAndConfirm(friday: string) {
-    const posted = await handleDeclareAvailability();
-    if (posted) router.push({ pathname: '/availability-confirmed', params: { friday } });
-  }
-
   if (state.status !== 'ready' || myGroup.status !== 'ready') {
     return <ScreenStatus failed={state.status === 'failed' || myGroup.status === 'failed'} />;
   }
@@ -39,31 +31,13 @@ export default function HomeScreen() {
     return <GroupSummary city={city.name} group={myGroup.group} myUserId={userId} />;
   }
 
-  if (state.fridayState.postedFriday === null) {
-    return (
-      <AvailabilityInvitation
-        city={city.name}
-        topCard={attendanceCard}
-        nextOpenFriday={state.fridayState.nextOpenFriday}
-        citySignupCount={state.fridayState.citySignupCount}
-        onPress={() => void declareAndConfirm(state.fridayState.nextOpenFriday)}
-        saving={state.saving}
-        failed={state.saveFailed}
-      />
-    );
-  }
-
   return (
-    <AvailabilityWaiting
+    <AvailabilityHome
       city={city.name}
       topCard={attendanceCard}
-      postedFriday={state.fridayState.postedFriday}
-      canCancel={state.fridayState.postedFriday === state.fridayState.nextOpenFriday}
-      onConfirmCancel={() => void handleCancelAvailability()}
-      canceling={state.canceling}
-      cancelFailed={state.cancelFailed}
-      groupFormationAt={state.fridayState.groupFormationAt}
-      citySignupCount={state.fridayState.citySignupCount}
+      screen={state}
+      onDeclare={handleDeclareAvailability}
+      onCancel={() => void handleCancelAvailability()}
     />
   );
 }
