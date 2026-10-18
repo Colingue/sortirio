@@ -10,6 +10,7 @@ function buildRow(overrides: Partial<MyGroupsRow> = {}): MyGroupsRow {
     friday: '2026-10-02',
     venue_name: 'Odessa',
     member_first_names: ['Alix', 'Bo', 'Chloé'],
+    member_photo_paths: ['alix.jpg', 'bo.jpg', 'chloe.jpg'],
     last_message_body: null,
     last_message_at: null,
     last_message_author_id: null,
@@ -19,12 +20,21 @@ function buildRow(overrides: Partial<MyGroupsRow> = {}): MyGroupsRow {
 }
 
 describe('buildMyGroupsItem', () => {
-  it('labels the friday and keeps the first names', () => {
-    expect(buildMyGroupsItem(buildRow(), 'user-1', NOW)).toEqual({
+  it('labels the friday and pairs each first name with its signed photo', () => {
+    const photoUrls = new Map([
+      ['alix.jpg', 'https://signed/alix'],
+      ['chloe.jpg', 'https://signed/chloe'],
+    ]);
+
+    expect(buildMyGroupsItem(buildRow(), 'user-1', NOW, photoUrls)).toEqual({
       groupId: 'group-1',
       fridayLabel: 'Vendredi 2 octobre',
       venueName: 'Odessa',
-      memberFirstNames: ['Alix', 'Bo', 'Chloé'],
+      memberFaces: [
+        { firstName: 'Alix', photoUrl: 'https://signed/alix' },
+        { firstName: 'Bo', photoUrl: null },
+        { firstName: 'Chloé', photoUrl: 'https://signed/chloe' },
+      ],
       lastMessage: null,
     });
   });
@@ -37,7 +47,7 @@ describe('buildMyGroupsItem', () => {
       last_message_author_first_name: 'Inès',
     });
 
-    expect(buildMyGroupsItem(row, 'user-1', NOW).lastMessage).toEqual({
+    expect(buildMyGroupsItem(row, 'user-1', NOW, new Map()).lastMessage).toEqual({
       preview: 'Inès : Je suis au fond',
       timeLabel: '20:04',
     });
@@ -51,7 +61,9 @@ describe('buildMyGroupsItem', () => {
       last_message_author_first_name: 'Alix',
     });
 
-    expect(buildMyGroupsItem(row, 'user-1', NOW).lastMessage?.preview).toBe('Toi : On remet ça ?');
+    expect(buildMyGroupsItem(row, 'user-1', NOW, new Map()).lastMessage?.preview).toBe(
+      'Toi : On remet ça ?',
+    );
   });
 });
 

@@ -2,21 +2,22 @@ import { StyleSheet, View } from 'react-native';
 
 import { MemberAvatar } from '@/components/member-avatar';
 import { Colors } from '@/constants/theme';
+import { type GroupFace } from '@/features/group/helpers/myGroups/myGroups';
 
 const FACE_SIZE = 34;
 
-export function GroupFaces({ firstNames }: { firstNames: string[] }) {
+export function GroupFaces({ faces }: { faces: GroupFace[] }) {
   return (
     <View
       style={styles.faces}
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
     >
-      {firstNames.slice(0, 2).map((firstName, index) => (
+      {faces.slice(0, 2).map((face, index) => (
         <MemberAvatar
-          key={`${firstName}-${index}`}
-          firstName={firstName}
-          photoUrl={null}
+          key={`${face.firstName}-${index}`}
+          firstName={face.firstName}
+          photoUrl={face.photoUrl}
           size={FACE_SIZE}
           colorIndex={index}
           style={[styles.face, index === 0 ? styles.topLeft : styles.bottomRight]}

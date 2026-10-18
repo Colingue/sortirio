@@ -1,5 +1,6 @@
 import { formatFridayLabel } from '@/features/availability/helpers/formatFridayLabel/formatFridayLabel';
 import { formatMessageTime } from '@/features/chat/helpers/groupMessages/groupMessages';
+import { signPhotoUrls } from '@/features/group/helpers/myGroup/myGroup';
 import { supabase } from '@/lib/supabase';
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
@@ -10,11 +11,16 @@ export type LastMessage = {
   timeLabel: string;
 };
 
+export type GroupFace = {
+  firstName: string;
+  photoUrl: string | null;
+};
+
 export type MyGroupsItem = {
   groupId: string;
   fridayLabel: string;
   venueName: string;
-  memberFirstNames: string[];
+  memberFaces: GroupFace[];
   lastMessage: LastMessage | null;
 };
 
@@ -23,6 +29,7 @@ export type MyGroupsRow = {
   friday: string;
   venue_name: string;
   member_first_names: string[];
+  member_photo_paths: string[];
   last_message_body: string | null;
   last_message_at: string | null;
   last_message_author_id: string | null;
@@ -60,12 +67,16 @@ export function buildMyGroupsItem(
   row: MyGroupsRow,
   myUserId: string | undefined,
   now: Date,
+  photoUrls: Map<string, string>,
 ): MyGroupsItem {
   return {
     groupId: row.group_id,
     fridayLabel: formatFridayLabel(row.friday),
     venueName: row.venue_name,
-    memberFirstNames: row.member_first_names,
+    memberFaces: row.member_first_names.map((firstName, index) => ({
+      firstName,
+      photoUrl: photoUrls.get(row.member_photo_paths[index]) ?? null,
+    })),
     lastMessage: buildLastMessage(row, myUserId, now),
   };
 }
@@ -74,6 +85,10 @@ export async function fetchMyGroups(myUserId: string | undefined): Promise<MyGro
   const { data, error } = await supabase.rpc('get_my_groups');
   if (error) throw error;
 
+  const rows = (data ?? []) as MyGroupsRow[];
+  const photoUrls = await signPhotoUrls([
+    ...new Set(rows.flatMap((row) => row.member_photo_paths)),
+  ]);
   const now = new Date();
-  return ((data ?? []) as MyGroupsRow[]).map((row) => buildMyGroupsItem(row, myUserId, now));
+  return rows.map((row) => buildMyGroupsItem(row, myUserId, now, photoUrls));
 }

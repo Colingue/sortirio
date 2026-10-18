@@ -19,7 +19,7 @@ export function MyGroupsRow({ group }: MyGroupsRowProps) {
         router.push({ pathname: '/past-group/[groupId]', params: { groupId: group.groupId } })
       }
     >
-      <GroupFaces firstNames={group.memberFirstNames} />
+      <GroupFaces faces={group.memberFaces} />
       <View style={styles.words}>
         <View style={styles.line}>
           <ThemedText style={styles.date}>{group.fridayLabel}</ThemedText>
@@ -30,7 +30,7 @@ export function MyGroupsRow({ group }: MyGroupsRowProps) {
           ) : null}
         </View>
         <ThemedText type="small" themeColor="textMuted">
-          {group.venueName} · {group.memberFirstNames.length} membres
+          {group.venueName} · {group.memberFaces.length} membres
         </ThemedText>
         {group.lastMessage ? (
           <ThemedText themeColor="textSecondary" numberOfLines={1} style={styles.preview}>
