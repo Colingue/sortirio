@@ -1,6 +1,17 @@
-import { useState, type Ref } from 'react';
-import { StyleSheet, TextInput, type StyleProp, type TextStyle } from 'react-native';
+import { useId, useState, type Ref } from 'react';
+import {
+  InputAccessoryView,
+  Keyboard,
+  Platform,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
+  type StyleProp,
+  type TextStyle,
+} from 'react-native';
 
+import { ThemedText } from '@/components/themed-text';
 import { Colors, Fonts, Radius } from '@/constants/theme';
 
 type DigitFieldProps = {
@@ -16,16 +27,30 @@ type DigitFieldProps = {
 
 export function DigitField({ style, ...rest }: DigitFieldProps) {
   const [focused, setFocused] = useState(false);
+  const accessoryId = useId();
 
   return (
-    <TextInput
-      {...rest}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
-      keyboardType="number-pad"
-      placeholderTextColor={Colors.placeholder}
-      style={[styles.input, focused && styles.focused, style]}
-    />
+    <>
+      <TextInput
+        {...rest}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        keyboardType="number-pad"
+        returnKeyType="done"
+        inputAccessoryViewID={accessoryId}
+        placeholderTextColor={Colors.placeholder}
+        style={[styles.input, focused && styles.focused, style]}
+      />
+      {Platform.OS === 'ios' ? (
+        <InputAccessoryView nativeID={accessoryId}>
+          <View style={styles.toolbar}>
+            <Pressable onPress={Keyboard.dismiss} accessibilityRole="button" hitSlop={12}>
+              <ThemedText style={styles.done}>OK</ThemedText>
+            </Pressable>
+          </View>
+        </InputAccessoryView>
+      ) : null}
+    </>
   );
 }
 
@@ -44,5 +69,18 @@ const styles = StyleSheet.create({
   focused: {
     borderWidth: 2,
     borderColor: Colors.accent,
+  },
+  toolbar: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    backgroundColor: Colors.surface,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: Colors.borderStrong,
+  },
+  done: {
+    fontFamily: Fonts.semiBold,
+    color: Colors.accent,
   },
 });
