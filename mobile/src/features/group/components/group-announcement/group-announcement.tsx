@@ -9,19 +9,27 @@ import {
   isGroupAnnouncementPending,
   saveGroupAnnouncementSeen,
 } from '@/features/group/helpers/groupAnnouncement/groupAnnouncement';
-import { fetchMyGroup, type MyGroup } from '@/features/group/helpers/myGroup/myGroup';
+import { type MyGroup } from '@/features/group/helpers/myGroup/myGroup';
 
-export function GroupAnnouncement({ myUserId }: { myUserId: string | undefined }) {
+export type GroupAnnouncementProps = {
+  group: MyGroup;
+  myUserId: string | undefined;
+};
+
+export function GroupAnnouncement({ group, myUserId }: GroupAnnouncementProps) {
   const [pendingGroup, setPendingGroup] = useState<MyGroup | null>(null);
 
   useEffect(() => {
-    async function findPendingGroup() {
-      const group = await fetchMyGroup();
-      if (group && (await isGroupAnnouncementPending(group.groupId))) setPendingGroup(group);
-    }
+    let cancelled = false;
 
-    findPendingGroup().catch(() => {});
-  }, []);
+    isGroupAnnouncementPending(group.groupId)
+      .then((pending) => pending && !cancelled && setPendingGroup(group))
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, [group]);
 
   function closeAnnouncement() {
     if (pendingGroup) void saveGroupAnnouncementSeen(pendingGroup.groupId).catch(() => {});

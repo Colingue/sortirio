@@ -1,5 +1,5 @@
-import { type ReactElement } from 'react';
 import { router } from 'expo-router';
+import { type ReactElement } from 'react';
 import { ScrollView, StyleSheet, type RefreshControlProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -7,6 +7,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { CityHeader } from '@/features/availability/components/city-header/city-header';
 import { UpcomingFridays } from '@/features/availability/components/upcoming-fridays/upcoming-fridays';
+import { GroupAnnouncement } from '@/features/group/components/group-announcement/group-announcement';
 import { GroupSummaryCard } from '@/features/group/components/group-summary-card/group-summary-card';
 import { getOtherMembers, type MyGroup } from '@/features/group/helpers/myGroup/myGroup';
 
@@ -43,6 +44,7 @@ export function GroupSummary({ city, group, myUserId, refreshControl }: GroupSum
         </ThemedText>
         <UpcomingFridays after={group.friday} city={city} />
       </ScrollView>
+      <GroupAnnouncement group={group} myUserId={myUserId} />
     </SafeAreaView>
   );
 }
