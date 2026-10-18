@@ -2,7 +2,7 @@ import { Pressable, StyleSheet } from 'react-native';
 
 import { MemberAvatar } from '@/components/member-avatar';
 import { ThemedText } from '@/components/themed-text';
-import { Colors, Fonts } from '@/constants/theme';
+import { Colors, Fonts, Radius } from '@/constants/theme';
 import { type GroupMember } from '@/features/group/helpers/myGroup/myGroup';
 
 export type GroupMemberRowProps = {
@@ -32,6 +32,11 @@ export function GroupMemberRow({ member, index, isMe, onOpenProfile }: GroupMemb
         {isMe ? 'Toi' : member.firstName}
         <ThemedText themeColor="textMuted"> · {member.age} ans</ThemedText>
       </ThemedText>
+      {member.joinedLate ? (
+        <ThemedText themeColor="accentDark" style={styles.newBadge}>
+          Nouveau
+        </ThemedText>
+      ) : null}
     </Pressable>
   );
 }
@@ -54,5 +59,15 @@ const styles = StyleSheet.create({
   name: {
     flex: 1,
     fontFamily: Fonts.medium,
+  },
+  newBadge: {
+    paddingVertical: 3,
+    paddingHorizontal: 10,
+    borderRadius: Radius.pill,
+    overflow: 'hidden',
+    backgroundColor: Colors.backgroundSelected,
+    fontFamily: Fonts.semiBold,
+    fontSize: 12,
+    lineHeight: 18,
   },
 });

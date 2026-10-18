@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase';
 
 import {
   addNewMessages,
+  buildChatItems,
   fetchGroupMessages,
   findMessageAuthor,
   formatMessageDay,
@@ -80,7 +81,11 @@ describe('formatMessageTime', () => {
 });
 
 describe('findMessageAuthor', () => {
-  const author: MessageAuthor = { firstName: 'Alix', photoUrl: 'https://signed/one' };
+  const author: MessageAuthor = {
+    firstName: 'Alix',
+    photoUrl: 'https://signed/one',
+    lateJoinedAt: null,
+  };
 
   it('finds the author among the group members', () => {
     expect(findMessageAuthor(new Map([['user-1', author]]), 'user-1')).toEqual(author);
@@ -138,5 +143,46 @@ describe('isNewMessageDay', () => {
       false,
       true,
     ]);
+  });
+});
+
+describe('buildChatItems', () => {
+  const authors = new Map<string, MessageAuthor>([
+    ['user-1', { firstName: 'Alix', photoUrl: null, lateJoinedAt: null }],
+    ['user-2', { firstName: 'Thomas', photoUrl: null, lateJoinedAt: '2026-10-16T13:13:00.000Z' }],
+  ]);
+  const before = buildMessage({ id: 'before', createdAt: '2026-10-15T18:00:00.000Z' });
+  const after = buildMessage({ id: 'after', createdAt: '2026-10-16T14:00:00.000Z' });
+
+  it('puts a joined line between the messages before and after the arrival', () => {
+    expect(buildChatItems([before, after], authors, 'user-1')).toEqual([
+      { kind: 'message', id: 'before', createdAt: before.createdAt, message: before },
+      {
+        kind: 'joined',
+        id: 'joined:user-2',
+        createdAt: '2026-10-16T13:13:00.000Z',
+        text: 'Thomas a rejoint le groupe',
+      },
+      { kind: 'message', id: 'after', createdAt: after.createdAt, message: after },
+    ]);
+  });
+
+  it('tells the newcomer they joined and can read what came before', () => {
+    const joined = buildChatItems([], authors, 'user-2');
+
+    expect(joined).toEqual([
+      expect.objectContaining({
+        kind: 'joined',
+        text: 'Tu as rejoint le groupe. Les messages précédents sont visibles.',
+      }),
+    ]);
+  });
+
+  it('has no joined line for members of the formation', () => {
+    const onlyFormation = new Map([...authors].filter(([userId]) => userId === 'user-1'));
+
+    expect(
+      buildChatItems([before], onlyFormation, 'user-1').map((chatItem) => chatItem.kind),
+    ).toEqual(['message']);
   });
 });

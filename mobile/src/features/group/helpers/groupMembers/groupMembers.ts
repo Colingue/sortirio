@@ -6,6 +6,7 @@ export type GroupMemberRow = {
   user_id: string;
   first_name: string;
   photo_path: string;
+  late_joined_at: string | null;
 };
 
 export function buildMessageAuthors(
@@ -15,7 +16,11 @@ export function buildMessageAuthors(
   return new Map(
     rows.map((row) => [
       row.user_id,
-      { firstName: row.first_name, photoUrl: photoUrls.get(row.photo_path) ?? null },
+      {
+        firstName: row.first_name,
+        photoUrl: photoUrls.get(row.photo_path) ?? null,
+        lateJoinedAt: row.late_joined_at,
+      },
     ]),
   );
 }

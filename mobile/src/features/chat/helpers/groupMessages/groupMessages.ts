@@ -20,7 +20,12 @@ export type PendingMessage = {
 export type MessageAuthor = {
   firstName: string;
   photoUrl: string | null;
+  lateJoinedAt: string | null;
 };
+
+export type ChatItem =
+  | { kind: 'message'; id: string; createdAt: string; message: GroupMessage }
+  | { kind: 'joined'; id: string; createdAt: string; text: string };
 
 export type MessageRow = {
   id: string;
@@ -50,6 +55,34 @@ export function addNewMessages(existing: GroupMessage[], incoming: GroupMessage[
   );
 }
 
+export function buildChatItems(
+  messages: GroupMessage[],
+  authorsById: Map<string, MessageAuthor>,
+  myUserId: string | undefined,
+): ChatItem[] {
+  const joined: ChatItem[] = [...authorsById]
+    .filter(([, author]) => author.lateJoinedAt !== null)
+    .map(([userId, author]) => ({
+      kind: 'joined',
+      id: `joined:${userId}`,
+      createdAt: author.lateJoinedAt as string,
+      text:
+        userId === myUserId
+          ? 'Tu as rejoint le groupe. Les messages précédents sont visibles.'
+          : `${author.firstName} a rejoint le groupe`,
+    }));
+  const sent: ChatItem[] = messages.map((message) => ({
+    kind: 'message',
+    id: message.id,
+    createdAt: message.createdAt,
+    message,
+  }));
+
+  return [...sent, ...joined].sort(
+    (one, other) => Date.parse(one.createdAt) - Date.parse(other.createdAt),
+  );
+}
+
 export function formatMessageTime(createdAt: string): string {
   const at = new Date(createdAt);
   const hours = String(at.getHours()).padStart(2, '0');
@@ -68,7 +101,7 @@ export function formatMessageDay(createdAt: string): string {
   return day.charAt(0).toUpperCase() + day.slice(1);
 }
 
-export function isNewMessageDay(messages: GroupMessage[], index: number): boolean {
+export function isNewMessageDay(messages: { createdAt: string }[], index: number): boolean {
   if (index === 0) return true;
 
   return (

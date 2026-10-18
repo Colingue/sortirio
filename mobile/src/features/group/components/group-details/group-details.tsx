@@ -2,7 +2,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
-import { Colors } from '@/constants/theme';
+import { Colors, Fonts, Radius } from '@/constants/theme';
 import { GroupDetailsHeader } from '@/features/group/components/group-details-header/group-details-header';
 import { GroupMeetingCard } from '@/features/group/components/group-meeting-card/group-meeting-card';
 import { GroupMemberRow } from '@/features/group/components/group-member-row/group-member-row';
@@ -22,6 +22,10 @@ export type GroupDetailsProps = {
 };
 
 export function GroupDetails(props: GroupDetailsProps) {
+  const joinedLate = props.members.some(
+    (member) => member.userId === props.myUserId && member.joinedLate,
+  );
+
   return (
     <SafeAreaView style={styles.screen}>
       <GroupDetailsHeader onBack={props.onBack} />
@@ -31,6 +35,14 @@ export function GroupDetails(props: GroupDetailsProps) {
         venueAddress={props.venueAddress}
         onOpenAddress={props.onOpenAddress}
       />
+      {joinedLate ? (
+        <View style={styles.joined}>
+          <ThemedText style={styles.joinedTitle}>Tu as rejoint le groupe</ThemedText>
+          <ThemedText type="small" themeColor="textSecondary">
+            Un empêchement ? Préviens le groupe directement dans le chat.
+          </ThemedText>
+        </View>
+      ) : null}
 
       <View style={styles.whoHeader}>
         <ThemedText type="subtitle">Qui vient</ThemedText>
@@ -62,6 +74,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 28,
     backgroundColor: Colors.background,
+  },
+  joined: {
+    gap: 2,
+    marginTop: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: Radius.card,
+    backgroundColor: Colors.backgroundElement,
+  },
+  joinedTitle: {
+    fontFamily: Fonts.semiBold,
   },
   whoHeader: {
     flexDirection: 'row',

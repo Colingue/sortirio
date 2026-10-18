@@ -5,6 +5,7 @@ import {
   fetchGroupDetails,
   fetchMyGroup,
   findGroupMemberProfile,
+  formatJoinedSentence,
   formatMeetingLabel,
   formatMembersSentence,
   formatShortFridayLabel,
@@ -30,6 +31,7 @@ function buildRow(overrides: Partial<GroupRow> = {}): GroupRow {
     member_first_name: 'Alix',
     member_age: 31,
     member_photo_path: 'user-1/photo.jpg',
+    member_joined_late: false,
     ...overrides,
   };
 }
@@ -57,10 +59,19 @@ describe('buildMyGroup', () => {
       venueName: 'Odessa',
       venueAddress: '14 Rue René Leynaud, 69001 Lyon',
       members: [
-        { userId: 'user-1', firstName: 'Alix', age: 31, photoUrl: null },
-        { userId: 'user-2', firstName: 'Bo', age: 24, photoUrl: null },
+        { userId: 'user-1', firstName: 'Alix', age: 31, photoUrl: null, joinedLate: false },
+        { userId: 'user-2', firstName: 'Bo', age: 24, photoUrl: null, joinedLate: false },
       ],
     });
+  });
+
+  it('tells which members joined after the formation', () => {
+    const rows = [buildRow(), buildRow({ member_user_id: 'user-2', member_joined_late: true })];
+
+    expect(buildMyGroup(rows, new Map())?.members.map((member) => member.joinedLate)).toEqual([
+      false,
+      true,
+    ]);
   });
 
   it('attaches the signed url matching each photo path', () => {
@@ -74,6 +85,20 @@ describe('buildMyGroup', () => {
       'https://signed/one',
       null,
     ]);
+  });
+});
+
+describe('formatJoinedSentence', () => {
+  const member = buildMyGroup([buildRow()], new Map())!.members[0];
+
+  it('names the members waiting for the newcomer', () => {
+    const others = ['Léa', 'Inès', 'Thomas'].map((firstName) => ({ ...member, firstName }));
+
+    expect(formatJoinedSentence(others)).toBe("Léa, Inès et Thomas t'attendent ce soir.");
+  });
+
+  it('agrees with a single member', () => {
+    expect(formatJoinedSentence([{ ...member, firstName: 'Léa' }])).toBe("Léa t'attend ce soir.");
   });
 });
 
@@ -102,7 +127,7 @@ describe('findGroupMemberProfile', () => {
     );
 
     expect(findGroupMemberProfile(group, 'user-2')).toEqual({
-      member: { userId: 'user-2', firstName: 'Bo', age: 31, photoUrl: null },
+      member: { userId: 'user-2', firstName: 'Bo', age: 31, photoUrl: null, joinedLate: false },
       colorIndex: 1,
       friday: '2026-10-16',
     });

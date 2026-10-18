@@ -38,5 +38,5 @@ export function getFridayStateAfterPosting(fridayState: FridayState): FridayStat
 
 export function isTonightSignupShown(fridayState: FridayState): boolean {
   if (fridayState.postedFriday === null) return isTonightSignupOpen(fridayState);
-  return fridayState.postedLate;
+  return fridayState.postedFriday !== fridayState.nextOpenFriday;
 }

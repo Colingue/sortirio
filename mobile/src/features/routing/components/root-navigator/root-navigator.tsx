@@ -44,6 +44,7 @@ export function RootNavigator() {
           <Stack.Screen name="(app)/(tabs)" />
           <Stack.Screen name="(app)/availability-confirmed" />
           <Stack.Screen name="(app)/group" />
+          <Stack.Screen name="(app)/group-joined" />
           <Stack.Screen name="(app)/past-group/[groupId]" />
           <Stack.Screen name="(app)/chat/[groupId]" />
           <Stack.Screen name="(app)/member/[groupId]/[userId]" />

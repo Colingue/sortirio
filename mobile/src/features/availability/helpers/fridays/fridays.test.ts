@@ -102,8 +102,18 @@ describe('isTonightSignupShown', () => {
     );
   });
 
-  it('hides it from someone who posted before Thursday 19 h', () => {
-    expect(isTonightSignupShown({ ...tonight, postedFriday: '2026-10-23' })).toBe(false);
+  it('shows it to someone who posted before Thursday 19 h and was left out of the formation', () => {
+    expect(isTonightSignupShown({ ...tonight, postedFriday: '2026-10-23' })).toBe(true);
+  });
+
+  it('hides it from someone who posted, before the formation', () => {
+    expect(
+      isTonightSignupShown({
+        ...tonight,
+        nextOpenFriday: '2026-10-23',
+        postedFriday: '2026-10-23',
+      }),
+    ).toBe(false);
   });
 
   it('hides it outside the tonight window', () => {

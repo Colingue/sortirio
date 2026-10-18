@@ -9,6 +9,7 @@ export type GroupMember = {
   firstName: string;
   age: number;
   photoUrl: string | null;
+  joinedLate: boolean;
 };
 
 export type MyGroup = {
@@ -28,6 +29,7 @@ export type GroupRow = {
   member_first_name: string;
   member_age: number;
   member_photo_path: string;
+  member_joined_late: boolean;
 };
 
 export type GroupMemberProfile = {
@@ -50,6 +52,7 @@ export function buildMyGroup(rows: GroupRow[], photoUrls: Map<string, string>): 
       firstName: row.member_first_name,
       age: row.member_age,
       photoUrl: photoUrls.get(row.member_photo_path) ?? null,
+      joinedLate: row.member_joined_late,
     })),
   };
 }
@@ -73,6 +76,15 @@ export function formatMembersCount(members: GroupMember[]): string {
 export function formatMembersSentence(otherMembers: GroupMember[]): string {
   const firstNames = otherMembers.map((member) => member.firstName);
   return firstNames.length === 0 ? 'Toi.' : `${firstNames.join(', ')} et toi.`;
+}
+
+export function formatJoinedSentence(otherMembers: GroupMember[]): string {
+  const firstNames = otherMembers.map((member) => member.firstName);
+  const last = firstNames.pop();
+  const names = firstNames.length === 0 ? last : `${firstNames.join(', ')} et ${last}`;
+  const verb = firstNames.length === 0 ? "t'attend" : "t'attendent";
+
+  return `${names} ${verb} ce soir.`;
 }
 
 export function getOtherMembers(group: MyGroup, myUserId: string | undefined): GroupMember[] {

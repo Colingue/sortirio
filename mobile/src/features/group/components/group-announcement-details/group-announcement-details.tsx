@@ -1,4 +1,5 @@
 import { SymbolView } from 'expo-symbols';
+import { type ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
@@ -8,12 +9,14 @@ export type GroupAnnouncementDetailsProps = {
   meetingLabel: string;
   venueName: string;
   venueAddress: string;
+  children?: ReactNode;
 };
 
 export function GroupAnnouncementDetails({
   meetingLabel,
   venueName,
   venueAddress,
+  children,
 }: GroupAnnouncementDetailsProps) {
   return (
     <View style={styles.list}>
@@ -27,7 +30,7 @@ export function GroupAnnouncementDetails({
           {meetingLabel}
         </ThemedText>
       </View>
-      <View style={styles.row}>
+      <View style={[styles.row, children !== undefined && styles.divided]}>
         <SymbolView
           name={{ ios: 'mappin', android: 'location_on', web: 'location_on' }}
           size={20}
@@ -42,6 +45,7 @@ export function GroupAnnouncementDetails({
           </ThemedText>
         </View>
       </View>
+      {children}
     </View>
   );
 }

@@ -12,6 +12,7 @@ type AvailabilityHomeProps = {
   topCard?: ReactNode;
   screen: Extract<ScreenState, { status: 'ready' }>;
   onDeclare: () => Promise<boolean>;
+  onDeclareTonight: () => void;
   onCancel: () => void;
 };
 
@@ -20,6 +21,7 @@ export function AvailabilityHome({
   topCard,
   screen,
   onDeclare,
+  onDeclareTonight,
   onCancel,
 }: AvailabilityHomeProps) {
   const { fridayState } = screen;
@@ -31,12 +33,7 @@ export function AvailabilityHome({
 
   if (isTonightSignupShown(fridayState)) {
     return (
-      <TonightSignup
-        city={city}
-        topCard={topCard}
-        screen={screen}
-        onPress={() => void onDeclare()}
-      />
+      <TonightSignup city={city} topCard={topCard} screen={screen} onPress={onDeclareTonight} />
     );
   }
 
