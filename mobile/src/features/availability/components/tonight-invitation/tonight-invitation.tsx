@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
 import { CityHeader } from '@/features/availability/components/city-header/city-header';
+import { GroupsWithRoomAlert } from '@/features/availability/components/groups-with-room-alert/groups-with-room-alert';
 import { TonightCard } from '@/features/availability/components/tonight-card/tonight-card';
 import { UpcomingFridays } from '@/features/availability/components/upcoming-fridays/upcoming-fridays';
 
@@ -36,6 +37,7 @@ export function TonightInvitation({
         <ThemedText type="title" style={styles.title}>
           Envie de sortir ce soir ?
         </ThemedText>
+        <GroupsWithRoomAlert />
 
         <ThemedText type="subtitle" style={styles.section}>
           Ce soir

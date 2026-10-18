@@ -1,6 +1,11 @@
 import { supabase } from '@/lib/supabase';
 
-import { cancelAvailability, declareAvailability, fetchFridayState } from './availability';
+import {
+  cancelAvailability,
+  declareAvailability,
+  fetchFridayState,
+  fetchHasGroupWithRoomForMe,
+} from './availability';
 
 jest.mock('@/lib/supabase', () => ({
   supabase: { rpc: jest.fn(), from: jest.fn() },
@@ -122,5 +127,32 @@ describe('cancelAvailability', () => {
       code: '23514',
       message: 'too late',
     });
+  });
+});
+
+describe('fetchHasGroupWithRoomForMe', () => {
+  it('returns the boolean of the RPC', async () => {
+    mockRpc.mockResolvedValue({ data: true, error: null });
+
+    await expect(fetchHasGroupWithRoomForMe()).resolves.toBe(true);
+    expect(mockRpc).toHaveBeenCalledWith('has_group_with_room_for_me');
+  });
+
+  it('returns false when no group has room for me', async () => {
+    mockRpc.mockResolvedValue({ data: false, error: null });
+
+    await expect(fetchHasGroupWithRoomForMe()).resolves.toBe(false);
+  });
+
+  it('returns false when the RPC fails', async () => {
+    mockRpc.mockResolvedValue({ data: null, error: new Error('network') });
+
+    await expect(fetchHasGroupWithRoomForMe()).resolves.toBe(false);
+  });
+
+  it('returns false when the request throws', async () => {
+    mockRpc.mockRejectedValue(new Error('offline'));
+
+    await expect(fetchHasGroupWithRoomForMe()).resolves.toBe(false);
   });
 });

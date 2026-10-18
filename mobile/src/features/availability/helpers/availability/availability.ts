@@ -47,3 +47,12 @@ export async function cancelAvailability(friday: string): Promise<void> {
   const { error } = await supabase.from('availabilities').delete().eq('friday', friday);
   if (error) throw error;
 }
+
+export async function fetchHasGroupWithRoomForMe(): Promise<boolean> {
+  try {
+    const { data, error } = await supabase.rpc('has_group_with_room_for_me');
+    return !error && data === true;
+  } catch {
+    return false;
+  }
+}

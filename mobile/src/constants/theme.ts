@@ -12,6 +12,8 @@ export const Colors = {
   backgroundElement: '#F2EFE8',
   backgroundMuted: '#F8F6F1',
   backgroundSelected: '#FBEDE6',
+  backgroundSelectedBorder: '#F1C4AF',
+  onBackgroundSelected: '#7A2A0E',
   surface: '#FFFFFF',
   accent: '#C9461B',
   accentDark: '#9E3412',
