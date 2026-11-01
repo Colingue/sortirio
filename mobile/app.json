@@ -9,10 +9,13 @@
     "userInterfaceStyle": "light",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.dispo.app"
+      "bundleIdentifier": "com.colinnoiret.dispo",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
-      "package": "com.dispo.app",
+      "package": "com.colinnoiret.dispo",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -72,7 +75,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "6c87cac6-b775-4c73-91be-ce9103bf2567"
+        "projectId": "25533c65-fd6f-42b2-82b7-eecb70da13e2"
       }
     },
     "owner": "colingue"
