@@ -9,7 +9,7 @@
     "userInterfaceStyle": "light",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.colinnoiret.dispo",
+      "bundleIdentifier": "com.colingue.dispo.dev",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
