@@ -1,6 +1,7 @@
-export type TimeRemaining = { days: number; hours: number; minutes: number };
+export type TimeRemaining = { days: number; hours: number; minutes: number; seconds: number };
 
-const MINUTE_MS = 60_000;
+const SECOND_MS = 1000;
+const MINUTE_MS = 60 * SECOND_MS;
 const HOUR_MS = 60 * MINUTE_MS;
 const DAY_MS = 24 * HOUR_MS;
 
@@ -12,6 +13,7 @@ export function getTimeUntilDeadline(deadlineIso: string, now: Date): TimeRemain
     days: Math.floor(diffMs / DAY_MS),
     hours: Math.floor((diffMs % DAY_MS) / HOUR_MS),
     minutes: Math.floor((diffMs % HOUR_MS) / MINUTE_MS),
+    seconds: Math.floor((diffMs % MINUTE_MS) / SECOND_MS),
   };
 }
 
@@ -20,6 +22,7 @@ export function formatTimeRemaining(remaining: TimeRemaining): string {
   if (remaining.days > 0) parts.push(`${remaining.days} j`);
   if (remaining.days > 0 || remaining.hours > 0) parts.push(`${remaining.hours} h`);
   parts.push(`${remaining.minutes} min`);
+  parts.push(`${remaining.seconds} s`);
 
   return parts.join(' ');
 }
