@@ -16,6 +16,7 @@ import { useMyGroup } from '@/features/group/hooks/useMyGroup/useMyGroup';
 import { useOpenScreenFromNotification } from '@/features/notifications/hooks/useOpenScreenFromNotification/useOpenScreenFromNotification';
 import { useRegisterPushToken } from '@/features/notifications/hooks/useRegisterPushToken/useRegisterPushToken';
 import { usePullToRefresh } from '@/hooks/usePullToRefresh';
+import { useRunOnForeground } from '@/hooks/useRunOnForeground';
 
 export default function HomeScreen() {
   const session = useSessionState();
@@ -24,16 +25,16 @@ export default function HomeScreen() {
     useAvailabilityScreen(userId);
   const myGroup = useMyGroup();
   const attendance = useAttendanceQuestion();
-  const attendanceCard = <AttendanceQuestionCard attendance={attendance} />;
   const [city] = cities;
   const [joinedGroup, setJoinedGroup] = useState<MyGroup | null>(null);
-  const pullToRefresh = usePullToRefresh(() =>
-    Promise.all([loadFridayState(), myGroup.loadMyGroup(), attendance.loadAttendanceQuestion()]),
-  );
+  const reloadHome = () =>
+    Promise.all([loadFridayState(), myGroup.loadMyGroup(), attendance.loadAttendanceQuestion()]);
+  const pullToRefresh = usePullToRefresh(reloadHome);
   const refreshControl = <RefreshControl {...pullToRefresh} />;
 
   useRegisterPushToken(userId);
   useOpenScreenFromNotification();
+  useRunOnForeground(() => void reloadHome());
 
   async function declareTonight() {
     if (!(await handleDeclareAvailability())) return;
@@ -65,7 +66,7 @@ export default function HomeScreen() {
   return (
     <AvailabilityHome
       city={city.name}
-      topCard={attendanceCard}
+      topCard={<AttendanceQuestionCard attendance={attendance} />}
       refreshControl={refreshControl}
       screen={state}
       onDeclare={handleDeclareAvailability}
