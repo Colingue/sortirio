@@ -1,9 +1,8 @@
-import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { Colors, Fonts, Radius } from '@/constants/theme';
-import { formatTimeRemaining } from '@/features/availability/helpers/countdown';
+import { CountdownBoxes } from '@/features/availability/components/countdown-boxes/countdown-boxes';
 import { formatFridayLabel } from '@/features/availability/helpers/formatFridayLabel/formatFridayLabel';
 import { useCountdown } from '@/hooks/useCountdown';
 
@@ -35,21 +34,9 @@ export function TonightCard({
         </ThemedText>
       </View>
 
-      <View style={styles.deadline}>
-        <SymbolView
-          name={{ ios: 'clock', android: 'schedule', web: 'schedule' }}
-          size={18}
-          tintColor={Colors.onAccent}
-        />
-        <ThemedText themeColor="onAccent" style={styles.deadlineLabel}>
-          Inscriptions jusqu&apos;à 18 h
-        </ThemedText>
-        {remaining ? (
-          <ThemedText themeColor="onAccent" style={styles.remaining}>
-            encore {formatTimeRemaining(remaining)}
-          </ThemedText>
-        ) : null}
-      </View>
+      {remaining ? (
+        <CountdownBoxes label="Inscriptions jusqu'à 18 h, fin dans" remaining={remaining} />
+      ) : null}
 
       <Pressable
         accessibilityRole="button"
@@ -83,26 +70,6 @@ const styles = StyleSheet.create({
   },
   when: {
     marginTop: 4,
-  },
-  deadline: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderRadius: Radius.small,
-    backgroundColor: Colors.accentDark,
-  },
-  deadlineLabel: {
-    flex: 1,
-    fontFamily: Fonts.medium,
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  remaining: {
-    fontFamily: Fonts.semiBold,
-    fontSize: 13,
-    lineHeight: 20,
   },
   button: {
     alignItems: 'center',

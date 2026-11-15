@@ -4,7 +4,8 @@ import { StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { Colors, Fonts, Radius } from '@/constants/theme';
 import { AvatarStack } from '@/components/avatar-stack';
-import { formatTimeRemaining, type TimeRemaining } from '@/features/availability/helpers/countdown';
+import { CountdownBoxes } from '@/features/availability/components/countdown-boxes/countdown-boxes';
+import { type TimeRemaining } from '@/features/availability/helpers/countdown';
 import { formatSignupCount } from '@/features/availability/helpers/fridays/fridays';
 import { formatFridayLabel } from '@/features/availability/helpers/formatFridayLabel/formatFridayLabel';
 
@@ -39,14 +40,7 @@ export function WaitingCard({ friday, remaining, citySignupCount }: WaitingCardP
       </View>
 
       {remaining ? (
-        <View>
-          <ThemedText themeColor="onAccent" style={styles.countdownLabel}>
-            Annonce de ton groupe dans
-          </ThemedText>
-          <ThemedText themeColor="onAccent" style={styles.countdown}>
-            {formatTimeRemaining(remaining)}
-          </ThemedText>
-        </View>
+        <CountdownBoxes label="Annonce de ton groupe dans" remaining={remaining} />
       ) : null}
 
       {citySignupCount !== null ? (
@@ -89,17 +83,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.semiBold,
     fontSize: 14,
     lineHeight: 20,
-  },
-  countdownLabel: {
-    fontFamily: Fonts.medium,
-    fontSize: 13,
-    lineHeight: 20,
-  },
-  countdown: {
-    fontFamily: Fonts.bold,
-    fontSize: 34,
-    lineHeight: 42,
-    letterSpacing: -0.5,
   },
   people: {
     flexDirection: 'row',

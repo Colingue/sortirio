@@ -17,12 +17,15 @@ export function getTimeUntilDeadline(deadlineIso: string, now: Date): TimeRemain
   };
 }
 
-export function formatTimeRemaining(remaining: TimeRemaining): string {
-  const parts: string[] = [];
-  if (remaining.days > 0) parts.push(`${remaining.days} j`);
-  if (remaining.days > 0 || remaining.hours > 0) parts.push(`${remaining.hours} h`);
-  parts.push(`${remaining.minutes} min`);
-  parts.push(`${remaining.seconds} s`);
+export type CountdownUnit = { value: string; label: string };
 
-  return parts.join(' ');
+export function getCountdownUnits(remaining: TimeRemaining): CountdownUnit[] {
+  const pad = (value: number) => String(value).padStart(2, '0');
+  const units = [
+    { value: pad(remaining.hours), label: 'heure' },
+    { value: pad(remaining.minutes), label: 'min' },
+    { value: pad(remaining.seconds), label: 'sec' },
+  ];
+
+  return remaining.days > 0 ? [{ value: pad(remaining.days), label: 'jour' }, ...units] : units;
 }

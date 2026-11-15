@@ -1,4 +1,4 @@
-import { formatTimeRemaining, getTimeUntilDeadline } from './countdown';
+import { getCountdownUnits, getTimeUntilDeadline } from './countdown';
 
 describe('getTimeUntilDeadline', () => {
   it('reads several days remaining', () => {
@@ -64,26 +64,21 @@ describe('getTimeUntilDeadline', () => {
   });
 });
 
-describe('formatTimeRemaining', () => {
-  it('shows days, hours, minutes and seconds', () => {
-    expect(formatTimeRemaining({ days: 3, hours: 4, minutes: 12, seconds: 37 })).toBe(
-      '3 j 4 h 12 min 37 s',
-    );
+describe('getCountdownUnits', () => {
+  it('shows days, hours, minutes and seconds when a day or more remains', () => {
+    expect(getCountdownUnits({ days: 1, hours: 0, minutes: 46, seconds: 37 })).toEqual([
+      { value: '01', label: 'jour' },
+      { value: '00', label: 'heure' },
+      { value: '46', label: 'min' },
+      { value: '37', label: 'sec' },
+    ]);
   });
 
-  it('hides the day when it is zero', () => {
-    expect(formatTimeRemaining({ days: 0, hours: 4, minutes: 12, seconds: 37 })).toBe(
-      '4 h 12 min 37 s',
-    );
-  });
-
-  it('hides the day and the hour when both are zero', () => {
-    expect(formatTimeRemaining({ days: 0, hours: 0, minutes: 12, seconds: 37 })).toBe(
-      '12 min 37 s',
-    );
-  });
-
-  it('keeps the minutes when only seconds remain', () => {
-    expect(formatTimeRemaining({ days: 0, hours: 0, minutes: 0, seconds: 5 })).toBe('0 min 5 s');
+  it('hides the day under a day', () => {
+    expect(getCountdownUnits({ days: 0, hours: 4, minutes: 12, seconds: 5 })).toEqual([
+      { value: '04', label: 'heure' },
+      { value: '12', label: 'min' },
+      { value: '05', label: 'sec' },
+    ]);
   });
 });

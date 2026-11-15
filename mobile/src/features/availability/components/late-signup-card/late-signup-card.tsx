@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { Colors, Fonts, Radius } from '@/constants/theme';
-import { formatTimeRemaining } from '@/features/availability/helpers/countdown';
+import { CountdownBoxes } from '@/features/availability/components/countdown-boxes/countdown-boxes';
 import { formatFridayLabel } from '@/features/availability/helpers/formatFridayLabel/formatFridayLabel';
 import { useCountdown } from '@/hooks/useCountdown';
 
@@ -39,16 +39,9 @@ export function LateSignupCard({ city, postedFriday, signupClosesAt }: LateSignu
         </ThemedText>
       </View>
 
-      <View style={styles.deadline}>
-        <ThemedText themeColor="onAccent" style={styles.deadlineLabel}>
-          Recherche jusqu&apos;à 18 h
-        </ThemedText>
-        {remaining ? (
-          <ThemedText themeColor="onAccent" style={styles.remaining}>
-            encore {formatTimeRemaining(remaining)}
-          </ThemedText>
-        ) : null}
-      </View>
+      {remaining ? (
+        <CountdownBoxes label="Recherche jusqu'à 18 h, fin dans" remaining={remaining} />
+      ) : null}
     </View>
   );
 }
@@ -85,24 +78,5 @@ const styles = StyleSheet.create({
     marginTop: 6,
     fontSize: 15,
     lineHeight: 22,
-  },
-  deadline: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-    borderRadius: Radius.small,
-    backgroundColor: Colors.accentDark,
-  },
-  deadlineLabel: {
-    fontFamily: Fonts.medium,
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  remaining: {
-    fontFamily: Fonts.semiBold,
-    fontSize: 14,
-    lineHeight: 20,
   },
 });
