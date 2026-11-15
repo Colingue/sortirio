@@ -1,8 +1,6 @@
 import { formatFridayLabel } from '@/features/availability/helpers/formatFridayLabel/formatFridayLabel';
+import { signPhotoUrls } from '@/features/photo-storage/helpers/photoStorage/photoStorage';
 import { supabase } from '@/lib/supabase';
-
-const BUCKET = 'profile-photos';
-const PHOTO_URL_TTL_SECONDS = 3600;
 
 export type GroupMember = {
   userId: string;
@@ -102,24 +100,6 @@ export function findGroupMemberProfile(
   if (!group || colorIndex < 0) return null;
 
   return { member: group.members[colorIndex], colorIndex, friday: group.friday };
-}
-
-export async function signPhotoUrls(paths: string[]): Promise<Map<string, string>> {
-  const signed = new Map<string, string>();
-
-  try {
-    const { data } = await supabase.storage
-      .from(BUCKET)
-      .createSignedUrls(paths, PHOTO_URL_TTL_SECONDS);
-
-    for (const signature of data ?? []) {
-      if (signature.path && signature.signedUrl) signed.set(signature.path, signature.signedUrl);
-    }
-  } catch {
-    return signed;
-  }
-
-  return signed;
 }
 
 export async function fetchMyGroup(): Promise<MyGroup | null> {

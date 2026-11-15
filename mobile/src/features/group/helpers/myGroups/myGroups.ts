@@ -1,7 +1,7 @@
 import { type FridayState } from '@/features/availability/helpers/availability/availability';
 import { formatFridayLabel } from '@/features/availability/helpers/formatFridayLabel/formatFridayLabel';
 import { formatMessageTime } from '@/features/chat/helpers/groupMessages/groupMessages';
-import { signPhotoUrls } from '@/features/group/helpers/myGroup/myGroup';
+import { signPhotoUrls } from '@/features/photo-storage/helpers/photoStorage/photoStorage';
 import { isoDay } from '@/features/date/helpers/isoDay/isoDay';
 import { supabase } from '@/lib/supabase';
 

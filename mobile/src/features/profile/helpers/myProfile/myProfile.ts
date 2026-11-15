@@ -1,10 +1,11 @@
 import { File } from 'expo-file-system';
 
+import {
+  PROFILE_PHOTOS_BUCKET,
+  signPhotoUrls,
+} from '@/features/photo-storage/helpers/photoStorage/photoStorage';
 import { getAgeOn } from '@/features/signup/helpers/age/age';
 import { supabase } from '@/lib/supabase';
-
-const BUCKET = 'profile-photos';
-const PHOTO_URL_TTL_SECONDS = 3600;
 
 export type MyProfile = {
   firstName: string;
@@ -42,11 +43,9 @@ export async function fetchMyProfile(userId: string): Promise<MyProfile> {
     .single<ProfileRow>();
   if (error) throw error;
 
-  const signed = await supabase.storage
-    .from(BUCKET)
-    .createSignedUrl(data.photo_path, PHOTO_URL_TTL_SECONDS);
+  const photoUrls = await signPhotoUrls([data.photo_path]);
 
-  return buildMyProfile(data, signed.data?.signedUrl ?? null, new Date());
+  return buildMyProfile(data, photoUrls.get(data.photo_path) ?? null, new Date());
 }
 
 export async function saveProfilePhoto(userId: string, photoUri: string): Promise<string> {
@@ -54,7 +53,7 @@ export async function saveProfilePhoto(userId: string, photoUri: string): Promis
   const bytes = await new File(photoUri).arrayBuffer();
 
   const sent = await supabase.storage
-    .from(BUCKET)
+    .from(PROFILE_PHOTOS_BUCKET)
     .upload(photoPath, bytes, { contentType: 'image/jpeg', upsert: true });
   if (sent.error) throw sent.error;
 

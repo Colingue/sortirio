@@ -1,5 +1,5 @@
 import { type MessageAuthor } from '@/features/chat/helpers/groupMessages/groupMessages';
-import { signPhotoUrls } from '@/features/group/helpers/myGroup/myGroup';
+import { signPhotoUrls } from '@/features/photo-storage/helpers/photoStorage/photoStorage';
 import { supabase } from '@/lib/supabase';
 
 export type GroupMemberRow = {
