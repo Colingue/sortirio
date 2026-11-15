@@ -1,16 +1,14 @@
 import { type FridayState } from '@/features/availability/helpers/availability/availability';
+import { isoDay } from '@/features/date/helpers/isoDay/isoDay';
 
 const WEEK_DAYS = 7;
 
 export function getFollowingFridays(isoFriday: string, count: number): string[] {
   const [year, month, day] = isoFriday.split('-').map(Number);
 
-  return Array.from({ length: count }, (_, index) => {
-    const date = new Date(year, month - 1, day + WEEK_DAYS * (index + 1));
-    const paddedMonth = String(date.getMonth() + 1).padStart(2, '0');
-    const paddedDay = String(date.getDate()).padStart(2, '0');
-    return `${date.getFullYear()}-${paddedMonth}-${paddedDay}`;
-  });
+  return Array.from({ length: count }, (_, index) =>
+    isoDay(new Date(year, month - 1, day + WEEK_DAYS * (index + 1))),
+  );
 }
 
 export function getDayOfMonth(isoDate: string): number {
