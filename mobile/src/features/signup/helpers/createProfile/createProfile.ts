@@ -1,5 +1,5 @@
 import { saveProfilePhoto } from '@/features/profile/helpers/myProfile/myProfile';
-import { isoDay } from '@/features/signup/helpers/isoDay/isoDay';
+import { isoDay } from '@/features/date/helpers/isoDay/isoDay';
 import type { CompleteDraft } from '@/features/signup/providers/signup-draft/signup-draft';
 import { supabase } from '@/lib/supabase';
 

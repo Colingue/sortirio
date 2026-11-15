@@ -2,7 +2,7 @@ import { type FridayState } from '@/features/availability/helpers/availability/a
 import { formatFridayLabel } from '@/features/availability/helpers/formatFridayLabel/formatFridayLabel';
 import { formatMessageTime } from '@/features/chat/helpers/groupMessages/groupMessages';
 import { signPhotoUrls } from '@/features/group/helpers/myGroup/myGroup';
-import { isoDay } from '@/features/signup/helpers/isoDay/isoDay';
+import { isoDay } from '@/features/date/helpers/isoDay/isoDay';
 import { supabase } from '@/lib/supabase';
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
