@@ -84,11 +84,7 @@ export function buildChatItems(
 }
 
 export function formatMessageTime(createdAt: string): string {
-  const at = new Date(createdAt);
-  const hours = String(at.getHours()).padStart(2, '0');
-  const minutes = String(at.getMinutes()).padStart(2, '0');
-
-  return `${hours}:${minutes}`;
+  return new Date(createdAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 }
 
 export function formatMessageDay(createdAt: string): string {
