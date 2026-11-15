@@ -1,8 +1,7 @@
 import { Pressable, StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
-import { Fonts, Radius } from '@/constants/theme';
-import { useTheme } from '@/hooks/useTheme';
+import { Colors, Fonts, Radius } from '@/constants/theme';
 
 export type PrimaryButtonProps = {
   label: string;
@@ -11,8 +10,6 @@ export type PrimaryButtonProps = {
 };
 
 export function PrimaryButton({ label, onPress, disabled = false }: PrimaryButtonProps) {
-  const theme = useTheme();
-
   return (
     <Pressable
       accessibilityRole="button"
@@ -21,7 +18,7 @@ export function PrimaryButton({ label, onPress, disabled = false }: PrimaryButto
       disabled={disabled}
       style={({ pressed }) => [
         styles.button,
-        { backgroundColor: pressed ? theme.accentDark : theme.accent },
+        { backgroundColor: pressed ? Colors.accentDark : Colors.accent },
         disabled && styles.off,
       ]}
     >
