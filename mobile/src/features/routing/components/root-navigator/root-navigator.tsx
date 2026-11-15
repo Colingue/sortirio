@@ -22,6 +22,7 @@ export function RootNavigator() {
     session: state.session,
     banned: state.banned,
     hasProfile: state.hasProfile,
+    onboardingIntroSeen: state.onboardingIntroSeen,
   });
 
   return (
@@ -37,6 +38,10 @@ export function RootNavigator() {
 
         <Stack.Protected guard={destination === 'signup'}>
           <Stack.Screen name="(signup)" />
+        </Stack.Protected>
+
+        <Stack.Protected guard={destination === 'onboarding'}>
+          <Stack.Screen name="(onboarding)" />
         </Stack.Protected>
 
         <Stack.Protected guard={destination === 'home'}>

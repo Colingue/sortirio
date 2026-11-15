@@ -18,27 +18,65 @@ const signedInSession: Session = {
 
 describe('resolveDestination', () => {
   it('sends a visitor without a session to the login screen', () => {
-    expect(resolveDestination({ session: null, banned: false, hasProfile: false })).toBe('login');
+    expect(
+      resolveDestination({
+        session: null,
+        banned: false,
+        hasProfile: false,
+        onboardingIntroSeen: false,
+      }),
+    ).toBe('login');
   });
 
   it('sends a signed-in user without a profile to signup', () => {
-    expect(resolveDestination({ session: signedInSession, banned: false, hasProfile: false })).toBe(
-      'signup',
-    );
+    expect(
+      resolveDestination({
+        session: signedInSession,
+        banned: false,
+        hasProfile: false,
+        onboardingIntroSeen: false,
+      }),
+    ).toBe('signup');
   });
 
-  it('sends a signed-in user with a profile home', () => {
-    expect(resolveDestination({ session: signedInSession, banned: false, hasProfile: true })).toBe(
-      'home',
-    );
+  it('sends a signed-in user with a profile who has not seen the intro to onboarding', () => {
+    expect(
+      resolveDestination({
+        session: signedInSession,
+        banned: false,
+        hasProfile: true,
+        onboardingIntroSeen: false,
+      }),
+    ).toBe('onboarding');
+  });
+
+  it('sends a signed-in user with a profile who has seen the intro home', () => {
+    expect(
+      resolveDestination({
+        session: signedInSession,
+        banned: false,
+        hasProfile: true,
+        onboardingIntroSeen: true,
+      }),
+    ).toBe('home');
   });
 
   it('sends a banned user to the banned screen, profile or not', () => {
-    expect(resolveDestination({ session: signedInSession, banned: true, hasProfile: true })).toBe(
-      'banned',
-    );
-    expect(resolveDestination({ session: signedInSession, banned: true, hasProfile: false })).toBe(
-      'banned',
-    );
+    expect(
+      resolveDestination({
+        session: signedInSession,
+        banned: true,
+        hasProfile: true,
+        onboardingIntroSeen: false,
+      }),
+    ).toBe('banned');
+    expect(
+      resolveDestination({
+        session: signedInSession,
+        banned: true,
+        hasProfile: false,
+        onboardingIntroSeen: false,
+      }),
+    ).toBe('banned');
   });
 });
