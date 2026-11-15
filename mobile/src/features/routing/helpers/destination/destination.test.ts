@@ -21,9 +21,9 @@ describe('resolveDestination', () => {
     expect(resolveDestination({ session: null, banned: false, hasProfile: false })).toBe('login');
   });
 
-  it('sends a signed-in user without a profile to onboarding', () => {
+  it('sends a signed-in user without a profile to signup', () => {
     expect(resolveDestination({ session: signedInSession, banned: false, hasProfile: false })).toBe(
-      'onboarding',
+      'signup',
     );
   });
 

@@ -1,6 +1,6 @@
 import type { Session } from '@supabase/supabase-js';
 
-export type Destination = 'login' | 'banned' | 'onboarding' | 'home';
+export type Destination = 'login' | 'banned' | 'signup' | 'home';
 
 export function resolveDestination(state: {
   session: Session | null;
@@ -9,5 +9,5 @@ export function resolveDestination(state: {
 }): Destination {
   if (!state.session) return 'login';
   if (state.banned) return 'banned';
-  return state.hasProfile ? 'home' : 'onboarding';
+  return state.hasProfile ? 'home' : 'signup';
 }

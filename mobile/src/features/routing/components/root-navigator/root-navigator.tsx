@@ -35,8 +35,8 @@ export function RootNavigator() {
           <Stack.Screen name="banned" />
         </Stack.Protected>
 
-        <Stack.Protected guard={destination === 'onboarding'}>
-          <Stack.Screen name="(onboarding)" />
+        <Stack.Protected guard={destination === 'signup'}>
+          <Stack.Screen name="(signup)" />
         </Stack.Protected>
 
         <Stack.Protected guard={destination === 'home'}>

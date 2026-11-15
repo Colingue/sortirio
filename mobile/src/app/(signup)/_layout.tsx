@@ -2,7 +2,7 @@ import { Stack } from 'expo-router';
 
 import { SignupDraftProvider } from '@/features/signup/providers/signup-draft/signup-draft';
 
-export default function OnboardingLayout() {
+export default function SignupLayout() {
   return (
     <SignupDraftProvider>
       <Stack screenOptions={{ headerShown: false }}>
