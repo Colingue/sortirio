@@ -1,10 +1,15 @@
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 
-import { fetchMyGroups, type MyGroupsItem } from '@/features/group/helpers/myGroups/myGroups';
+import { fetchFridayState } from '@/features/availability/helpers/availability/availability';
+import {
+  fetchMyGroups,
+  getMyGroupsSections,
+  type MyGroupsSections,
+} from '@/features/group/helpers/myGroups/myGroups';
 
 export type MyGroupsState =
-  { status: 'loading' } | { status: 'failed' } | { status: 'ready'; groups: MyGroupsItem[] };
+  { status: 'loading' } | { status: 'failed' } | ({ status: 'ready' } & MyGroupsSections);
 
 export function useMyGroups(myUserId: string | undefined): MyGroupsState {
   const [myGroups, setMyGroups] = useState<MyGroupsState>({ status: 'loading' });
@@ -13,8 +18,15 @@ export function useMyGroups(myUserId: string | undefined): MyGroupsState {
     useCallback(() => {
       let cancelled = false;
 
-      fetchMyGroups(myUserId)
-        .then((groups) => !cancelled && setMyGroups({ status: 'ready', groups }))
+      Promise.all([fetchMyGroups(myUserId), fetchFridayState().catch(() => null)])
+        .then(
+          ([groups, fridayState]) =>
+            !cancelled &&
+            setMyGroups({
+              status: 'ready',
+              ...getMyGroupsSections(groups, fridayState, new Date()),
+            }),
+        )
         .catch(
           () =>
             !cancelled &&
