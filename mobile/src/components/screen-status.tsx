@@ -1,7 +1,7 @@
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { Colors } from '@/constants/theme';
 
 export type ScreenStatusProps = {
   failed: boolean;
@@ -9,13 +9,13 @@ export type ScreenStatusProps = {
 
 export function ScreenStatus({ failed }: ScreenStatusProps) {
   return (
-    <ThemedView style={styles.centered}>
+    <View style={styles.centered}>
       {failed ? (
         <ThemedText themeColor="textSecondary">Une erreur, réessaie plus tard.</ThemedText>
       ) : (
         <ActivityIndicator />
       )}
-    </ThemedView>
+    </View>
   );
 }
 
@@ -24,5 +24,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: Colors.background,
   },
 });
