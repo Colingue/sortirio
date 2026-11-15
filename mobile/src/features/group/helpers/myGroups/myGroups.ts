@@ -1,6 +1,8 @@
+import { type FridayState } from '@/features/availability/helpers/availability/availability';
 import { formatFridayLabel } from '@/features/availability/helpers/formatFridayLabel/formatFridayLabel';
 import { formatMessageTime } from '@/features/chat/helpers/groupMessages/groupMessages';
 import { signPhotoUrls } from '@/features/group/helpers/myGroup/myGroup';
+import { isoDay } from '@/features/signup/helpers/isoDay/isoDay';
 import { supabase } from '@/lib/supabase';
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
@@ -18,10 +20,20 @@ export type GroupFace = {
 
 export type MyGroupsItem = {
   groupId: string;
+  friday: string;
   fridayLabel: string;
   venueName: string;
   memberFaces: GroupFace[];
   lastMessage: LastMessage | null;
+};
+
+export type UpcomingItem =
+  | { kind: 'group'; group: MyGroupsItem }
+  | { kind: 'pending'; friday: string; isFormedThursday: boolean };
+
+export type MyGroupsSections = {
+  upcoming: UpcomingItem | null;
+  past: MyGroupsItem[];
 };
 
 export type MyGroupsRow = {
@@ -71,6 +83,7 @@ export function buildMyGroupsItem(
 ): MyGroupsItem {
   return {
     groupId: row.group_id,
+    friday: row.friday,
     fridayLabel: formatFridayLabel(row.friday),
     venueName: row.venue_name,
     memberFaces: row.member_first_names.map((firstName, index) => ({
@@ -78,6 +91,38 @@ export function buildMyGroupsItem(
       photoUrl: photoUrls.get(row.member_photo_paths[index]) ?? null,
     })),
     lastMessage: buildLastMessage(row, myUserId, now),
+  };
+}
+
+function getUpcomingItem(
+  upcomingGroup: MyGroupsItem | undefined,
+  fridayState: FridayState | null,
+  now: Date,
+): UpcomingItem | null {
+  if (upcomingGroup) return { kind: 'group', group: upcomingGroup };
+
+  const postedFriday = fridayState?.postedFriday ?? null;
+  if (postedFriday === null || postedFriday < isoDay(now)) return null;
+
+  const formationAt = fridayState?.groupFormationAt ?? null;
+  return {
+    kind: 'pending',
+    friday: postedFriday,
+    isFormedThursday: formationAt !== null && now < new Date(formationAt),
+  };
+}
+
+export function getMyGroupsSections(
+  groups: MyGroupsItem[],
+  fridayState: FridayState | null,
+  now: Date,
+): MyGroupsSections {
+  const today = isoDay(now);
+  const upcomingGroup = groups.find((group) => group.friday >= today);
+
+  return {
+    upcoming: getUpcomingItem(upcomingGroup, fridayState, now),
+    past: groups.filter((group) => group.friday < today),
   };
 }
 
