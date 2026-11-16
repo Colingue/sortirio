@@ -4,18 +4,21 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
 import { Colors, Fonts, Radius } from '@/constants/theme';
+import { AppleSignInButton } from '@/features/auth/components/apple-sign-in-button/apple-sign-in-button';
 import { LoginIllustration } from '@/features/auth/components/login-illustration/login-illustration';
+import { signInWithApple } from '@/features/auth/helpers/signInWithApple/signInWithApple';
 import { signInWithGoogle } from '@/features/auth/helpers/signInWithGoogle/signInWithGoogle';
 
 export default function LoginScreen() {
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
 
-  async function signIn() {
+  async function signIn(signInWithProvider: () => Promise<'signed-in' | 'cancelled'>) {
+    if (busy) return;
     setBusy(true);
     setFailed(false);
     try {
-      await signInWithGoogle();
+      await signInWithProvider();
     } catch {
       setFailed(true);
     } finally {
@@ -42,10 +45,12 @@ export default function LoginScreen() {
 
       <View style={styles.spacer} />
 
+      <AppleSignInButton busy={busy} onPress={() => signIn(signInWithApple)} />
+
       <Pressable
         accessibilityRole="button"
         accessibilityState={{ disabled: busy }}
-        onPress={signIn}
+        onPress={() => signIn(signInWithGoogle)}
         disabled={busy}
         style={({ pressed }) => [styles.button, (pressed || busy) && styles.dimmed]}
       >
