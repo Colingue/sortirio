@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
-import { Colors, Fonts, Radius } from '@/constants/theme';
+import { Colors, Fonts } from '@/constants/theme';
 import { AppleSignInButton } from '@/features/auth/components/apple-sign-in-button/apple-sign-in-button';
+import { GoogleSignInButton } from '@/features/auth/components/google-sign-in-button/google-sign-in-button';
 import { LoginIllustration } from '@/features/auth/components/login-illustration/login-illustration';
 import { signInWithApple } from '@/features/auth/helpers/signInWithApple/signInWithApple';
 import { signInWithGoogle } from '@/features/auth/helpers/signInWithGoogle/signInWithGoogle';
@@ -47,17 +48,7 @@ export default function LoginScreen() {
 
       <AppleSignInButton busy={busy} onPress={() => signIn(signInWithApple)} />
 
-      <Pressable
-        accessibilityRole="button"
-        accessibilityState={{ disabled: busy }}
-        onPress={() => signIn(signInWithGoogle)}
-        disabled={busy}
-        style={({ pressed }) => [styles.button, (pressed || busy) && styles.dimmed]}
-      >
-        <ThemedText themeColor="onAccent" style={styles.buttonLabel}>
-          Continuer avec Google
-        </ThemedText>
-      </Pressable>
+      <GoogleSignInButton busy={busy} onPress={() => signIn(signInWithGoogle)} />
 
       {failed ? (
         <ThemedText type="small" themeColor="danger" style={styles.error}>
@@ -94,20 +85,6 @@ const styles = StyleSheet.create({
   },
   spacer: {
     flex: 1,
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 54,
-    borderRadius: Radius.medium,
-    backgroundColor: Colors.text,
-  },
-  dimmed: {
-    opacity: 0.7,
-  },
-  buttonLabel: {
-    fontFamily: Fonts.semiBold,
-    fontSize: 17,
   },
   error: {
     marginTop: 16,
