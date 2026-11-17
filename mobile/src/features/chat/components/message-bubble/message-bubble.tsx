@@ -3,7 +3,10 @@ import { StyleSheet, View } from 'react-native';
 import { MemberAvatar } from '@/components/member-avatar';
 import { ThemedText } from '@/components/themed-text';
 import { Colors, Fonts, MemberNameColors } from '@/constants/theme';
-import { type MessageAuthor } from '@/features/chat/helpers/groupMessages/groupMessages';
+import {
+  DELETED_AUTHOR_LABEL,
+  type MessageAuthor,
+} from '@/features/chat/helpers/groupMessages/groupMessages';
 
 const UNKNOWN_AUTHOR_LABEL = 'Un membre';
 
@@ -11,11 +14,19 @@ export type MessageBubbleProps = {
   body: string;
   time: string;
   author: MessageAuthor | undefined;
+  authorDeleted: boolean;
   colorIndex: number;
   mine: boolean;
 };
 
-export function MessageBubble({ body, time, author, colorIndex, mine }: MessageBubbleProps) {
+export function MessageBubble({
+  body,
+  time,
+  author,
+  authorDeleted,
+  colorIndex,
+  mine,
+}: MessageBubbleProps) {
   if (mine) {
     return (
       <View style={[styles.bubble, styles.mine]}>
@@ -29,12 +40,14 @@ export function MessageBubble({ body, time, author, colorIndex, mine }: MessageB
     );
   }
 
-  const firstName = author?.firstName ?? UNKNOWN_AUTHOR_LABEL;
+  const firstName = authorDeleted
+    ? DELETED_AUTHOR_LABEL
+    : (author?.firstName ?? UNKNOWN_AUTHOR_LABEL);
 
   return (
     <View style={styles.row}>
       <MemberAvatar
-        firstName={firstName}
+        firstName={authorDeleted ? '' : firstName}
         photoUrl={author?.photoUrl ?? null}
         size={30}
         colorIndex={colorIndex}

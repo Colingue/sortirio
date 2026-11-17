@@ -10,6 +10,7 @@ waiting for Colin: it settles nothing, and nothing is built on it until he says 
 
 | Record                                                                                   | Date       | Status     | What it settles                                                                                                                                                                              |
 | ---------------------------------------------------------------------------------------- | ---------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Un email banni est refusé à l'inscription, par un hook Auth Postgres](2026-11-17-block-banned-email-at-signup.md) | 2026-11-17 | proposed   | Le hook `before_user_created` refuse un email présent dans `bans`, pas l'app ni un trigger sur `auth.users`. En attente de Colin. |
 | [UI — thème maison tiré de Claude Design, pas de librairie de composants](2026-10-15-ui-in-house-theme.md) | 2026-10-15 | proposed   | `StyleSheet` + thème maison (palette, rayons, Poppins) dans `src/constants/theme.ts`, quelques composants partagés, app en clair seulement. Pas de Tamagui/Paper/NativeWind. En attente de Colin. |
 | [Les appels HTTP sortants partent de Postgres, avec `pg_net`](2026-09-27-outbound-http-from-postgres.md) | 2026-09-27 | proposed   | Le backend joint le réseau depuis une fonction Postgres via `pg_net`, pas via une Edge Function ni un worker externe. En attente de Colin.                                                   |
 | [Mobile dev runs against the hosted Supabase project](2026-09-26-mobile-dev-against-hosted-supabase.md) | 2026-09-26 | proposed   | `mobile/.env.local` points at the hosted project, not the local stack — Google sign-in is only configured there. Local stack stays for migrations and SQL-only checks. En attente de Colin. |
@@ -42,6 +43,8 @@ waiting for Colin: it settles nothing, and nothing is built on it until he says 
   → mobile dev runs against the hosted Supabase project (proposed)
 - **Comment le backend appelle un service extérieur, push et envois planifiés** → les
   appels HTTP sortants partent de Postgres, avec `pg_net` (proposed)
+- **Refuser un banni qui se réinscrit, email, hook Auth** → un email banni est refusé à
+  l'inscription (proposed)
 - **Look de l'app, couleurs, police, librairie UI, mode sombre** → UI thème maison tiré de
   Claude Design (proposed)
 
