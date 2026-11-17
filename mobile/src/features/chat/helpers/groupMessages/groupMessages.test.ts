@@ -91,6 +91,10 @@ describe('findMessageAuthor', () => {
     expect(findMessageAuthor(new Map([['user-1', author]]), 'user-1')).toEqual(author);
   });
 
+  it('has no author for a deleted account, whose author id is null', () => {
+    expect(findMessageAuthor(new Map([['user-1', author]]), null)).toBeUndefined();
+  });
+
   it('has no author for someone the group screen does not know', () => {
     expect(findMessageAuthor(new Map([['user-1', author]]), 'user-9')).toBeUndefined();
   });

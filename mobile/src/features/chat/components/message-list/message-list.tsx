@@ -58,8 +58,9 @@ export function MessageList({
               body={chatItem.message.body}
               time={formatMessageTime(chatItem.createdAt)}
               author={findMessageAuthor(authorsById, chatItem.message.authorId)}
-              colorIndex={Math.max(authorIds.indexOf(chatItem.message.authorId), 0)}
-              mine={chatItem.message.authorId === myUserId}
+              authorDeleted={chatItem.message.authorId === null}
+              colorIndex={Math.max(authorIds.indexOf(chatItem.message.authorId ?? ''), 0)}
+              mine={chatItem.message.authorId !== null && chatItem.message.authorId === myUserId}
             />
           )}
         </View>

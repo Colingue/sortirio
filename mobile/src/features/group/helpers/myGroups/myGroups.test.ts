@@ -62,6 +62,19 @@ describe('buildMyGroupsItem', () => {
     });
   });
 
+  it('says Utilisateur supprimé when the author of the last message is gone', () => {
+    const row = buildRow({
+      last_message_body: 'À tout à l’heure',
+      last_message_at: '2026-10-16T20:04:00',
+      last_message_author_id: null,
+      last_message_author_first_name: null,
+    });
+
+    expect(buildMyGroupsItem(row, undefined, NOW, new Map()).lastMessage?.preview).toBe(
+      'Utilisateur supprimé : À tout à l’heure',
+    );
+  });
+
   it('says Toi when I wrote the last message', () => {
     const row = buildRow({
       last_message_body: 'On remet ça ?',

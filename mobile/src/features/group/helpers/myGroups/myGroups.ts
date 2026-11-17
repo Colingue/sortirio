@@ -1,6 +1,9 @@
 import { type FridayState } from '@/features/availability/helpers/availability/availability';
 import { formatFridayLabel } from '@/features/availability/helpers/formatFridayLabel/formatFridayLabel';
-import { formatMessageTime } from '@/features/chat/helpers/groupMessages/groupMessages';
+import {
+  DELETED_AUTHOR_LABEL,
+  formatMessageTime,
+} from '@/features/chat/helpers/groupMessages/groupMessages';
 import { signPhotoUrls } from '@/features/photo-storage/helpers/photoStorage/photoStorage';
 import { isoDay } from '@/features/date/helpers/isoDay/isoDay';
 import { supabase } from '@/lib/supabase';
@@ -65,9 +68,11 @@ export function buildLastMessage(
   if (!row.last_message_body || !row.last_message_at) return null;
 
   const author =
-    row.last_message_author_id === myUserId
-      ? 'Toi'
-      : (row.last_message_author_first_name ?? UNKNOWN_AUTHOR_LABEL);
+    row.last_message_author_id === null
+      ? DELETED_AUTHOR_LABEL
+      : row.last_message_author_id === myUserId
+        ? 'Toi'
+        : (row.last_message_author_first_name ?? UNKNOWN_AUTHOR_LABEL);
 
   return {
     preview: `${author} : ${row.last_message_body}`,

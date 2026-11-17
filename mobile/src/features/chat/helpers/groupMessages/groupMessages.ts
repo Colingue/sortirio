@@ -4,9 +4,11 @@ import { supabase } from '@/lib/supabase';
 
 const TABLE = 'group_messages';
 
+export const DELETED_AUTHOR_LABEL = 'Utilisateur supprimé';
+
 export type GroupMessage = {
   id: string;
-  authorId: string;
+  authorId: string | null;
   body: string;
   createdAt: string;
 };
@@ -29,7 +31,7 @@ export type ChatItem =
 
 export type MessageRow = {
   id: string;
-  author_id: string;
+  author_id: string | null;
   body: string;
   created_at: string;
 };
@@ -108,9 +110,9 @@ export function isNewMessageDay(messages: { createdAt: string }[], index: number
 
 export function findMessageAuthor(
   authorsById: Map<string, MessageAuthor>,
-  authorId: string,
+  authorId: string | null,
 ): MessageAuthor | undefined {
-  return authorsById.get(authorId);
+  return authorId === null ? undefined : authorsById.get(authorId);
 }
 
 export function watchGroupMessages(
