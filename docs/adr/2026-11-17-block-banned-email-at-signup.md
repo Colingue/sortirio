@@ -1,6 +1,6 @@
 ---
 type: decision
-status: proposed # proposed | accepted | superseded
+status: accepted # proposed | accepted | superseded
 date: 2026-11-17
 tags: [backend, auth, moderation]
 supersedes:
