@@ -11,11 +11,13 @@ export default function MyProfileScreen() {
   const myUserId = session.status === 'ready' ? session.session?.user.id : undefined;
   const myProfile = useMyProfile(myUserId);
 
-  if (myProfile.status !== 'ready') return <ScreenStatus failed={myProfile.status === 'failed'} />;
+  if (!myUserId || myProfile.status !== 'ready')
+    return <ScreenStatus failed={myProfile.status === 'failed'} />;
 
   return (
     <MyProfile
       profile={myProfile.profile}
+      userId={myUserId}
       onEdit={() => router.push('/edit-profile')}
       onSignOut={() => void signOut().catch(() => {})}
     />

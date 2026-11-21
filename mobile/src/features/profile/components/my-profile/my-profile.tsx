@@ -4,16 +4,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MemberAvatar } from '@/components/member-avatar';
 import { ThemedText } from '@/components/themed-text';
 import { Colors, Fonts, Radius } from '@/constants/theme';
+import { DeleteAccountButton } from '@/features/profile/components/delete-account-button/delete-account-button';
 import { MyProfileDetails } from '@/features/profile/components/my-profile-details/my-profile-details';
 import { type MyProfile as MyProfileData } from '@/features/profile/helpers/myProfile/myProfile';
 
 export type MyProfileProps = {
   profile: MyProfileData;
+  userId: string;
   onEdit: () => void;
   onSignOut: () => void;
 };
 
-export function MyProfile({ profile, onEdit, onSignOut }: MyProfileProps) {
+export function MyProfile({ profile, userId, onEdit, onSignOut }: MyProfileProps) {
   return (
     <SafeAreaView edges={['top']} style={styles.screen}>
       <ScrollView contentContainerStyle={styles.content}>
@@ -52,6 +54,7 @@ export function MyProfile({ profile, onEdit, onSignOut }: MyProfileProps) {
             Se déconnecter
           </ThemedText>
         </Pressable>
+        <DeleteAccountButton userId={userId} />
       </ScrollView>
     </SafeAreaView>
   );
