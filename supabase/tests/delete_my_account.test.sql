@@ -1,5 +1,5 @@
 begin;
-select plan(8);
+select plan(9);
 
 insert into auth.users (id, email) values
   ('00000000-0000-0000-0000-000000000001', 'Me@Example.com'),
@@ -22,6 +22,10 @@ where u.id::text like '00000000-0000-0000-0000-00000000000_';
 
 insert into public.availabilities (user_id)
 values ('00000000-0000-0000-0000-000000000001');
+set local session_replication_role = replica;
+insert into public.availabilities (user_id, friday)
+values ('00000000-0000-0000-0000-000000000001', date '2000-01-07');
+set local session_replication_role = origin;
 insert into public.reports (reporter_id, reported_id)
 values ('00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000001');
 insert into public.group_messages (group_id, author_id, body)
@@ -35,6 +39,7 @@ select public.delete_my_account();
 select is((select count(*)::int from auth.users where id = '00000000-0000-0000-0000-000000000001'), 0, 'the account is gone');
 select is((select count(*)::int from public.profiles where id = '00000000-0000-0000-0000-000000000001'), 0, 'the profile is gone');
 select is((select count(*)::int from public.availabilities where user_id = '00000000-0000-0000-0000-000000000001'), 0, 'the sign-ups are gone');
+select is((select count(*)::int from public.availabilities where user_id = '00000000-0000-0000-0000-000000000001' and friday = date '2000-01-07'), 0, 'a past Friday sign-up does not block the deletion');
 select is((select count(*)::int from public.group_members where user_id = '00000000-0000-0000-0000-000000000001'), 0, 'the group membership is gone');
 select is((select count(*)::int from public.reports where reported_id = '00000000-0000-0000-0000-000000000001'), 0, 'the reports are gone');
 select is((select author_id from public.group_messages), null, 'the message stays, with a null author');
