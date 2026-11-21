@@ -3,13 +3,13 @@
 Source : [App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/) (révision du 16 octobre 2026).
 Les US P1 à P8 bloquent la validation Apple. P9 et P10 sont des tâches dans App Store Connect, sans code.
 
-## P1 — Se connecter avec Apple (iOS)
+## ✅ P1 — Se connecter avec Apple (iOS)
 
 Règle 4.8 : si l'app propose Google, elle doit aussi proposer une connexion qui permet de cacher son email. Sign in with Apple remplit cette condition.
 Ajouter le bouton « Continuer avec Apple » sur l'écran de connexion iOS, au-dessus ou à côté de Google, avec la même taille. Créer ou connecter le compte via Supabase Auth (fournisseur Apple).
 Apple ne donne le nom qu'à la première connexion : le garder à ce moment-là. Si l'utilisateur cache son email, on reçoit une adresse relais `@privaterelay.appleid.com` qui doit fonctionner normalement.
 
-## P2 — Supprimer mon compte depuis l'app
+## 🚧 P2 — Supprimer mon compte depuis l'app
 
 Règle 5.1.1(v) : si on peut créer un compte dans l'app, on doit pouvoir le supprimer dans l'app.
 Ajouter « Supprimer mon compte » dans le profil, avec une confirmation claire (« c'est définitif »). Supprimer le compte et ses données (profil, photos, inscriptions), puis revenir à l'écran de connexion.
